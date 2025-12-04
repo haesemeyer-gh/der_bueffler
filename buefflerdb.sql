@@ -1,0 +1,63 @@
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+
+
+CREATE TABLE `appointments` (
+  `TerminID` int(11) NOT NULL,
+  `TeamID` int(11) NOT NULL,
+  `Datum` date NOT NULL,
+  `Titel` varchar(255) NOT NULL,
+  `Fach` varchar(255) NOT NULL,
+  `Lehrer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`Lehrer`)),
+  `Notizen` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `appointments`
+  ADD PRIMARY KEY (`TerminID`);
+
+CREATE TABLE `changes` (
+  `AenderungsID` int(11) NOT NULL,
+  `Timestamp` date NOT NULL,
+  `TerminID` int(11) NOT NULL,
+  `Datum` date NOT NULL,
+  `Titel` varchar(255) NOT NULL,
+  `Fach` varchar(255) NOT NULL,
+  `Lehrer` varchar(255) NOT NULL,
+  `Notizen` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `changes`
+  ADD PRIMARY KEY (`AenderungsID`);
+
+CREATE TABLE `session` (
+  `Token` int(11) NOT NULL,
+  `NutzerID` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `session`
+  ADD PRIMARY KEY (`Token`) USING BTREE;
+
+CREATE TABLE `teams` (
+  `TeamID` int(11) NOT NULL,
+  `TeamName` varchar(255) NOT NULL,
+  `Mitglieder` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`Mitglieder`)),
+  `Klassensprecher` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`Klassensprecher`))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `teams`
+  ADD PRIMARY KEY (`TeamID`);
+
+CREATE TABLE `user` (
+  `ID` int(11) NOT NULL,
+  `Mail` varchar(255) NOT NULL,
+  `Passwort` varchar(255) NOT NULL
+  `Name` varchar(255) NOT NULL,
+  `Lehrer` tinyint(1) NOT NULL,
+  `Admin` tinyint(1) NOT NULL,
+  `online` date DEFAULT NULL,
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`ID`);
+
+COMMIT;
