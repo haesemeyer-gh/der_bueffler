@@ -3,6 +3,28 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }))
 
+const mariadb = require('mariadb');
+const pool = mariadb.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: ''
+});
+
+/*
+async function db_example() {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        const res = await conn.query("INSERT INTO myTable value (?, ?)", [1, ""]);
+        console.log(res);
+    } catch (err) {
+        throw err;
+    } finally {
+        if (conn) conn.end();
+    }
+}
+*/
+
 app.get('/ping', (req, res) => {
     res.json({
         message: "pong"
