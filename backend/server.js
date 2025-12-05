@@ -122,7 +122,7 @@ app.post('/auth/register', (req, res) => {
 
 app.post('/auth/login', (req, res) => {
     // rq.body.email, rq.body.password
-    // session token erstellen
+
     const email = req.body.email;
     const password = req.body.password;
 
@@ -266,6 +266,47 @@ app.post('/user/makeadmin', (req, res) => {
     });
 });
 
+/* SMTP */
+
+const nodemailer = require("nodemailer");
+const transporter = nodemailer.createTransport({
+    host: "localhost",
+    port: 25,
+    secure: false, // SSL
+    auth: {
+        user: "fiadmin",
+        pass: "aA1234Aa"
+    },
+    tls: {
+        rejectUnauthorized: false // erlaubt self-signed zertifikate
+    }
+});
+
+async function sendmail(to, subject, html) {
+    const smtpstatus = await transporter.sendMail({
+        from: '"Der Büffler" <fiadmin@localhost>',
+        to: to,
+        subject: subject,
+        text: html, // eigentlich plain text fallback
+        html: html
+    });
+    console.log(smtpstatus);
+};
+
+/* DIGESTS */
+
+const cron = require('node-cron');
+function startDigest() {
+    cron.schedule('0 7 * * SAT', () => { // should run each saturday @ 07:00
+        // get list of upcoming appointments this week
+        // send mail to each team member
+        sendmail("test@test", "test", "du solltest diese e-mail jeden samstag um 7 uhr erhalten!");
+    });
+};
+
 /*  */
 
-app.listen(8080);
+app.listen(8080, () => {
+    console.log("Web-Server verfügbar!");
+    startDigest();
+});

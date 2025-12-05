@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "express": "^5.2.1",
-    "mariadb": "^3.4.5"
+    "mariadb": "^3.4.5",
+    "node-cron": "^4.2.1",
+    "nodemailer": "^7.0.11"
   }
 }
