@@ -8,7 +8,7 @@ CREATE TABLE `appointments` (
   `Datum` date NOT NULL,
   `Titel` varchar(255) NOT NULL,
   `Fach` varchar(255) NOT NULL,
-  `Lehrer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`Lehrer`)),
+  `Lehrer` varchar(255) NOT NULL,
   `Notizen` text DEFAULT NULL,
   PRIMARY KEY (`TerminID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
