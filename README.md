@@ -29,4 +29,6 @@ node server.js # programm mit node.js starten
 ```
 Dieser Server stellt auch das Frontend bereit.
 Er ist standardgemäß unter [localhost:8080](http://localhost:8080) verfügbar.
-Aktuell sind die Konfigurationen für die Datenbankverbindung, SMTP, die Schedule für das Digest und der Port, auf dem der Web Server gehostet wird, hard-coded.
+
+Der Server kann mit Umgebungsvariablen konfiguriert werden.
+Eine Beispiel-Konfiguration ist unter `dist.env` verfügbar.
