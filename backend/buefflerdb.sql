@@ -50,11 +50,11 @@ ALTER TABLE `teams`
 CREATE TABLE `user` (
   `ID` int(11) NOT NULL,
   `Mail` varchar(255) NOT NULL,
-  `Passwort` varchar(255) NOT NULL
+  `Passwort` varchar(255) NOT NULL,
   `Name` varchar(255) NOT NULL,
   `Lehrer` tinyint(1) NOT NULL,
   `Admin` tinyint(1) NOT NULL,
-  `online` date DEFAULT NULL,
+  `online` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 ALTER TABLE `user`
