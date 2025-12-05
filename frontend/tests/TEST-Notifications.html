@@ -7,32 +7,34 @@
 </head>
 <body>
 
-    <button onclick="enablePushNotifications()">Push-Benachrichtigungen aktivieren</button>
+    <button onclick="registerServiceWorker()">Push-Benachrichtigungen aktivieren</button>
+    <button onclick="ping()">PING</button>
 
     <script>
-        function enablePushNotifications() {
-            if ('Notification' in window && 'serviceWorker' in navigator) {
-                // Benachrichtigungen Anfragen
-                Notification.requestPermission(permission => {
-                    if (permission === 'granted') {
-                        console.log('Permission to receive notifications granted!');
+        async function registerServiceWorker() {
+            const publicVapidKey = "BHm1GIUIGMm3R47i5qRCPCo6oU4Z7dlc_g2JkXptkvcZOFLlobRAgJWpAmzKOrbiKBtBR69J4iB9-ISA_X8suNc";   
 
-                        // Service Worker registrieren
-                        // Service Worker laufen im Hintergrund und haben prinzipiell zwei Aufgaben:
-                        // 1. wie ein Proxy z.B. API Anfragen der Web-App abfangen und entscheiden, ob gecachte Inhalte zurückgegeben werden oder die Anfrage an die remote API weitergereicht wird
-                        // 2. einfach im Hintergrund laufen für bspw. Push Benachrichtigungen, wofür es hier verwendet wird
-                        navigator.serviceWorker.register('TEST-Notifications.js').then(registration => {
-                            console.log('Service Worker registered with scope:', registration.scope);
-                        }).catch(error => {
-                            console.error('Service Worker registration failed:', error);
-                        });
+            const register = await navigator.serviceWorker.register('/worker.js');
+            console.log(register.scope)
 
-                    } else {
-                        console.error('Notification permission denied!');
-                    }
-                });
-            }
+            const subscription = await register.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: publicVapidKey,
+            });
+
+            await fetch("/subscribe", {
+                method: "POST",
+                body: JSON.stringify(subscription),
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
         }
+
+        function ping() {
+            fetch("/ping")
+        }
+        
     </script>
 </body>
 </html>
