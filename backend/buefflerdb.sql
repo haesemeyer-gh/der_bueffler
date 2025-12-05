@@ -28,7 +28,7 @@ CREATE TABLE `changes` (
 
 
 CREATE TABLE `session` (
-  `Token` int(11) NOT NULL,
+  `Token` varchar(255) NOT NULL,
   `NutzerID` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
