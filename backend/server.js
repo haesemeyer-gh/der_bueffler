@@ -18,7 +18,6 @@ async function query(sqlQuery, values) {
     try {
         conn = await pool.getConnection();
         const res = await conn.query(sqlQuery, values);
-        console.log("inside", res);
         return res;
     } catch (err) {
         console.error(err);
@@ -267,15 +266,50 @@ async function sendmail(to, subject, html) {
 const cron = require('node-cron');
 function startDigest() {
     cron.schedule('0 7 * * SAT', () => { // should run each saturday @ 07:00
-        // get list of upcoming appointments this week
-        // send mail to each team member
-        sendmail("test@test", "test", "du solltest diese e-mail jeden samstag um 7 uhr erhalten!");
+        getWeeklyAppointments();
     });
 };
+
+function getWeeklyAppointments() {
+    let appointments_response = query("SELECT * FROM appointments WHERE Datum BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);", []);
+    appointments_response.then((response) => {
+        if (response.length > 0) {
+            response.forEach(appointment => {
+                let date = new Date(appointment.Datum).toLocaleString('de-DE', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+                let teammember_response = query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [appointment.TeamID]);
+                teammember_response.then((response) => {
+                    if (response.length === 1) {
+                        response[0].Mitglieder.forEach((userid) => {
+                            let mail_response = query("SELECT Mail FROM user WHERE ID LIKE ?", [userid]);
+                            mail_response.then((response) => {
+                                if (response.length === 1) {
+                                    let text = `<h1>Diese Woche steht ein Termin an!</h1>
+                                    <h2>${appointment.Titel}</h2>
+                                    <ul>
+                                    <li>Datum: <b>${date}</b></li>
+                                    <li>Fach: <b>${appointment.Fach}</b></li>
+                                    <li>Lehrer: <b>${appointment.Lehrer}</b></li>
+                                    </ul>
+                                    <h3>Notizen:</h3>
+                                    <p>${appointment.Notizen}</p>
+                                    `;
+                                    sendmail(response[0].Mail, "Diese Woche steht ein Termin an!", text);
+                                }
+                            });
+                        });
+                    }
+                });
+            });
+        }
+    });
+}
 
 /*  */
 
 app.listen(8080, () => {
     console.log("Web-Server verfügbar!");
     startDigest();
+
+    //tmp
+    getWeeklyAppointments();
 });

@@ -1,7 +1,6 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 
-
 CREATE TABLE `appointments` (
   `TerminID` int(11) NOT NULL AUTO_INCREMENT,
   `TeamID` int(11) NOT NULL,
@@ -12,7 +11,6 @@ CREATE TABLE `appointments` (
   `Notizen` text DEFAULT NULL,
   PRIMARY KEY (`TerminID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 CREATE TABLE `changes` (
   `AenderungsID` int(11) NOT NULL AUTO_INCREMENT,
@@ -53,6 +51,5 @@ CREATE TABLE `user` (
   `online` date DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 COMMIT;
