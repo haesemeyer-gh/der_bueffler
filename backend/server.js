@@ -1,29 +1,37 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 
 const mariadb = require('mariadb');
 const pool = mariadb.createPool({
     host: 'localhost',
     user: 'root',
-    password: 'aA1234Aa'
+    password: 'aA1234Aa',
+    database: 'bueffler_db'
 });
 
-/*
-async function db_example() {
+
+app.use("/", express.static("../frontend"))
+
+
+async function query(sqlQuery, values) {
     let conn;
     try {
         conn = await pool.getConnection();
-        const res = await conn.query("INSERT INTO myTable value (?, ?)", [1, ""]);
-        console.log(res);
+        const res = await conn.query(sqlQuery, values);
+        console.log("inside", res);
+        return res;
     } catch (err) {
         throw err;
     } finally {
         if (conn) conn.end();
     }
 }
-*/
+
+
+
+
 
 app.get('/ping', (req, res) => {
     res.json({
@@ -33,19 +41,104 @@ app.get('/ping', (req, res) => {
 
 /* AUTH */
 
+function userWithEmailExits(email) {
+    return query("SELECT * FROM user WHERE (Mail = ?)", [email]).then(data => (data.length > 0))
+}
+
+function createNewUser(uname, email, password) {
+    return query("INSERT INTO user (Mail, Passwort, Name, Lehrer, Admin) VALUES (?, ?, ?, 0, 0)", [email, password, uname])
+}
+
+function getUserID(password, email) {
+    return query("SELECT ID FROM user WHERE (Mail = ? AND Passwort = ?)", [email, password])
+}
+
+function verifyPassword(password, email) {
+    return query("SELECT Passwort FROM user WHERE (Mail = ?)", [email]).then(data => (data[0]["Passwort"] == password))
+}
+
+
+function createSession(userID) {
+    const uuid = crypto.randomUUID();
+    return closeSession(userID).then(() => query("INSERT INTO session (Token, NutzerID) VALUES (?, ?)", [uuid, userID]).then(() => uuid))
+}
+
+function closeSession(userID) {
+    return query("DELETE FROM session WHERE (NutzerID = ?)", [userID])
+}
+
+
 app.post('/auth/register', (req, res) => {
     // rq.body.name, rq.body.email, rq.body.password
-    res.json({
-        message: "" // evt. fehler
-    });
+
+    const uname = req.body.uname;
+    const email = req.body.email;
+    const password = req.body.password;
+    
+    userWithEmailExits(email).then(exist => {
+        if (exist) {
+            console.log("exists")
+            res.json({
+                message: "User exists already"
+            });
+            
+        }
+        else {
+            console.log("created")
+            createNewUser(uname, email, password).then(() => {
+                res.json({
+                    message: "User created successfully"
+                });
+                
+            })
+        }
+    })
 });
 
 app.post('/auth/login', (req, res) => {
     // rq.body.email, rq.body.password
     // session token erstellen
-    res.json({
-        message: "" // session token
-    });
+    const email = req.body.email;
+    const password = req.body.password;
+
+    userWithEmailExits(email).then(exist => {
+        if (exist) {
+            console.log("exists")
+            return verifyPassword(password, email);
+        }
+        else {
+            console.log("doesn't exist")
+            res.json({
+                message: "No such user"
+            });
+            return null;
+        }
+    }).then(verified => {
+        if (verified !== null) {
+            if (verified) {
+                return getUserID(password, email)
+                .then(data => createSession(data[0]["ID"]))
+            }
+            else {
+                res.json({
+                    message: "Wrong password"
+                });
+                return null;
+            }
+        }
+        else {
+            return null;
+        }
+
+    }).then(token => {
+        console.log(token)
+        if (token !== null) {
+            res.json({
+                message: token
+            });
+        }
+    })
+    
 });
 
 /* APPOINTMENTS */
