@@ -219,12 +219,18 @@ app.post('/appointment/delete', (req, res) => {
 
 /* TEAMS */
 
+
 function listTeammates(teamid) {
     return query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [teamid]);
 }
 
+function createTeams(teamsName){
+ return query("INSERT INTO teams (TeamName) VALUES (?)", [teamsName])
+}
+
 app.post('/teams/create', (req, res) => {
     // mit rq.body.token in datenbank abfragen ob team mit namen req.body.name erstellt werden darf
+    createTeams(req.body.name)
     res.json({
         message: "" // evt. fehlernachricht
     });
