@@ -3,17 +3,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
 
+app.use("/", express.static("../frontend"))
+
 const mariadb = require('mariadb');
 const pool = mariadb.createPool({
     host: 'localhost',
     user: 'root',
     password: 'aA1234Aa',
-    database: 'bueffler_db'
+    database: 'buefflerdb'
 });
-
-
-app.use("/", express.static("../frontend"))
-
 
 async function query(sqlQuery, values) {
     let conn;
@@ -23,15 +21,11 @@ async function query(sqlQuery, values) {
         console.log("inside", res);
         return res;
     } catch (err) {
-        throw err;
+        console.error(err);
     } finally {
         if (conn) conn.end();
     }
 }
-
-
-
-
 
 app.get('/ping', (req, res) => {
     res.json({
@@ -74,14 +68,14 @@ app.post('/auth/register', (req, res) => {
     const uname = req.body.uname;
     const email = req.body.email;
     const password = req.body.password;
-    
+
     userWithEmailExits(email).then(exist => {
         if (exist) {
             console.log("exists")
             res.json({
                 message: "User exists already"
             });
-            
+
         }
         else {
             console.log("created")
@@ -89,7 +83,7 @@ app.post('/auth/register', (req, res) => {
                 res.json({
                     message: "User created successfully"
                 });
-                
+
             })
         }
     })
@@ -138,7 +132,7 @@ app.post('/auth/login', (req, res) => {
             });
         }
     })
-    
+
 });
 
 /* APPOINTMENTS */
