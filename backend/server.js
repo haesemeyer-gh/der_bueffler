@@ -31,6 +31,23 @@ app.get('/ping', (req, res) => {
     });
 });
 
+/* AUTH */
+
+app.post('/auth/register', (req, res) => {
+    // rq.body.name, rq.body.email, rq.body.password
+    res.json({
+        message: "" // evt. fehler
+    });
+});
+
+app.post('/auth/login', (req, res) => {
+    // rq.body.email, rq.body.password
+    // session token erstellen
+    res.json({
+        message: "" // session token
+    });
+});
+
 /* APPOINTMENTS */
 
 app.post('/appointment/list', (req, res) => {
