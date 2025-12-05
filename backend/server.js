@@ -26,6 +26,8 @@ async function query(sqlQuery, values) {
     }
 }
 
+
+
 app.get('/ping', (req, res) => {
     res.json({
         message: "pong"
@@ -34,30 +36,59 @@ app.get('/ping', (req, res) => {
 
 /* AUTH */
 
+const argon2 = require('argon2');
+
+async function encrypt(password) {
+    try {
+        return await argon2.hash(password)
+    } catch(err) {
+        console.error(err)
+    }
+}
+
+async function verify(hash, password) {
+    try {
+        return await argon2.verify(hash, password)
+    } catch(err) {
+        console.error(err)
+    }
+}
+
+
 function userWithEmailExits(email) {
     return query("SELECT * FROM user WHERE (Mail = ?)", [email]).then(data => (data.length > 0))
 }
 
 function createNewUser(uname, email, password) {
-    return query("INSERT INTO user (Mail, Passwort, Name, Lehrer, Admin) VALUES (?, ?, ?, 0, 0)", [email, password, uname])
+    return encrypt(password).then(hash => query("INSERT INTO user (Mail, Passwort, Name, Lehrer, Admin) VALUES (?, ?, ?, 0, 0)", [email, hash, uname]))
 }
 
-function getUserID(password, email) {
-    return query("SELECT ID FROM user WHERE (Mail = ? AND Passwort = ?)", [email, password])
+function getUserID(email) {
+    return query("SELECT ID FROM user WHERE (Mail = ?)", [email])
 }
 
 function verifyPassword(password, email) {
-    return query("SELECT Passwort FROM user WHERE (Mail = ?)", [email]).then(data => (data[0]["Passwort"] == password))
+    return query("SELECT Passwort FROM user WHERE (Mail = ?)", [email]).then(data => (verify(data[0]["Passwort"], password)))
 }
 
 
 function createSession(userID) {
     const uuid = crypto.randomUUID();
-    return closeSession(userID).then(() => query("INSERT INTO session (Token, NutzerID) VALUES (?, ?)", [uuid, userID]).then(() => uuid))
+    return closeSession(userID).then(() => query("INSERT INTO session (Token, NutzerID) VALUES (?, ?)", [uuid, userID]).then(() => {
+        markOnline(userID);
+        return uuid;
+    }))
 }
 
 function closeSession(userID) {
     return query("DELETE FROM session WHERE (NutzerID = ?)", [userID])
+}
+
+
+function markOnline(userID) {
+    const date = new Date()
+    
+    return query("UPDATE user SET online = ? WHERE (ID = ?)", [date.toISOString("de").split('T')[0], userID])
 }
 
 
@@ -109,7 +140,7 @@ app.post('/auth/login', (req, res) => {
     }).then(verified => {
         if (verified !== null) {
             if (verified) {
-                return getUserID(password, email)
+                return getUserID(email)
                 .then(data => createSession(data[0]["ID"]))
             }
             else {
