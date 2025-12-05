@@ -148,6 +148,34 @@ app.post('/user/makeadmin', (req, res) => {
     });
 });
 
+/* SMTP */
+
+const nodemailer = require("nodemailer");
+const transporter = nodemailer.createTransport({
+    host: "localhost",
+    port: 25,
+    secure: false, // SSL
+    auth: {
+        user: "fiadmin",
+        pass: "aA1234Aa"
+    },
+    tls: {
+        rejectUnauthorized: false // erlaubt self-signed zertifikate
+    }
+});
+
+async function sendmail() {
+    const smtpstatus = await transporter.sendMail({
+        from: '"Der Büffler" <fiadmin@localhost>',
+        to: "test@localhost",
+        subject: "Dies ist eine E-Mail",
+        text: "plain text fallback",
+        html: "<p>test</p>"
+    });
+    console.log(smtpstatus);
+};
+sendmail();
+
 /*  */
 
 app.listen(8080);
