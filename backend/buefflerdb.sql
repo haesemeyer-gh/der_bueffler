@@ -3,31 +3,29 @@ START TRANSACTION;
 
 
 CREATE TABLE `appointments` (
-  `TerminID` int(11) NOT NULL,
+  `TerminID` int(11) NOT NULL AUTO_INCREMENT,
   `TeamID` int(11) NOT NULL,
   `Datum` date NOT NULL,
   `Titel` varchar(255) NOT NULL,
   `Fach` varchar(255) NOT NULL,
   `Lehrer` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`Lehrer`)),
-  `Notizen` text DEFAULT NULL
+  `Notizen` text DEFAULT NULL,
+  PRIMARY KEY (`TerminID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE `appointments`
-  ADD PRIMARY KEY (`TerminID`);
 
 CREATE TABLE `changes` (
-  `AenderungsID` int(11) NOT NULL,
+  `AenderungsID` int(11) NOT NULL AUTO_INCREMENT,
   `Timestamp` date NOT NULL,
   `TerminID` int(11) NOT NULL,
   `Datum` date NOT NULL,
   `Titel` varchar(255) NOT NULL,
   `Fach` varchar(255) NOT NULL,
   `Lehrer` varchar(255) NOT NULL,
-  `Notizen` text DEFAULT NULL
+  `Notizen` text DEFAULT NULL,
+  PRIMARY KEY (`AenderungsID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE `changes`
-  ADD PRIMARY KEY (`AenderungsID`);
 
 CREATE TABLE `session` (
   `Token` int(11) NOT NULL,
@@ -38,26 +36,23 @@ ALTER TABLE `session`
   ADD PRIMARY KEY (`Token`) USING BTREE;
 
 CREATE TABLE `teams` (
-  `TeamID` int(11) NOT NULL,
+  `TeamID` int(11) NOT NULL AUTO_INCREMENT,
   `TeamName` varchar(255) NOT NULL,
   `Mitglieder` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`Mitglieder`)),
-  `Klassensprecher` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`Klassensprecher`))
+  `Klassensprecher` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`Klassensprecher`)),
+  PRIMARY KEY (`TeamID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE `teams`
-  ADD PRIMARY KEY (`TeamID`);
-
 CREATE TABLE `user` (
-  `ID` int(11) NOT NULL,
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
   `Mail` varchar(255) NOT NULL,
   `Passwort` varchar(255) NOT NULL,
   `Name` varchar(255) NOT NULL,
   `Lehrer` tinyint(1) NOT NULL,
   `Admin` tinyint(1) NOT NULL,
-  `online` date DEFAULT NULL
+  `online` date DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`ID`);
 
 COMMIT;
