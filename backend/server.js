@@ -164,18 +164,31 @@ const transporter = nodemailer.createTransport({
     }
 });
 
-async function sendmail() {
+async function sendmail(to, subject, html) {
     const smtpstatus = await transporter.sendMail({
         from: '"Der Büffler" <fiadmin@localhost>',
-        to: "test@localhost",
-        subject: "Dies ist eine E-Mail",
-        text: "plain text fallback",
-        html: "<p>test</p>"
+        to: to,
+        subject: subject,
+        text: html, // eigentlich plain text fallback
+        html: html
     });
     console.log(smtpstatus);
 };
-sendmail();
+
+/* DIGESTS */
+
+const cron = require('node-cron');
+function startDigest() {
+    cron.schedule('0 7 * * SAT', () => { // should run each saturday @ 07:00
+        // get list of upcoming appointments this week
+        // send mail to each team member
+        sendmail("test@test", "test", "du solltest diese e-mail jeden samstag um 7 uhr erhalten!");
+    });
+};
 
 /*  */
 
-app.listen(8080);
+app.listen(8080, () => {
+    console.log("Web-Server verfügbar!");
+    startDigest();
+});
