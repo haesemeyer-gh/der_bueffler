@@ -91,7 +91,7 @@ app.post('/auth/register', (req, res) => {
 
 app.post('/auth/login', (req, res) => {
     // rq.body.email, rq.body.password
-    // session token erstellen
+
     const email = req.body.email;
     const password = req.body.password;
 
