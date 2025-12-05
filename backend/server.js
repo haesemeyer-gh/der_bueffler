@@ -87,7 +87,7 @@ function closeSession(userID) {
 
 function markOnline(userID) {
     const date = new Date()
-    
+
     return query("UPDATE user SET online = ? WHERE (ID = ?)", [date.toISOString("de").split('T')[0], userID])
 }
 
@@ -167,6 +167,19 @@ app.post('/auth/login', (req, res) => {
 
 /* APPOINTMENTS */
 
+function appointmentToObject(title, date, course, teacher, notes) {
+    let dateString = new Date(date).toLocaleString('de-DE', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+    let appointmentObject = {
+        title: title,
+        date: date,
+        dateString: dateString,
+        course: course,
+        teacher: teacher,
+        notes: notes
+    };
+    return appointmentObject;
+}
+
 app.post('/appointment/list', (req, res) => {
     // mit rq.body.token in datenbank abfragen welche termine sichtbar sind
     res.json({
@@ -205,6 +218,10 @@ app.post('/appointment/delete', (req, res) => {
 });
 
 /* TEAMS */
+
+function listTeammates(teamid) {
+    return query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [teamid]);
+}
 
 app.post('/teams/create', (req, res) => {
     // mit rq.body.token in datenbank abfragen ob team mit namen req.body.name erstellt werden darf
@@ -251,6 +268,10 @@ app.post('/teams/demote', (req, res) => {
 
 /* USERS */
 
+function getUserMail(userid) {
+    return query("SELECT Mail FROM user WHERE ID LIKE ?", [userid]);
+}
+
 app.post('/user/maketeacher', (req, res) => {
     // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.id zum lehrer ernannt werden darf
     res.json({
@@ -289,7 +310,7 @@ async function sendmail(to, subject, html) {
         text: html, // eigentlich plain text fallback
         html: html
     });
-    console.log(smtpstatus);
+    //console.log(smtpstatus);
 };
 
 /* DIGESTS */
@@ -302,36 +323,70 @@ function startDigest() {
 };
 
 function getWeeklyAppointments() {
+    let collectiveMailArray = [];
     let appointments_response = query("SELECT * FROM appointments WHERE Datum BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);", []);
     appointments_response.then((response) => {
-        if (response.length > 0) {
-            response.forEach(appointment => {
-                let date = new Date(appointment.Datum).toLocaleString('de-DE', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
-                let teammember_response = query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [appointment.TeamID]);
+        let appointmentLength = response.length;
+        if (appointmentLength > 0) {
+            response.forEach((appointment, appointmentI) => {
+                let appointmentObject = appointmentToObject(appointment.Titel, appointment.Datum, appointment.Fach, appointment.Lehrer, appointment.Notizen);
+
+                let teammember_response = listTeammates(appointment.TeamID);
                 teammember_response.then((response) => {
                     if (response.length === 1) {
                         response[0].Mitglieder.forEach((userid) => {
-                            let mail_response = query("SELECT Mail FROM user WHERE ID LIKE ?", [userid]);
+                            let mail_response = getUserMail(userid);
                             mail_response.then((response) => {
                                 if (response.length === 1) {
-                                    let text = `<h1>Diese Woche steht ein Termin an!</h1>
-                                    <h2>${appointment.Titel}</h2>
-                                    <ul>
-                                    <li>Datum: <b>${date}</b></li>
-                                    <li>Fach: <b>${appointment.Fach}</b></li>
-                                    <li>Lehrer: <b>${appointment.Lehrer}</b></li>
-                                    </ul>
-                                    <h3>Notizen:</h3>
-                                    <p>${appointment.Notizen}</p>
-                                    `;
-                                    sendmail(response[0].Mail, "Diese Woche steht ein Termin an!", text);
+                                    let alreadyMember = false;
+                                    let alreadyMemberI = 0;
+                                    collectiveMailArray.forEach((user, i) => {
+                                        if (user.mail === response[0].Mail) {
+                                            alreadyMember = true;
+                                            alreadyMemberI = i;
+                                        }
+                                    });
+                                    if (alreadyMember === false) {
+                                        collectiveMailArray.push({
+                                            mail: response[0].Mail,
+                                            appointments: [
+                                                appointmentObject
+                                            ]
+                                        })
+                                    } else {
+                                        collectiveMailArray[alreadyMemberI].appointments.push(appointmentObject)
+                                    }
+                                }
+                            }).then(() => {
+                                if (appointmentI+1 === appointmentLength) {
+                                    sendCollectiveMails(collectiveMailArray);
                                 }
                             });
                         });
                     }
                 });
+
             });
         }
+    });
+}
+
+function sendCollectiveMails(arr) {
+    arr.forEach(user => {
+        let digest = `<h1>Diese Woche stehen Termine an!<h1>`;
+        user.appointments.forEach((appointment) => {
+            digest += `
+            <h2>${appointment.title}</h2>
+            <ul>
+            <li>Datum: <b>${appointment.dateString}</b></li>
+            <li>Fach: <b>${appointment.course}</b></li>
+            <li>Lehrer: <b>${appointment.teacher}</b></li>
+            </ul>
+            <h3>Notizen:</h3>
+            <p>${appointment.notes}</p>
+            `;
+        });
+        sendmail(user.mail, "Diese Woche stehen Termine an!", digest);
     });
 }
 
