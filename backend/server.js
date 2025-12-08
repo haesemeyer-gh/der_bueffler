@@ -233,7 +233,7 @@ function createTeam(teamName){
 }
 
 function deleteTeam(teamID) {
-    return query("DELETE FROM Team WHERE (TeamID = ?)", [teamID]);
+    return query("DELETE FROM teams WHERE (TeamID = ?)", [teamID]);
 }
 
 app.post('/teams/create', async (req, res) => {
@@ -258,11 +258,25 @@ app.post('/teams/create', async (req, res) => {
     });
 });
 
-app.post('/teams/delete', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob team mit id req.body.id gelöscht werden darf
-    deleteTeam(req.body.id)
+app.post('/teams/delete', async (req, res) => {
+    const token = req.body.token;
+    const id = req.body.id;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions.Lehrer === 1) {
+        if (id) {
+            response = "Team gelöscht!";
+            deleteTeam(id);
+        } else {
+            response = "Du musst eine ID angeben!";
+        }
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 

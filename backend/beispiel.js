@@ -42,7 +42,7 @@ app.post('/teams/create', async (req, res) => {
 
     let response;
 
-    // die `verifyToken()` Funktion überprüft, welche Berechtigungen der Nutzer hat und wie seine ID lautet. Das Ergebnis schreiben wir in die `permissions` Variable.
+    // Die `verifyToken()` Funktion überprüft, welche Berechtigungen der Nutzer hat und wie seine ID lautet. Das Ergebnis schreiben wir in die `permissions` Variable.
     let permissions = await verifyToken(token);
 
     // Hier wird nun geprüft, ob der Nutzer existiert.
