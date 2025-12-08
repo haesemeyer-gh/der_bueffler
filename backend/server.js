@@ -55,9 +55,13 @@ async function verify(hash, password) {
     }
 }
 
-
 async function userWithEmailExists(email) {
     const data = await query("SELECT * FROM user WHERE (Mail = ?)", [email])
+    return data.length > 0
+}
+
+async function userWithTokenExists(token) {
+    const data = await query("SELECT * FROM session WHERE (Token = ?)", [token])
     return data.length > 0
 }
 
@@ -71,11 +75,15 @@ async function getUserID(email) {
     return data[0]["ID"]
 }
 
+async function getIDByToken(token) {
+    const data = await query("SELECT NutzerID FROM session WHERE (Token = ?)", [token])
+    return data[0].NutzerID
+}
+
 async function verifyPassword(password, email) {
     const data = await query("SELECT Passwort FROM user WHERE (Mail = ?)", [email])
     return await verify(data[0]["Passwort"], password)
 }
-
 
 async function createSession(userID) {
     const uuid = crypto.randomUUID();
@@ -119,10 +127,22 @@ async function addSubscriptions(userID, subscription) {
     return await query("INSERT INTO push_subscriptions (Subscription, NutzerID) VALUES (?, ?)", [subscription, userID]);
 }
 
+async function getUserPermissions(userid) {
+    const data = await query("SELECT ID, Lehrer, Admin FROM user WHERE (ID = ?)", [userid])
+    return data[0]
+}
+
+async function verifyToken(token) {
+    if (await userWithTokenExists(token)) {
+        let id = await getIDByToken(token);
+        let permissions = await getUserPermissions(id);
+        return permissions;
+    } else {
+        return false;
+    }
+}
 
 app.post('/auth/register', async (req, res) => {
-    // rq.body.name, rq.body.email, rq.body.password
-
     const uname = req.body.uname;
     const email = req.body.email;
     const password = req.body.password;
@@ -149,8 +169,6 @@ app.post('/auth/register', async (req, res) => {
 });
 
 app.post('/auth/login', async (req, res) => {
-    // rq.body.email, rq.body.password
-
     const email = req.body.email;
     const password = req.body.password;
 
@@ -161,7 +179,7 @@ app.post('/auth/login', async (req, res) => {
     }
 
     if (!(await userWithEmailExists(email))) {
-        
+
         console.log("doesn't exist")
         return res.json({
             message: "No such user"
@@ -283,10 +301,11 @@ app.get("/pingpush", (req, res) => {
 
 /* APPOINTMENTS */
 
-function appointmentToObject(title, date, course, teacher, notes) {
+function appointmentToObject(title, teamid, date, course, teacher, notes) {
     let dateString = new Date(date).toLocaleString('de-DE', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
     let appointmentObject = {
         title: title,
+        teamid: teamid,
         date: date,
         dateString: dateString,
         course: course,
@@ -298,40 +317,96 @@ function appointmentToObject(title, date, course, teacher, notes) {
 
 
 
-app.post('/appointment/list', (req, res) => {
-    // mit rq.body.token in datenbank abfragen welche termine sichtbar sind
+app.post('/appointment/list', async(req, res) => {
+    const token = req.body.token;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: [] // termine
+        message: response
     });
 });
 
-app.post('/appointment/view', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob termin mit id rq.body.id sichtbar ist und termin zurückgeben
+app.post('/appointment/view', async(req, res) => {
+    const token = req.body.token;
+    const id = req.body.id;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: {} // termin
+        message: response
     });
 });
 
-app.post('/appointment/create', (req, res) => {
-    // mit rq.body.token in datenbank abfragen in welchem team erstellt werden kann, eintragen
-    // weitere daten: rq.body.team rq.body.title req.body.course req.body.teacher req.body.notes
+app.post('/appointment/create', async(req, res) => {
+    const token = req.body.token;
+    const teamid = req.body.teamid;
+    const title = req.body.title;
+    const course = req.body.course;
+    const teacher = req.body.teacher;
+    const notes = req.body.notes;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/appointment/edit', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob termin mit id req.body.id editiert werden kann
-    // weitere daten: rq.body.team rq.body.title req.body.course req.body.teacher req.body.notes
+app.post('/appointment/edit', async(req, res) => {
+    const token = req.body.token;
+    const id = req.body.id;
+    const title = req.body.title;
+    const course = req.body.course;
+    const teacher = req.body.teacher;
+    const notes = req.body.notes;
+
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/appointment/delete', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob termin mit id req.body.id gelöscht werden kann
+app.post('/appointment/delete', async(req, res) => {
+    const token = req.body.token;
+    const id = req.body.id;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
@@ -342,58 +417,129 @@ async function listTeammates(teamid) {
     return await query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [teamid]);
 }
 
-function createTeams(teamsName){
- return query("INSERT INTO teams (TeamName) VALUES (?)", [teamsName])
+function createTeam(teamName){
+    return query("INSERT INTO teams (TeamName) VALUES (?)", [teamName]);
 }
 
-app.post('/teams/create', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob team mit namen req.body.name erstellt werden darf
-    createTeams(req.body.name)
-    res.json({
-        message: "" // evt. fehlernachricht
-    });
-});
-
-function deleteTeam(TeamID) {
-    return query("DELETE FROM Team WHERE (TeamID = ?)", [TeamID])
+function deleteTeam(teamID) {
+    return query("DELETE FROM teams WHERE (TeamID = ?)", [teamID]);
 }
 
-app.post('/teams/delete', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob team mit id req.body.id gelöscht werden darf
-    deleteTeam(req.body.id)
+app.post('/teams/create', async (req, res) => {
+    const token = req.body.token;
+    const name = req.body.name;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions.Lehrer === 1) {
+        if (name && name.length > 0) {
+            response = "Team erstellt!";
+            createTeam(name);
+        } else {
+            response = "Du musst einen Namen angeben!";
+        }
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/teams/add', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.userid zu team req.body.teamid hinzugefügt werden darf
+app.post('/teams/delete', async (req, res) => {
+    const token = req.body.token;
+    const id = req.body.id;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions.Lehrer === 1) {
+        if (id) {
+            response = "Team gelöscht!";
+            deleteTeam(id);
+        } else {
+            response = "Du musst eine ID angeben!";
+        }
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/teams/remove', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.userid von team req.body.teamid entfernt werden darf
+app.post('/teams/add', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/teams/promote', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.userid in team req.body.teamid zum klassensprecher ernannt werden darf
+app.post('/teams/remove', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/teams/demote', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.userid in team req.body.teamid den klassensprecherstatus aberkannt haben werdewn tun darf dürfen sollen
+app.post('/teams/promote', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
+app.post('/teams/demote', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
+    res.json({
+        message: response
+    });
+});
 
 /* USERS */
 
@@ -401,17 +547,38 @@ function getUserMail(userid) {
     return query("SELECT Mail FROM user WHERE ID LIKE ?", [userid]);
 }
 
-app.post('/user/maketeacher', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.id zum lehrer ernannt werden darf
+app.post('/user/maketeacher', async(req, res) => {
+    const token = req.body.token;
+    const id = req.body.id;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/user/makeadmin', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.id zum admin ernannt werden darf
+app.post('/user/makeadmin', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
@@ -447,61 +614,65 @@ async function sendmail(to, subject, html) {
 const cron = require('node-cron');
 function startDigest() {
     cron.schedule(process.env.BUEFFLER_CRON, () => { // should run each saturday @ 07:00
-        getWeeklyAppointments();
+        sendCollectiveMails();
     });
 };
 
-function getWeeklyAppointments() {
-    let collectiveMailArray = [];
-    let appointments_response = query("SELECT * FROM appointments WHERE Datum BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);", []);
-    appointments_response.then((response) => {
-        let appointmentLength = response.length;
-        if (appointmentLength > 0) {
-            response.forEach((appointment, appointmentI) => {
-                let appointmentObject = appointmentToObject(appointment.Titel, appointment.Datum, appointment.Fach, appointment.Lehrer, appointment.Notizen);
+async function getWeeklyAppointments() {
+    let appointmentResponse = await query("SELECT * FROM appointments WHERE Datum BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);", []);
+    let weeklyAppointments = [];
+    appointmentResponse.forEach((appointment, i) => {
+        let appointmentObject = appointmentToObject(appointment.Titel, appointment.TeamID, appointment.Datum, appointment.Fach, appointment.Lehrer, appointment.Notizen);
+        weeklyAppointments.push(appointmentObject);
+    });
+    return weeklyAppointments;
+}
 
-                let teammember_response = listTeammates(appointment.TeamID);
-                teammember_response.then((response) => {
-                    if (response.length === 1) {
-                        response[0].Mitglieder.forEach((userid) => {
-                            let mail_response = getUserMail(userid);
-                            mail_response.then((response) => {
-                                if (response.length === 1) {
-                                    let alreadyMember = false;
-                                    let alreadyMemberI = 0;
-                                    collectiveMailArray.forEach((user, i) => {
-                                        if (user.mail === response[0].Mail) {
-                                            alreadyMember = true;
-                                            alreadyMemberI = i;
-                                        }
-                                    });
-                                    if (alreadyMember === false) {
-                                        collectiveMailArray.push({
-                                            mail: response[0].Mail,
-                                            appointments: [
-                                                appointmentObject
-                                            ]
-                                        })
-                                    } else {
-                                        collectiveMailArray[alreadyMemberI].appointments.push(appointmentObject)
-                                    }
-                                }
-                            }).then(() => {
-                                if (appointmentI+1 === appointmentLength) {
-                                    sendCollectiveMails(collectiveMailArray);
-                                }
-                            });
-                        });
+async function getMailArray() {
+    let collectiveMailArray = [];
+    return new Promise(async (resolve, reject) => {
+        let weeklyAppointments = await getWeeklyAppointments();
+        weeklyAppointments.forEach(async (appointment, alli) => {
+            let teammemberResponse = await listTeammates(appointment.teamid);
+            teammemberResponse[0].Mitglieder.forEach(async (userid, i) => {
+                let mailResponse = await getUserMail(userid);
+                let alreadyMember = false;
+                let alreadyMemberI = 0;
+                collectiveMailArray.forEach((user, i) => {
+                    if (user.mail === mailResponse[0].Mail) {
+                        alreadyMember = true;
+                        alreadyMemberI = i;
                     }
                 });
-
+                if (alreadyMember === false) {
+                    collectiveMailArray.push({
+                        mail: mailResponse[0].Mail,
+                        appointments: [
+                            appointment
+                        ]
+                    });
+                } else {
+                    collectiveMailArray[alreadyMemberI].appointments.push(appointment);
+                }
+                if (alli+1 === weeklyAppointments.length && i+1 === teammemberResponse[0].Mitglieder.length) {
+                    resolve(collectiveMailArray)
+                }
             });
-        }
+        });
     });
 }
 
-function sendCollectiveMails(arr) {
-    arr.forEach(user => {
+async function sortMailArray() {
+    let collectiveMailArray = await getMailArray();
+    collectiveMailArray.forEach(user => {
+        user.appointments.sort((a,b) => a.date - b.date);
+    });
+    return collectiveMailArray
+}
+
+async function sendCollectiveMails() {
+    let collectiveMailArray = await sortMailArray();
+    collectiveMailArray.forEach(user => {
         let digest = `<h1>Diese Woche stehen Termine an!<h1>`;
         user.appointments.forEach((appointment) => {
             digest += `
@@ -526,5 +697,5 @@ app.listen(8080, () => {
     startDigest();
 
     //tmp
-    //getWeeklyAppointments();
+    sendCollectiveMails();
 });
