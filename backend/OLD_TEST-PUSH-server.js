@@ -27,10 +27,7 @@ app.use(express.json());
 
 app.use("/", express.static("../frontend/tests"))
 
-const publicVapidKey = "BHm1GIUIGMm3R47i5qRCPCo6oU4Z7dlc_g2JkXptkvcZOFLlobRAgJWpAmzKOrbiKBtBR69J4iB9-ISA_X8suNc";
-const privateVapidKey = "S_vmLED21JvKAfra5zDg3woYMZeJWjRVaB5Dc1up_FA";
 
-webpush.setVapidDetails("mailto:v.hudz@bbw-fi.de", publicVapidKey, privateVapidKey);
 
 app.post('/subscribe', (req, res) => {
     const subscription = req.body;

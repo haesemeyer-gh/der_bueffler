@@ -52,4 +52,12 @@ CREATE TABLE `user` (
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `push_subscriptions` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Subscription` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`Subscription`)),
+  `NutzerID` int(11) NOT NULL,
+  PRIMARY KEY(`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 COMMIT;

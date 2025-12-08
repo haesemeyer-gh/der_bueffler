@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 const express = require('express');
+const webpush = require('web-push');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
@@ -15,7 +16,7 @@ const pool = mariadb.createPool({
     database: process.env.BUEFFLER_DB_NAME
 });
 
-async function query(sqlQuery, values) {
+async function query(sqlQuery, values = []) {
     let conn;
     try {
         conn = await pool.getConnection();
@@ -89,11 +90,33 @@ async function closeSession(userID) {
     return await query("DELETE FROM session WHERE (NutzerID = ?)", [userID])
 }
 
+async function getUserIDFromToken(token) {
+    return await query("SELECT NutzerID FROM session WHERE (Token = ?)", [token])
+}
+
+function formatDate(date) {
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`
+}
+
 
 async function markOnline(userID) {
     const date = new Date()
 
-    return await query("UPDATE user SET online = ? WHERE (ID = ?)", [date.toISOString("de").split('T')[0], userID])
+    return await query("UPDATE user SET online = ? WHERE (ID = ?)", [formatDate(date), userID])
+}
+
+
+async function getAllAppointmentsWithinTimeframe(start, end) {
+    return await query("SELECT * FROM appointments WHERE Datum BETWEEN ? AND ?", [formatDate(start), formatDate(end)]);
+}
+
+
+async function getSubscriptions(userID) {
+    return await query("SELECT Subscription FROM push_subscriptions WHERE (NutzerID = ?)", [userID])
+}
+
+async function addSubscriptions(userID, subscription) {
+    return await query("INSERT INTO push_subscriptions (Subscription, NutzerID) VALUES (?, ?)", [subscription, userID]);
 }
 
 
@@ -103,6 +126,11 @@ app.post('/auth/register', async (req, res) => {
     const uname = req.body.uname;
     const email = req.body.email;
     const password = req.body.password;
+    if (uname.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0) {
+        return res.json({
+            message: "Some fields are empty"
+        })
+    }
 
     if (await userWithEmailExists(email)) {
         console.log("exists")
@@ -125,6 +153,12 @@ app.post('/auth/login', async (req, res) => {
 
     const email = req.body.email;
     const password = req.body.password;
+
+    if (email.trim().length === 0 || password.trim().length === 0) {
+        return res.json({
+            message: "Some fields are empty"
+        })
+    }
 
     if (!(await userWithEmailExists(email))) {
         
@@ -151,6 +185,102 @@ app.post('/auth/login', async (req, res) => {
 
 });
 
+
+
+/* PUSH-NOTIFICATIONS */
+
+
+function setupWebpush() {
+    const publicVapidKey = process.env.BUEFFLER_VAPID_PUBLIC;
+    const privateVapidKey = process.env.BUEFFLER_VAPID_PRIVATE;
+
+    webpush.setVapidDetails("mailto:fiadmin@localhosts", publicVapidKey, privateVapidKey);
+}
+setupWebpush();
+
+
+async function sendPush() {
+    const now = new Date();
+    let nearTime = new Date();
+    nearTime.setDate(now.getDate() + 1);
+
+    const appointments = await getAllAppointmentsWithinTimeframe(now, nearTime);
+
+    
+
+    const toSend = {}
+    for (const appointment of appointments) {
+        let teamID = appointment.TeamID;
+        let teamData = await listTeammates(teamID);
+        let teamMembers = teamData[0].Mitglieder;
+
+        teamMembers.forEach((member) => {
+            if (member in toSend) {
+
+                toSend[member].push(appointment)
+            }
+            else {
+                toSend[member] = [appointment]
+            }
+        })
+
+    }
+
+    const subscriptions = {}
+
+    for (const userID of Object.keys(toSend)) {
+        let pushSubscriptions = await getSubscriptions(userID)
+        if (pushSubscriptions.length > 0) {
+            subscriptions[userID] = pushSubscriptions;
+        }
+        
+    }
+ 
+    for (const [userID, pushsubscriptions] of Object.entries(subscriptions)) {
+        let appointments = toSend[userID];
+        for (const address of pushsubscriptions) {
+            for (const appointment of appointments) {
+                console.log(address.Subscription)
+                console.log(formatAppointment(appointment))
+                webpush.sendNotification(address.Subscription, formatAppointment(appointment))
+            }
+        }
+    }
+}
+
+
+function formatAppointment(appointment) {
+    const date = new Date(appointment.Datum);
+    return JSON.stringify({title: appointment.Titel, body: `Datum: ${formatDate(date)}; Fach: ${appointment.Fach}; Lehrer: ${appointment.Lehrer}`})
+}
+
+app.post("/subscribe", async (req, res) => {
+    const subscription = req.body.subscription;
+    const token = req.body.token;
+
+    const data = await getUserIDFromToken(token);
+    if (data.length > 0) {
+        const userID = data[0].NutzerID;
+        await addSubscriptions(userID, subscription);
+        console.log("added")
+        return res.json({
+            message: "Subscribed successfully"
+        })
+    }
+    else {
+        return res.json({
+            message: "Wrong token"
+        })
+    }
+})
+
+app.get("/pingpush", (req, res) => {
+    sendPush()
+    return res.status(200)
+})
+
+
+
 /* APPOINTMENTS */
 
 function appointmentToObject(title, date, course, teacher, notes) {
@@ -165,6 +295,8 @@ function appointmentToObject(title, date, course, teacher, notes) {
     };
     return appointmentObject;
 }
+
+
 
 app.post('/appointment/list', (req, res) => {
     // mit rq.body.token in datenbank abfragen welche termine sichtbar sind
@@ -206,8 +338,8 @@ app.post('/appointment/delete', (req, res) => {
 /* TEAMS */
 
 
-function listTeammates(teamid) {
-    return query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [teamid]);
+async function listTeammates(teamid) {
+    return await query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [teamid]);
 }
 
 function createTeams(teamsName){
@@ -394,5 +526,5 @@ app.listen(8080, () => {
     startDigest();
 
     //tmp
-    getWeeklyAppointments();
+    //getWeeklyAppointments();
 });

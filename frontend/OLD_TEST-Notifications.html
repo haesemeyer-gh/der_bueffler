@@ -9,6 +9,7 @@
 
     <button onclick="registerServiceWorker()">Push-Benachrichtigungen aktivieren</button>
     <button onclick="ping()">PING</button>
+    <input type="text" id="token">
 
     <script>
         async function registerServiceWorker() {
@@ -21,10 +22,10 @@
                 userVisibleOnly: true,
                 applicationServerKey: publicVapidKey,
             });
-
-            await fetch("/subscribe", {
+            const token = document.getElementById("token").value;
+            await fetch("subscribe", {
                 method: "POST",
-                body: JSON.stringify(subscription),
+                body: JSON.stringify({"subscription": subscription, "token": token}),
                 headers: {
                     "Content-Type": "application/json",
                 }
@@ -32,7 +33,7 @@
         }
 
         function ping() {
-            fetch("/ping")
+            fetch("/pushping")
         }
         
     </script>
