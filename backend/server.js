@@ -55,113 +55,99 @@ async function verify(hash, password) {
 }
 
 
-function userWithEmailExits(email) {
-    return query("SELECT * FROM user WHERE (Mail = ?)", [email]).then(data => (data.length > 0))
+async function userWithEmailExists(email) {
+    const data = await query("SELECT * FROM user WHERE (Mail = ?)", [email])
+    return data.length > 0
 }
 
-function createNewUser(uname, email, password) {
-    return encrypt(password).then(hash => query("INSERT INTO user (Mail, Passwort, Name, Lehrer, Admin) VALUES (?, ?, ?, 0, 0)", [email, hash, uname]))
+async function createNewUser(uname, email, password) {
+    const hash = await encrypt(password)
+    return await query("INSERT INTO user (Mail, Passwort, Name, Lehrer, Admin) VALUES (?, ?, ?, 0, 0)", [email, hash, uname])
 }
 
-function getUserID(email) {
-    return query("SELECT ID FROM user WHERE (Mail = ?)", [email])
+async function getUserID(email) {
+    const data = await query("SELECT ID FROM user WHERE (Mail = ?)", [email])
+    return data[0]["ID"]
 }
 
-function verifyPassword(password, email) {
-    return query("SELECT Passwort FROM user WHERE (Mail = ?)", [email]).then(data => (verify(data[0]["Passwort"], password)))
+async function verifyPassword(password, email) {
+    const data = await query("SELECT Passwort FROM user WHERE (Mail = ?)", [email])
+    return await verify(data[0]["Passwort"], password)
 }
 
 
-function createSession(userID) {
+async function createSession(userID) {
     const uuid = crypto.randomUUID();
-    return closeSession(userID).then(() => query("INSERT INTO session (Token, NutzerID) VALUES (?, ?)", [uuid, userID]).then(() => {
-        markOnline(userID);
-        return uuid;
-    }))
+    await closeSession(userID)
+    await query("INSERT INTO session (Token, NutzerID) VALUES (?, ?)", [uuid, userID])
+    await markOnline(userID)
+    return uuid
+
 }
 
-function closeSession(userID) {
-    return query("DELETE FROM session WHERE (NutzerID = ?)", [userID])
+async function closeSession(userID) {
+    return await query("DELETE FROM session WHERE (NutzerID = ?)", [userID])
 }
 
 
-function markOnline(userID) {
+async function markOnline(userID) {
     const date = new Date()
 
-    return query("UPDATE user SET online = ? WHERE (ID = ?)", [date.toISOString("de").split('T')[0], userID])
+    return await query("UPDATE user SET online = ? WHERE (ID = ?)", [date.toISOString("de").split('T')[0], userID])
 }
 
 
-app.post('/auth/register', (req, res) => {
+app.post('/auth/register', async (req, res) => {
     // rq.body.name, rq.body.email, rq.body.password
 
     const uname = req.body.uname;
     const email = req.body.email;
     const password = req.body.password;
 
-    userWithEmailExits(email).then(exist => {
-        if (exist) {
-            console.log("exists")
-            res.json({
-                message: "User exists already"
-            });
+    if (await userWithEmailExists(email)) {
+        console.log("exists")
+        return res.json({
+            message: "User exists already"
+        });
 
-        }
-        else {
-            console.log("created")
-            createNewUser(uname, email, password).then(() => {
-                res.json({
-                    message: "User created successfully"
-                });
-
-            })
-        }
-    })
+    }
+    else {
+        console.log("created")
+        await createNewUser(uname, email, password)
+        return res.json({
+            message: "User created successfully"
+        });
+    }
 });
 
-app.post('/auth/login', (req, res) => {
+app.post('/auth/login', async (req, res) => {
     // rq.body.email, rq.body.password
 
     const email = req.body.email;
     const password = req.body.password;
 
-    userWithEmailExits(email).then(exist => {
-        if (exist) {
-            console.log("exists")
-            return verifyPassword(password, email);
-        }
-        else {
-            console.log("doesn't exist")
-            res.json({
-                message: "No such user"
-            });
-            return null;
-        }
-    }).then(verified => {
-        if (verified !== null) {
-            if (verified) {
-                return getUserID(email)
-                .then(data => createSession(data[0]["ID"]))
-            }
-            else {
-                res.json({
-                    message: "Wrong password"
-                });
-                return null;
-            }
-        }
-        else {
-            return null;
-        }
+    if (!(await userWithEmailExists(email))) {
+        
+        console.log("doesn't exist")
+        return res.json({
+            message: "No such user"
+        });
+    }
+    console.log("exists")
 
-    }).then(token => {
-        console.log(token)
-        if (token !== null) {
-            res.json({
-                message: token
-            });
-        }
-    })
+    if (!(await verifyPassword(password, email))) {
+        return res.json({
+            message: "Wrong password"
+        });
+    }
+
+    const userID = await getUserID(email);
+    const token = await createSession(userID);
+
+    console.log(token)
+    return res.json({
+        message: token
+    });
 
 });
 
