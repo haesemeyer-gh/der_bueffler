@@ -119,8 +119,6 @@ async function verifyToken(token) {
 }
 
 app.post('/auth/register', async (req, res) => {
-    // rq.body.name, rq.body.email, rq.body.password
-
     const uname = req.body.uname;
     const email = req.body.email;
     const password = req.body.password;
@@ -142,8 +140,6 @@ app.post('/auth/register', async (req, res) => {
 });
 
 app.post('/auth/login', async (req, res) => {
-    // rq.body.email, rq.body.password
-
     const email = req.body.email;
     const password = req.body.password;
 
@@ -228,36 +224,39 @@ app.post('/appointment/delete', (req, res) => {
 /* TEAMS */
 
 
-function listTeammates(teamid) {
-    return query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [teamid]);
+function listTeammates(teamID) {
+    return query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [teamID]);
 }
 
-function createTeams(teamsName){
- return query("INSERT INTO teams (TeamName) VALUES (?)", [teamsName])
+function createTeam(teamName){
+    return query("INSERT INTO teams (TeamName) VALUES (?)", [teamName]);
+}
+
+function deleteTeam(teamID) {
+    return query("DELETE FROM Team WHERE (TeamID = ?)", [teamID]);
 }
 
 app.post('/teams/create', async (req, res) => {
-    // rq.body.token, rq.body.name
+    const token = req.body.token;
+    const name = req.body.name;
+
     let response;
-    let permissions = await verifyToken(req.body.token);
+    let permissions = await verifyToken(token);
     if (permissions) {
-        if (req.body.name && req.body.name.length > 0) {
+        if (name && name.length > 0) {
             response = "Team erstellt!";
-            createTeams(req.body.name);
+            createTeam(name);
         } else {
             response = "Du musst einen Namen angeben!";
         }
     } else {
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
+
     res.json({
-        message: response // evt. fehlernachricht
+        message: response
     });
 });
-
-function deleteTeam(TeamID) {
-    return query("DELETE FROM Team WHERE (TeamID = ?)", [TeamID])
-}
 
 app.post('/teams/delete', (req, res) => {
     // mit rq.body.token in datenbank abfragen ob team mit id req.body.id gelöscht werden darf
