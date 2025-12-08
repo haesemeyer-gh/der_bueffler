@@ -236,8 +236,13 @@ app.post('/teams/create', (req, res) => {
     });
 });
 
+function deleteTeam(TeamID) {
+    return query("DELETE FROM Team WHERE (TeamID = ?)", [TeamID])
+}
+
 app.post('/teams/delete', (req, res) => {
     // mit rq.body.token in datenbank abfragen ob team mit id req.body.id gelöscht werden darf
+    deleteTeam(req.body.id)
     res.json({
         message: "" // evt. fehlernachricht
     });
