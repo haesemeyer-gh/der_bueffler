@@ -184,45 +184,100 @@ function appointmentToObject(title, teamid, date, course, teacher, notes) {
     return appointmentObject;
 }
 
-app.post('/appointment/list', (req, res) => {
-    // mit rq.body.token in datenbank abfragen welche termine sichtbar sind
+app.post('/appointment/list', async(req, res) => {
+    const token = req.body.token;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: [] // termine
+        message: response
     });
 });
 
-app.post('/appointment/view', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob termin mit id rq.body.id sichtbar ist und termin zurückgeben
+app.post('/appointment/view', async(req, res) => {
+    const token = req.body.token;
+    const id = req.body.id;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: {} // termin
+        message: response
     });
 });
 
-app.post('/appointment/create', (req, res) => {
-    // mit rq.body.token in datenbank abfragen in welchem team erstellt werden kann, eintragen
-    // weitere daten: rq.body.team rq.body.title req.body.course req.body.teacher req.body.notes
+app.post('/appointment/create', async(req, res) => {
+    const token = req.body.token;
+    const teamid = req.body.teamid;
+    const title = req.body.title;
+    const course = req.body.course;
+    const teacher = req.body.teacher;
+    const notes = req.body.notes;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/appointment/edit', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob termin mit id req.body.id editiert werden kann
-    // weitere daten: rq.body.team rq.body.title req.body.course req.body.teacher req.body.notes
+app.post('/appointment/edit', async(req, res) => {
+    const token = req.body.token;
+    const id = req.body.id;
+    const title = req.body.title;
+    const course = req.body.course;
+    const teacher = req.body.teacher;
+    const notes = req.body.notes;
+
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/appointment/delete', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob termin mit id req.body.id gelöscht werden kann
+app.post('/appointment/delete', async(req, res) => {
+    const token = req.body.token;
+    const id = req.body.id;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
 /* TEAMS */
-
 
 function listTeammates(teamID) {
     return query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [teamID]);
@@ -280,34 +335,77 @@ app.post('/teams/delete', async (req, res) => {
     });
 });
 
-app.post('/teams/add', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.userid zu team req.body.teamid hinzugefügt werden darf
+app.post('/teams/add', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/teams/remove', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.userid von team req.body.teamid entfernt werden darf
+app.post('/teams/remove', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/teams/promote', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.userid in team req.body.teamid zum klassensprecher ernannt werden darf
+app.post('/teams/promote', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/teams/demote', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.userid in team req.body.teamid den klassensprecherstatus aberkannt haben werdewn tun darf dürfen sollen
+app.post('/teams/demote', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
-
 
 /* USERS */
 
@@ -315,17 +413,38 @@ function getUserMail(userid) {
     return query("SELECT Mail FROM user WHERE ID LIKE ?", [userid]);
 }
 
-app.post('/user/maketeacher', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.id zum lehrer ernannt werden darf
+app.post('/user/maketeacher', async(req, res) => {
+    const token = req.body.token;
+    const id = req.body.id;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
-app.post('/user/makeadmin', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob nutzer mit id req.body.id zum admin ernannt werden darf
+app.post('/user/makeadmin', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) { // TODO: benötigte Berechtigungen definieren
+        // TODO: Funktionen schreiben
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response
     });
 });
 
