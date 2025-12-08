@@ -54,9 +54,13 @@ async function verify(hash, password) {
     }
 }
 
-
 async function userWithEmailExists(email) {
     const data = await query("SELECT * FROM user WHERE (Mail = ?)", [email])
+    return data.length > 0
+}
+
+async function userWithTokenExists(token) {
+    const data = await query("SELECT * FROM session WHERE (Token = ?)", [token])
     return data.length > 0
 }
 
@@ -70,11 +74,15 @@ async function getUserID(email) {
     return data[0]["ID"]
 }
 
+async function getIDByToken(token) {
+    const data = await query("SELECT NutzerID FROM session WHERE (Token = ?)", [token])
+    return data[0].NutzerID
+}
+
 async function verifyPassword(password, email) {
     const data = await query("SELECT Passwort FROM user WHERE (Mail = ?)", [email])
     return await verify(data[0]["Passwort"], password)
 }
-
 
 async function createSession(userID) {
     const uuid = crypto.randomUUID();
@@ -89,13 +97,26 @@ async function closeSession(userID) {
     return await query("DELETE FROM session WHERE (NutzerID = ?)", [userID])
 }
 
-
 async function markOnline(userID) {
     const date = new Date()
 
     return await query("UPDATE user SET online = ? WHERE (ID = ?)", [date.toISOString("de").split('T')[0], userID])
 }
 
+async function getUserPermissions(userid) {
+    const data = await query("SELECT ID, Lehrer, Admin FROM user WHERE (ID = ?)", [userid])
+    return data[0]
+}
+
+async function verifyToken(token) {
+    if (await userWithTokenExists(token)) {
+        let id = await getIDByToken(token);
+        let permissions = await getUserPermissions(id);
+        return permissions;
+    } else {
+        return false;
+    }
+}
 
 app.post('/auth/register', async (req, res) => {
     // rq.body.name, rq.body.email, rq.body.password
@@ -215,11 +236,22 @@ function createTeams(teamsName){
  return query("INSERT INTO teams (TeamName) VALUES (?)", [teamsName])
 }
 
-app.post('/teams/create', (req, res) => {
-    // mit rq.body.token in datenbank abfragen ob team mit namen req.body.name erstellt werden darf
-    createTeams(req.body.name)
+app.post('/teams/create', async (req, res) => {
+    // rq.body.token, rq.body.name
+    let response;
+    let permissions = await verifyToken(req.body.token);
+    if (permissions) {
+        if (req.body.name && req.body.name.length > 0) {
+            response = "Team erstellt!";
+            createTeams(req.body.name);
+        } else {
+            response = "Du musst einen Namen angeben!";
+        }
+    } else {
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
     res.json({
-        message: "" // evt. fehlernachricht
+        message: response // evt. fehlernachricht
     });
 });
 
