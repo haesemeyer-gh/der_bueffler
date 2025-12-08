@@ -54,9 +54,10 @@ CREATE TABLE `user` (
 
 CREATE TABLE `push_subscriptions` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Subscription` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`Subscription`)),
+  `Subscription` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`Subscription`)),
   `NutzerID` int(11) NOT NULL,
-  PRIMARY KEY(`ID`)
+  PRIMARY KEY(`ID`),
+  UNIQUE(`Subscription`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 

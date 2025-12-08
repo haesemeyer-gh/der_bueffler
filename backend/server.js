@@ -98,10 +98,6 @@ async function closeSession(userID) {
     return await query("DELETE FROM session WHERE (NutzerID = ?)", [userID])
 }
 
-async function getUserIDFromToken(token) {
-    return await query("SELECT NutzerID FROM session WHERE (Token = ?)", [token])
-}
-
 function formatDate(date) {
     return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`
 }
@@ -124,7 +120,7 @@ async function getSubscriptions(userID) {
 }
 
 async function addSubscriptions(userID, subscription) {
-    return await query("INSERT INTO push_subscriptions (Subscription, NutzerID) VALUES (?, ?)", [subscription, userID]);
+    return await query("INSERT IGNORE INTO push_subscriptions (Subscription, NutzerID) VALUES (?, ?)", [subscription, userID]);
 }
 
 async function getUserPermissions(userid) {
@@ -276,11 +272,9 @@ app.post("/subscribe", async (req, res) => {
     const subscription = req.body.subscription;
     const token = req.body.token;
 
-    const data = await getUserIDFromToken(token);
-    if (data.length > 0) {
-        const userID = data[0].NutzerID;
+    if (await userWithTokenExists(token)) {
+        const userID = await getIDByToken(token);
         await addSubscriptions(userID, subscription);
-        console.log("added")
         return res.json({
             message: "Subscribed successfully"
         })
@@ -699,3 +693,7 @@ app.listen(8080, () => {
     //tmp
     sendCollectiveMails();
 });
+
+
+
+
