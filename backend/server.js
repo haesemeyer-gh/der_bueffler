@@ -127,7 +127,7 @@ app.post('/auth/login', async (req, res) => {
     const password = req.body.password;
 
     if (!(await userWithEmailExists(email))) {
-        
+
         console.log("doesn't exist")
         return res.json({
             message: "No such user"
@@ -330,7 +330,7 @@ async function getWeeklyAppointments() {
     return weeklyAppointments;
 }
 
-async function getDigestArray() {
+async function getMailArray() {
     let collectiveMailArray = [];
     return new Promise(async (resolve, reject) => {
         let weeklyAppointments = await getWeeklyAppointments();
@@ -364,8 +364,16 @@ async function getDigestArray() {
     });
 }
 
+async function sortMailArray() {
+    let collectiveMailArray = await getMailArray();
+    collectiveMailArray.forEach(user => {
+        user.appointments.sort((a,b) => a.date - b.date);
+    });
+    return collectiveMailArray
+}
+
 async function sendCollectiveMails() {
-    let collectiveMailArray = await getDigestArray();
+    let collectiveMailArray = await sortMailArray();
     collectiveMailArray.forEach(user => {
         let digest = `<h1>Diese Woche stehen Termine an!<h1>`;
         user.appointments.forEach((appointment) => {
