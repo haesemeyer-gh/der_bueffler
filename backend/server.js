@@ -242,7 +242,7 @@ app.post('/teams/create', async (req, res) => {
 
     let response;
     let permissions = await verifyToken(token);
-    if (permissions) {
+    if (permissions.Lehrer === 1) {
         if (name && name.length > 0) {
             response = "Team erstellt!";
             createTeam(name);

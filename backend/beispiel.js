@@ -46,8 +46,12 @@ app.post('/teams/create', async (req, res) => {
     let permissions = await verifyToken(token);
 
     // Hier wird nun geprüft, ob der Nutzer existiert.
-    // Alternativ könnte man hier die Berechtigungen weiter beschränken, damit z.B. nur Lehrer etwas ausführen können.
     if (permissions) {
+    // Alternativ könnte man hier die Berechtigungen weiter beschränken, damit z.B. nur Lehrer etwas ausführen können. Beispiel:
+    //      if (permissions.Lehrer === 1) {
+    //      if (permissions.Admin === 1) {
+    // Klassensprecher und Teammitglieder sind logischerweise bei jedem Team anders,
+    // daher muss für diese Berechtigungen überprüft werden, ob `permissions.ID` im `Mitglieder` bzw. `Klassensprecher` Array des jeweiligen Teams ist.
 
         if (name && name.length > 0) { // wenn der Nutzer einen Namen angegeben hat...
             response = "Team erstellt!";
