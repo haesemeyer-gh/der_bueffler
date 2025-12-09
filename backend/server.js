@@ -123,6 +123,10 @@ async function addSubscriptions(userID, subscription) {
     return await query("INSERT IGNORE INTO push_subscriptions (Subscription, NutzerID) VALUES (?, ?)", [subscription, userID]);
 }
 
+async function removeSubscriptions(userID) {
+    return await query("DELETE FROM push_subscriptions WHERE (NutzerID = ?)", [userID]);
+}
+
 async function getUserPermissions(userid) {
     const data = await query("SELECT ID, Lehrer, Admin FROM user WHERE (ID = ?)", [userid])
     return data[0]
@@ -226,18 +230,19 @@ async function sendPush() {
     for (const appointment of appointments) {
         let teamID = appointment.TeamID;
         let teamData = await listTeammates(teamID);
-        let teamMembers = teamData[0].Mitglieder;
+        if (teamData.length > 0) {
+            let teamMembers = teamData[0].Mitglieder;
 
-        teamMembers.forEach((member) => {
-            if (member in toSend) {
+            teamMembers.forEach((member) => {
+                if (member in toSend) {
 
-                toSend[member].push(appointment)
-            }
-            else {
-                toSend[member] = [appointment]
-            }
-        })
-
+                    toSend[member].push(appointment)
+                }
+                else {
+                    toSend[member] = [appointment]
+                }
+            })
+        }
     }
 
     const subscriptions = {}
@@ -268,7 +273,7 @@ function formatAppointment(appointment) {
     return JSON.stringify({title: appointment.Titel, body: `Datum: ${formatDate(date)}; Fach: ${appointment.Fach}; Lehrer: ${appointment.Lehrer}`})
 }
 
-app.post("/subscribe", async (req, res) => {
+app.post("/push/subscribe", async (req, res) => {
     const subscription = req.body.subscription;
     const token = req.body.token;
 
@@ -286,9 +291,27 @@ app.post("/subscribe", async (req, res) => {
     }
 })
 
+
+app.post("/push/unsubscribe", async (req, res) => {
+    const token = req.body.token;
+
+    if (await userWithTokenExists(token)) {
+        const userID = await getIDByToken(token);
+        await removeSubscriptions(userID);
+        return res.json({
+            message: "Removed all subscriptions successfully"
+        })
+    }
+    else {
+        return res.json({
+            message: "Wrong token"
+        })
+    }
+})
+
 app.get("/pingpush", (req, res) => {
     sendPush()
-    return res.status(200)
+    return res.status(200).end();
 })
 
 
