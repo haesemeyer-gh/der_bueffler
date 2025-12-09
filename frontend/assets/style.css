@@ -34,12 +34,25 @@ nav > a > img {
     height: 48px;
 }
 nav > a > img:hover {
-    filter: brightness(0) saturate(100%) invert(20%) sepia(90%) saturate(1000%) hue-rotate(185deg) brightness(90%) contrast(90%);
+    filter: saturate(100%) invert(20%) sepia(90%) saturate(1000%) hue-rotate(185deg) brightness(90%) contrast(90%);
+}
+nav > .current-page > img {
+    filter: saturate(100%) invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+}
+nav > .current-page > img:hover {
+    filter: saturate(100%) invert(20%) sepia(100%) saturate(1000%) hue-rotate(185deg) brightness(120%) contrast(100%);
 }
 
+#login-main {
+    padding: 10px;
+}
 #login input {
     border: 2px solid black;
 }
 #login button {
     margin-top: 10px;
+}
+
+main {
+    padding: 10px;
 }

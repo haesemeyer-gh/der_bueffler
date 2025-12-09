@@ -1,7 +1,7 @@
 const APIURL = 'http://localhost:8080';
 
 const loginEl = document.getElementById('login');
-const mainEl = document.getElementById('main');
+const elementsThatRequireLogin = document.getElementsByClassName('requirelogin');
 
 let token;
 function getCookie(cname) {
@@ -72,5 +72,7 @@ loginButton.addEventListener('click', () => {
 
 function logIn() {
     loginEl.classList.toggle("hidden");
-    mainEl.classList.toggle("hidden");
+    for (let i = 0; i < elementsThatRequireLogin.length; i++) {
+        elementsThatRequireLogin[i].classList.toggle("hidden");
+    }
 }

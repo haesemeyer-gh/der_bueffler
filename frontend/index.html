@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Startseite</title>
     <link rel="stylesheet" href="assets/style.css">
     <script src="scripts/login.js" defer></script>
     <script src="scripts/push.js" defer></script>
+    <script src="index.js" defer></script>
 </head>
 <body>
 
@@ -14,47 +15,43 @@
         <header>
             <h1>Der Büffler - Anmeldung</h1>
         </header>
-        <label>E-Mail Adresse:<br>
-            <input id="login-mail" type="text" />
-        </label><br>
-        <label>Passwort:<br>
-            <input id="login-pass" type="password" />
-        </label><br>
-        <label>Anzeigename: <i>(nur Registierung)</i><br>
-            <input id="register-uname" type="text" />
-        </label><br>
-        <button id="register-button" class="anmelde-button">Registrieren</button>
-        <button id="login-button" class="anmelde-button">Anmelden</button>
-        <!--<button id="reset" class="anmelde-button">Passwort vergessen?</button>-->
-        <p id="login-status"></p>
+        <div id="login-main">
+            <label>E-Mail Adresse:<br>
+                <input id="login-mail" type="text" />
+            </label><br>
+            <label>Passwort:<br>
+                <input id="login-pass" type="password" />
+            </label><br>
+            <label>Anzeigename: <i>(nur Registierung)</i><br>
+                <input id="register-uname" type="text" />
+            </label><br>
+            <button id="register-button" class="anmelde-button">Registrieren</button>
+            <button id="login-button" class="anmelde-button">Anmelden</button>
+            <!--<button id="reset" class="anmelde-button">Passwort vergessen?</button>-->
+            <p id="login-status"></p>
+        </div>
     </section>
 
-    <main id="main" class="hidden">
+    <header class="hidden requirelogin">
+        <h1>Der Büffler!</h1>
+        <nav>
+            <a class="current-page" href="#"><img src="assets/icons/home.svg" alt="Startseite"></a>
+            <a href="kalender"><img src="assets/icons/calendar.svg" alt="Kalenderansicht"></a>
+            <!--
+            <a href ="Noten.html"><img src="assets/icons/test.svg" alt="Notenübersicht"></a>
+            <a href ="Einstellungen.html"><img src="assets/icons/gear.svg" alt="Einstellungen"></a>
+            -->
+            <!--  <button id="subscribe-to-push">Push-Benachrichtigungen aktivieren</button> <!--?-->
+        </nav>
+    </header>
 
-        <header>
-            <h1>Der Büffler!</h1>
-            <nav>
-                <a href ="index.html"><img src="assets/icons/home.svg" alt="Startseite"></a>
-                <a href ="Kalenderansicht.html"><img src="assets/icons/calendar.svg" alt="Kalenderansicht"></a>
-                <!--
-                <a href ="Noten.html"><img src="assets/icons/test.svg" alt="Notenübersicht"></a>
-                <a href ="Einstellungen.html"><img src="assets/icons/gear.svg" alt="Einstellungen"></a>
-                -->
-                <!--  <button id="subscribe-to-push">Push-Benachrichtigungen aktivieren</button> <!--?-->
-            </nav>
-        </header>
+    <main class="hidden requirelogin">
 
-        <h2>Aktuelles Datum: </h2>
+        <h2>Datum: <span id="date"></span></h2>
 
-        <h3>Anstehende Arbeiten</h3>
-        <ul>
-            <li>11.12.2025: Mathe - Leistungskontrolle
-                <li>12.12.2025: Lernfeld 5 - Leistungskontrolle</li>
-            <li>16.12.2025: Deutsch - Klassenarbeit</li>
-        </ul> <br>
+        <section id="dashboard">
 
-        <h3>Letzte Noten</h3>
-        <p> Konzept noch in bearbeitung</p>
+        </section>
 
     </main>
 
