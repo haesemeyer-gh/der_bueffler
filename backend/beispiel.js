@@ -58,7 +58,7 @@ app.post('/teams/create', async (req, res) => {
             response = "Team erstellt!";
             createTeam(name); // ...erstelle ein Team in der Datenbank (siehe die Definition der Funktion oben)
         } else {
-            res.status(403); // 422 ist der HTTP-Fehlercode den wir hier verwenden, wenn der Nutzer nicht genügend Informationen angibt.
+            res.status(422); // 422 ist der HTTP-Fehlercode den wir hier verwenden, wenn der Nutzer nicht genügend Informationen angibt.
             response = "Du musst einen Namen angeben!";
         }
 
