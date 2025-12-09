@@ -1,14 +1,18 @@
-require('dotenv').config()
+import 'dotenv/config';
+import cors from 'cors';
+import express from 'express';
+import webpush from 'web-push';
+import mariadb from 'mariadb';
+import argon2 from 'argon2';
+import nodemailer from 'nodemailer';
+import cron from 'node-cron';
 
-const express = require('express');
-const webpush = require('web-push');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
-
+app.use(cors())
 app.use("/", express.static("../frontend"))
 
-const mariadb = require('mariadb');
 const pool = mariadb.createPool({
     host: process.env.BUEFFLER_DB_HOST,
     user: process.env.BUEFFLER_DB_USER,
@@ -36,8 +40,6 @@ app.get('/ping', (req, res) => {
 });
 
 /* AUTH */
-
-const argon2 = require('argon2');
 
 async function encrypt(password) {
     try {
@@ -147,6 +149,7 @@ app.post('/auth/register', async (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
     if (uname.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0) {
+        res.status(422);
         return res.json({
             message: "Some fields are empty"
         })
@@ -154,6 +157,7 @@ app.post('/auth/register', async (req, res) => {
 
     if (await userWithEmailExists(email)) {
         console.log("exists")
+        res.status(422);
         return res.json({
             message: "User exists already"
         });
@@ -162,6 +166,7 @@ app.post('/auth/register', async (req, res) => {
     else {
         console.log("created")
         await createNewUser(uname, email, password)
+        res.status(201);
         return res.json({
             message: "User created successfully"
         });
@@ -173,6 +178,7 @@ app.post('/auth/login', async (req, res) => {
     const password = req.body.password;
 
     if (email.trim().length === 0 || password.trim().length === 0) {
+        res.status(403);
         return res.json({
             message: "Some fields are empty"
         })
@@ -181,6 +187,7 @@ app.post('/auth/login', async (req, res) => {
     if (!(await userWithEmailExists(email))) {
 
         console.log("doesn't exist")
+        res.status(403);
         return res.json({
             message: "No such user"
         });
@@ -188,6 +195,7 @@ app.post('/auth/login', async (req, res) => {
     console.log("exists")
 
     if (!(await verifyPassword(password, email))) {
+        res.status(403);
         return res.json({
             message: "Wrong password"
         });
@@ -197,6 +205,7 @@ app.post('/auth/login', async (req, res) => {
     const token = await createSession(userID);
 
     console.log(token)
+    res.status(200);
     return res.json({
         message: token
     });
@@ -224,7 +233,7 @@ async function sendPush() {
 
     const appointments = await getAllAppointmentsWithinTimeframe(now, nearTime);
 
-    
+
 
     const toSend = {}
     for (const appointment of appointments) {
@@ -252,9 +261,9 @@ async function sendPush() {
         if (pushSubscriptions.length > 0) {
             subscriptions[userID] = pushSubscriptions;
         }
-        
+
     }
- 
+
     for (const [userID, pushsubscriptions] of Object.entries(subscriptions)) {
         let appointments = toSend[userID];
         for (const address of pushsubscriptions) {
@@ -342,6 +351,7 @@ app.post('/appointment/list', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -359,6 +369,7 @@ app.post('/appointment/view', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -380,6 +391,7 @@ app.post('/appointment/create', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -402,6 +414,7 @@ app.post('/appointment/edit', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -419,6 +432,7 @@ app.post('/appointment/delete', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -450,12 +464,15 @@ app.post('/teams/create', async (req, res) => {
     let permissions = await verifyToken(token);
     if (permissions.Lehrer === 1) {
         if (name && name.length > 0) {
+            res.status(201);
             response = "Team erstellt!";
             createTeam(name);
         } else {
+            res.status(422);
             response = "Du musst einen Namen angeben!";
         }
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -472,12 +489,15 @@ app.post('/teams/delete', async (req, res) => {
     let permissions = await verifyToken(token);
     if (permissions.Lehrer === 1) {
         if (id) {
+            res.status(201);
             response = "Team gelöscht!";
             deleteTeam(id);
         } else {
+            res.status(422);
             response = "Du musst eine ID angeben!";
         }
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -496,6 +516,7 @@ app.post('/teams/add', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -514,6 +535,7 @@ app.post('/teams/remove', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -532,6 +554,7 @@ app.post('/teams/promote', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -550,6 +573,7 @@ app.post('/teams/demote', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -573,6 +597,7 @@ app.post('/user/maketeacher', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -591,6 +616,7 @@ app.post('/user/makeadmin', async(req, res) => {
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
     } else {
+        res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -601,7 +627,6 @@ app.post('/user/makeadmin', async(req, res) => {
 
 /* SMTP */
 
-const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
     host: process.env.BUEFFLER_SMTP_HOST,
     port: process.env.BUEFFLER_SMTP_PORT,
@@ -628,7 +653,6 @@ async function sendmail(to, subject, html) {
 
 /* DIGESTS */
 
-const cron = require('node-cron');
 function startDigest() {
     cron.schedule(process.env.BUEFFLER_CRON, () => { // should run each saturday @ 07:00
         sendCollectiveMails();
@@ -716,7 +740,3 @@ app.listen(8080, () => {
     //tmp
     sendCollectiveMails();
 });
-
-
-
-

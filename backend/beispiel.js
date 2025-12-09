@@ -54,13 +54,16 @@ app.post('/teams/create', async (req, res) => {
     // daher muss für diese Berechtigungen überprüft werden, ob `permissions.ID` im `Mitglieder` bzw. `Klassensprecher` Array des jeweiligen Teams ist.
 
         if (name && name.length > 0) { // wenn der Nutzer einen Namen angegeben hat...
+            res.status(201); // 201 ist der HTTP-Statuscode für "Created!" und zeigt an, dass erfolgreich ein Team erstellt wurde.
             response = "Team erstellt!";
             createTeam(name); // ...erstelle ein Team in der Datenbank (siehe die Definition der Funktion oben)
         } else {
+            res.status(422); // 422 ist der HTTP-Fehlercode den wir hier verwenden, wenn der Nutzer nicht genügend Informationen angibt.
             response = "Du musst einen Namen angeben!";
         }
 
-    } else { // (hat der Nutzer nicht die nötigen Berechtigungen, wird nur eine Fehlernachricht in die Antwort geschrieben)
+    } else { // (hat der Nutzer nicht die nötigen Berechtigungen, wird nur eine Fehlernachricht in die Antwort geschrieben und der Fehlercode gesetzt)
+        res.status(403); // 403 ist der HTTP-Fehlercode für keine Berechtigungen
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
