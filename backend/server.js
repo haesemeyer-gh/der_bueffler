@@ -1,14 +1,18 @@
-require('dotenv').config()
+import 'dotenv/config';
+import cors from 'cors';
+import express from 'express';
+import webpush from 'web-push';
+import mariadb from 'mariadb';
+import 'argon2';
+import nodemailer from 'nodemailer';
+import cron from 'node-cron';
 
-const express = require('express');
-const webpush = require('web-push');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
-
+app.use(cors())
 app.use("/", express.static("../frontend"))
 
-const mariadb = require('mariadb');
 const pool = mariadb.createPool({
     host: process.env.BUEFFLER_DB_HOST,
     user: process.env.BUEFFLER_DB_USER,
@@ -36,8 +40,6 @@ app.get('/ping', (req, res) => {
 });
 
 /* AUTH */
-
-const argon2 = require('argon2');
 
 async function encrypt(password) {
     try {
@@ -220,7 +222,7 @@ async function sendPush() {
 
     const appointments = await getAllAppointmentsWithinTimeframe(now, nearTime);
 
-    
+
 
     const toSend = {}
     for (const appointment of appointments) {
@@ -247,9 +249,9 @@ async function sendPush() {
         if (pushSubscriptions.length > 0) {
             subscriptions[userID] = pushSubscriptions;
         }
-        
+
     }
- 
+
     for (const [userID, pushsubscriptions] of Object.entries(subscriptions)) {
         let appointments = toSend[userID];
         for (const address of pushsubscriptions) {
@@ -578,7 +580,6 @@ app.post('/user/makeadmin', async(req, res) => {
 
 /* SMTP */
 
-const nodemailer = require("nodemailer");
 const transporter = nodemailer.createTransport({
     host: process.env.BUEFFLER_SMTP_HOST,
     port: process.env.BUEFFLER_SMTP_PORT,
@@ -605,7 +606,6 @@ async function sendmail(to, subject, html) {
 
 /* DIGESTS */
 
-const cron = require('node-cron');
 function startDigest() {
     cron.schedule(process.env.BUEFFLER_CRON, () => { // should run each saturday @ 07:00
         sendCollectiveMails();
@@ -693,7 +693,3 @@ app.listen(8080, () => {
     //tmp
     sendCollectiveMails();
 });
-
-
-
-
