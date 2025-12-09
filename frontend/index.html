@@ -4,18 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="login.js" defer></script>
-    <script src="index.js" defer></script>
+    <link rel="stylesheet" href="assets/style.css">
+    <script src="scripts/login.js" defer></script>
+    <script src="scripts/push.js" defer></script>
 </head>
 <body>
 
-    <header>
-        <h1>Der Büffler!</h1>
-    </header>
-
     <section id="login">
-        <h1>Anmeldung</h1>
+        <header>
+            <h1>Der Büffler - Anmeldung</h1>
+        </header>
         <label>E-Mail Adresse:<br>
             <input id="login-mail" type="text" />
         </label><br>
@@ -33,14 +31,18 @@
 
     <main id="main" class="hidden">
 
-        <nav>
-            <a href ="index.html">Startseite</a> <br>
-            <a href ="Kalenderansicht.html">Kalenderansicht</a> <br>
-            <a href ="Noten.html">Notenübersicht</a> <br>
-            <a href ="Einstellungen.html">Einstellungen</a> <br>
-            <a href ="auth.html">Auth</a> <br>
-            <button id="subscribe-to-push">Push-Benachrichtigungen aktivieren</button>
-        </nav>
+        <header>
+            <h1>Der Büffler!</h1>
+            <nav>
+                <a href ="index.html"><img src="assets/icons/home.svg" alt="Startseite"></a>
+                <a href ="Kalenderansicht.html"><img src="assets/icons/calendar.svg" alt="Kalenderansicht"></a>
+                <!--
+                <a href ="Noten.html"><img src="assets/icons/test.svg" alt="Notenübersicht"></a>
+                <a href ="Einstellungen.html"><img src="assets/icons/gear.svg" alt="Einstellungen"></a>
+                -->
+                <!--  <button id="subscribe-to-push">Push-Benachrichtigungen aktivieren</button> <!--?-->
+            </nav>
+        </header>
 
         <h2>Aktuelles Datum: </h2>
 

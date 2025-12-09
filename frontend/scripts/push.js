@@ -1,6 +1,3 @@
-
-/* PUSH-BENACHRICHTIGUNGEN */
-
 const subscribeBtn = document.getElementById("subscribe-to-push");
 
 subscribeBtn.addEventListener("click", () => {

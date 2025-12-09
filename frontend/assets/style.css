@@ -1,0 +1,45 @@
+.hidden {
+    display: none;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.5rem;
+    @media (width < 50rem) {
+        font-size: 1.2rem;
+    }
+}
+
+header {
+    background-color: #FBBA00;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    @media (width < 36rem) {
+        flex-direction: column;
+    }
+}
+header > h1 {
+    margin: 0;
+    @media (width < 36rem) {
+        text-align: center;
+    }
+}
+nav {
+    display: flex;
+}
+nav > a > img {
+    height: 48px;
+}
+nav > a > img:hover {
+    filter: brightness(0) saturate(100%) invert(20%) sepia(90%) saturate(1000%) hue-rotate(185deg) brightness(90%) contrast(90%);
+}
+
+#login input {
+    border: 2px solid black;
+}
+#login button {
+    margin-top: 10px;
+}
