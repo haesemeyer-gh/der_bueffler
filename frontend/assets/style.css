@@ -36,11 +36,9 @@ nav > a > img {
 nav > a > img:hover {
     filter: saturate(100%) invert(20%) sepia(90%) saturate(1000%) hue-rotate(185deg) brightness(90%) contrast(90%);
 }
-nav > .current-page > img {
-    filter: saturate(100%) invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
-}
+nav > .current-page > img,
 nav > .current-page > img:hover {
-    filter: saturate(100%) invert(20%) sepia(100%) saturate(1000%) hue-rotate(185deg) brightness(120%) contrast(100%);
+    filter: saturate(100%) invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
 }
 
 #login-main {
@@ -55,4 +53,41 @@ nav > .current-page > img:hover {
 
 main {
     padding: 10px;
+}
+
+.date-display {
+    font-size: 1.3rem;
+}
+
+#dashboard details {
+    margin: 0 0 10px 0;
+    border: 2px solid black;
+    padding: 10px;
+}
+#dashboard summary {
+    font-weight: 700;
+}
+#dashboard details > ul > li {
+    margin: 10px 0;
+}
+#dashboard details > ul > li > span {
+    margin-right: 10px;
+}
+.appointment-list-date {
+    font-family: "Lucida Console", "Courier New", monospace;
+}
+.appointment-list-course {
+    background-color: #f3e178;
+    border: 1px solid #FBBA00;
+    border-radius: 10px;
+    padding: 2px 5px;
+}
+.appointment-list-teacher {
+    background-color: #f3e178;
+    border: 1px solid #FBBA00;
+    border-radius: 10px;
+    padding: 2px 5px;
+}
+.appointment-list-title {
+    font-weight: 700;
 }
