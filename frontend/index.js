@@ -91,7 +91,15 @@ async function updateDashboard() {
             }
         }
 
-        dashboardEl.append(detailsElNow, detailsElSoon, detailsElLater);
+        if (listElNow.innerHTML != ``) {
+            dashboardEl.appendChild(detailsElNow)
+        }
+        if (listElSoon.innerHTML != ``) {
+            dashboardEl.appendChild(detailsElSoon)
+        }
+        if (listElLater.innerHTML != ``) {
+            dashboardEl.appendChild(detailsElLater)
+        }
     }
 }
 
