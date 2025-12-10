@@ -24,7 +24,6 @@ CREATE TABLE `changes` (
   PRIMARY KEY (`AenderungsID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-
 CREATE TABLE `session` (
   `Token` varchar(255) NOT NULL,
   `NutzerID` int(11) NOT NULL
@@ -59,6 +58,5 @@ CREATE TABLE `push_subscriptions` (
   PRIMARY KEY(`ID`),
   UNIQUE(`Subscription`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
 
 COMMIT;

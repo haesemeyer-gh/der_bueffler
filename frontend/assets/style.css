@@ -1,10 +1,92 @@
+/* JS */
+
 .hidden {
     display: none;
 }
 
+/* FONT: Aptos */
+
+@font-face {
+    font-family: "Aptos";
+    src: url("aptos/Aptos.ttf");
+    font-weight: 300 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Aptos";
+    src: url("aptos/Aptos-Light.ttf");
+    font-weight: 100 200;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Aptos";
+    src: url("aptos/Aptos-Bold.ttf");
+    font-weight: 500 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Aptos";
+    src: url("aptos/Aptos-Black.ttf");
+    font-weight: 800 900;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Aptos";
+    src: url("aptos/Aptos-Italic.ttf");
+    font-weight: 300 400;
+    font-style: italic;
+}
+@font-face {
+    font-family: "Aptos";
+    src: url("aptos/Aptos-Light-Italic.ttf");
+    font-weight: 100 200;
+    font-style: italic;
+}
+@font-face {
+    font-family: "Aptos";
+    src: url("aptos/Aptos-Bold-Italic.ttf");
+    font-weight: 500 700;
+    font-style: italic;
+}
+@font-face {
+    font-family: "Aptos";
+    src: url("aptos/Aptos-Black-Italic.ttf");
+    font-weight: 800 900;
+    font-style: italic;
+}
+
+/* FONT: Aptos Mono */
+
+@font-face {
+    font-family: "Aptos Mono";
+    src: url("aptos/Aptos-Mono.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Aptos Mono";
+    src: url("aptos/Aptos-Mono-Italic.ttf");
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: "Aptos Mono";
+    src: url("aptos/Aptos-Mono-Bold.ttf");
+    font-weight: bold;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Aptos Mono";
+    src: url("aptos/Aptos-Mono-Bold-Italic.ttf");
+    font-weight: bold;
+    font-style: italic;
+}
+
+/* STYLES */
+
 body {
     margin: 0;
-    font-family: "Aptos Regular", "Aptos", Arial, Helvetica, sans-serif;
+    font-family: "Aptos", sans-serif;
     font-size: 1.5rem;
     @media (width < 50rem) {
         font-size: 1.2rem;
@@ -23,6 +105,7 @@ header {
 }
 header > h1 {
     margin: 0;
+    font-weight: 900; /************************************************************************/
     @media (width < 36rem) {
         text-align: center;
     }
@@ -57,6 +140,7 @@ main {
 
 .date-display {
     font-size: 1.3rem;
+    font-weight: normal; /************************************************************************/
 }
 
 #dashboard details {
@@ -65,7 +149,7 @@ main {
     padding: 10px;
 }
 #dashboard summary {
-    font-weight: 700;
+    font-weight: bold;
 }
 #dashboard details > ul > li {
     margin: 10px 0;
@@ -74,7 +158,8 @@ main {
     margin-right: 10px;
 }
 .appointment-list-date {
-    font-family: "Lucida Console", "Courier New", monospace;
+    margin-left: 10px;
+    font-family: "Aptos Mono", monospace;
 }
 .appointment-list-course {
     background-color: #f3e178;
@@ -89,5 +174,5 @@ main {
     padding: 2px 5px;
 }
 .appointment-list-title {
-    font-weight: 700;
+    font-weight: bold;
 }

@@ -6,6 +6,7 @@
     <title>Startseite</title>
     <link rel="stylesheet" href="assets/style.css">
     <script src="scripts/login.js" defer></script>
+    <script src="scripts/clock.js" defer></script>
     <script src="scripts/push.js" defer></script>
     <script src="index.js" defer></script>
 </head>
@@ -38,8 +39,8 @@
             <a class="current-page" href="#"><img src="assets/icons/home.svg" alt="Startseite"></a>
             <a href="kalender"><img src="assets/icons/calendar.svg" alt="Kalenderansicht"></a>
             <!--
-            <a href ="Noten.html"><img src="assets/icons/test.svg" alt="Notenübersicht"></a>
-            <a href ="Einstellungen.html"><img src="assets/icons/gear.svg" alt="Einstellungen"></a>
+            <a href="Noten.html"><img src="assets/icons/test.svg" alt="Notenübersicht"></a>
+            <a href="Einstellungen.html"><img src="assets/icons/gear.svg" alt="Einstellungen"></a>
             -->
             <!--  <button id="subscribe-to-push">Push-Benachrichtigungen aktivieren</button> <!--?-->
         </nav>
@@ -47,7 +48,7 @@
 
     <main class="hidden requirelogin">
 
-        <h2 class="date-display">Datum: <span id="date"></span></h2>
+        <h2 class="date-display">Datum: <i id="date"></i></h2>
 
         <section id="dashboard">
 

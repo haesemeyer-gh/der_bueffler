@@ -1,10 +1,3 @@
-function updateClock() {
-    let today = new Date().toLocaleString('de-DE', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
-    document.getElementById('date').innerText = today;
-}
-updateClock()
-setInterval(updateClock, 10000); // 10s
-
 const dashboardEl = document.getElementById('dashboard');
 async function updateDashboard() {
 
@@ -89,7 +82,6 @@ async function updateDashboard() {
             titleEl.classList.add('appointment-list-title');
             appointmentEl.append(dateEl, courseEl, /*teacherEl,*/ titleEl);
 
-            console.log(new Date(todayDate + dayInMs * 7));
             if (day <= todayDate+dayInMs*7) {
                 listElNow.appendChild(appointmentEl);
             } else if (day <= todayDate+dayInMs*30) {
