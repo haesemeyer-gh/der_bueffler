@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Aptos Regular", "Aptos", Arial, Helvetica, sans-serif;
     font-size: 1.5rem;
     @media (width < 50rem) {
         font-size: 1.2rem;
@@ -12,7 +12,7 @@ body {
 }
 
 header {
-    background-color: #FBBA00;
+    background-color: #FBB900;
     padding: 10px;
     display: flex;
     justify-content: space-between;
@@ -78,13 +78,13 @@ main {
 }
 .appointment-list-course {
     background-color: #f3e178;
-    border: 1px solid #FBBA00;
+    border: 1px solid #FBB900;
     border-radius: 10px;
     padding: 2px 5px;
 }
 .appointment-list-teacher {
     background-color: #f3e178;
-    border: 1px solid #FBBA00;
+    border: 1px solid #FBB900;
     border-radius: 10px;
     padding: 2px 5px;
 }
