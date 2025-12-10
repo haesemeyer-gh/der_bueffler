@@ -72,9 +72,23 @@ async function createNewUser(uname, email, password) {
     return await query("INSERT INTO user (Mail, Passwort, Name, Lehrer, Admin) VALUES (?, ?, ?, 0, 0)", [email, hash, uname])
 }
 
+async function resetPassword(userID, password) {
+    const hash = await encrypt(password)
+    return await query("UPDATE user SET Passwort = ? WHERE (ID = ?)", [hash, userID])
+}
+
+async function userWithIDExists(userID) {
+    const data = await query("SELECT 1 FROM user WHERE (ID = ?)", [userID]);
+    return data.length > 0
+}
+
 async function getUserID(email) {
     const data = await query("SELECT ID FROM user WHERE (Mail = ?)", [email])
     return data[0]["ID"]
+}
+
+async function removeUser(userID) {
+    return await query("DELETE FROM user WHERE (ID = ?)", [userID])
 }
 
 async function getIDByToken(token) {
@@ -212,6 +226,53 @@ app.post('/auth/login', async (req, res) => {
 
 });
 
+
+app.post("/auth/reset", async (req, res)  => {
+    // Internal, so it will work if you are already logged in.
+    const token = req.body.token;
+    const newPassword = req.body.password;
+
+    if (newPassword.trim().length === 0) {
+        return res.json({
+            message: "Some fields are empty"
+        })
+    }
+
+    if (await userWithTokenExists(token)) {
+        const userID = await getIDByToken(token);
+        resetPassword(userID, newPassword);
+        return res.status(200).end();
+    
+    }
+    else {
+        return res.status(403).json({message: "Wrong token"})
+    }
+})
+
+// Can be .delete() but the route right now is so.
+app.post("/user/delete/:id", async (req, res)  => {
+    const toDeleteUserID = req.params.id;
+    const token = req.body.token;
+
+    if (toDeleteUserID.trim().length === 0 || !(await userWithIDExists(toDeleteUserID))) {
+        return res.status(400).json({
+            message: "Invalid ID"
+        })
+    }
+    
+    const permissions = await verifyToken(token);
+    if (permissions && permissions.Admin === 1) {
+        await removeUser(toDeleteUserID);
+        await removeSubscriptions(toDeleteUserID);
+        await closeSession(toDeleteUserID);
+        // TODO: clean from teams
+        return res.status(200).end();
+    }
+    else {
+        console.log("Not an Admin")
+        return res.status(403).json({message: "Du hast nicht die nötigen Berechtigungen."});
+    }
+})
 
 
 /* PUSH-NOTIFICATIONS */
