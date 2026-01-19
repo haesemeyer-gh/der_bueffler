@@ -19,13 +19,12 @@ export async function removeSubscriptions(userID) {
     return await query("DELETE FROM push_subscriptions WHERE (NutzerID = ?)", [userID]);
 }
 
-function setupWebpush() {
+export function setupWebpush() {
     const publicVapidKey = process.env.BUEFFLER_VAPID_PUBLIC;
     const privateVapidKey = process.env.BUEFFLER_VAPID_PRIVATE;
 
     webpush.setVapidDetails("mailto:fiadmin@localhosts", publicVapidKey, privateVapidKey);
 }
-setupWebpush();
 
 export async function sendPush() {
     const now = new Date();
