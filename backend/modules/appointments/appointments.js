@@ -26,7 +26,9 @@ async function viewAppointment(terminid) {
 
 async function editAppointment(terminid, date, title, course, teacher, notes) {
     // viewAppointment() und in variable speichern
+    let current = await viewAppointment(terminid)
     // vorherigen stand aus viewAppointment() in changes table schreiben
+    query("INSERT INTO changes (Timestamp, TerminID, ZuletztGeaendert, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [new Date(), current[0].TerminID, current[0].ZuletztGeaendert, current[0].Datum, current[0].Titel, current[0].Fach, current[0].Lehrer, current[0].Notizen])
     return query("UPDATE appointments SET Datum = ?, Titel = ?, Fach = ?, Lehrer = ?, Notizen = ? WHERE terminid = ?", [terminid, date, title, course, teacher, notes]);
 }
 
