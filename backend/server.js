@@ -242,7 +242,7 @@ app.post("/auth/reset", async (req, res)  => {
         const userID = await getIDByToken(token);
         resetPassword(userID, newPassword);
         return res.status(200).end();
-    
+
     }
     else {
         return res.status(403).json({message: "Wrong token"})
@@ -259,7 +259,7 @@ app.post("/user/delete/:id", async (req, res)  => {
             message: "Invalid ID"
         })
     }
-    
+
     const permissions = await verifyToken(token);
     if (permissions && permissions.Admin === 1) {
         await removeUser(toDeleteUserID);
@@ -794,10 +794,12 @@ async function sendCollectiveMails() {
 
 /*  */
 
-app.listen(8080, () => {
+app.listen(8080, async () => {
     console.log("Web-Server verfügbar!");
     startDigest();
 
     //tmp
     sendCollectiveMails();
+    let test = await query("SELECT * FROM appointments WHERE TerminID=3;")
+    console.log(test[0].Titel)
 });

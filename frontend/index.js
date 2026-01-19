@@ -4,24 +4,28 @@ async function updateDashboard() {
     // fetch api
     const appointments = [
         {
+            id: 1,
             date: new Date(),
             title: "Toller Termin",
             course: "SQL",
             teacher: "asjdn",
         },
         {
+            id: 2,
             date: new Date("2026-01-03"),
             title: "JavaScript Klassenarbeit",
             course: "JavaScript",
             teacher: "Klose",
         },
         {
+            id: 3,
             date: new Date("2026-01-10"),
             title: "JavaScript Klassenarbeit 2",
             course: "JavaScript",
             teacher: "aklsjdalskdm",
         },
         {
+            id: 4,
             date: new Date("2026-01-10"),
             title: "JavaScript Klassenarbeit 2",
             course: "JavaScript",
@@ -70,12 +74,13 @@ async function updateDashboard() {
             let dateEl = document.createElement('span');
             let courseEl = document.createElement('span');
             let teacherEl = document.createElement('span');
-            let titleEl = document.createElement('span');
+            let titleEl = document.createElement('a');
             dateEl.innerText = `${dateString}:`;
             //date.innerHTML += `&shy;`;
             courseEl.innerText = `${appointments[i].course}`;
             teacherEl.innerText = `${appointments[i].teacher}`;
             titleEl.innerText = `${appointments[i].title}`;
+            titleEl.href=`termin/index.html?t=${appointments[i].id}`; //////////////////////////////////////////////////// index.html
             dateEl.classList.add('appointment-list-date');
             courseEl.classList.add('appointment-list-course');
             teacherEl.classList.add('appointment-list-teacher');
