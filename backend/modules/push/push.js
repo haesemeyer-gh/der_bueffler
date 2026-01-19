@@ -3,6 +3,7 @@ import webpush from 'web-push';
 
 import { query } from '../db/db.js';
 import { formatDate } from '../auth/auth.js';
+import { listTeammates } from '../teams/teams.js';
 
 async function getAllAppointmentsWithinTimeframe(start, end) {
     return await query("SELECT * FROM appointments WHERE Datum BETWEEN ? AND ?", [formatDate(start), formatDate(end)]);
