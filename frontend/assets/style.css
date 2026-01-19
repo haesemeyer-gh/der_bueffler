@@ -133,6 +133,40 @@ main {
     font-weight: normal;
 }
 
+.nv-dev-input {
+    width: 75%;
+    margin: 5px 0;
+    border: 2px solid black;
+    @media (prefers-color-scheme: dark) {
+        border-color: white;
+    }
+    padding: 5px;
+    font-family: "Roboto Mono", monospace;
+    font-size: 1.5rem;
+}
+.nv-dev-button {
+    width: 20rem;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: 5px solid black;
+    background-color: white;
+    color: black;
+    @media (prefers-color-scheme: dark) {
+        border-color: white
+    }
+}
+.nv-dev-button:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+.nv-dev-button:active {
+    translate: 0 5px;
+}
+
+.nv-dev-div,
 #dashboard details {
     margin: 0 0 20px 0;
     border: 2px solid black;
