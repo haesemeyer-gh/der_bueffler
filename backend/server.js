@@ -11,9 +11,6 @@ import usersRouter from './modules/users/route.js';
 import startDigest from './modules/mails/mails.js';
 import setupWebpush from './modules/push/push.js';
 
-// tmp
-import { sendCollectiveMails } from './modules/mails/mails.js';
-
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
@@ -36,7 +33,4 @@ app.listen(process.env.BUEFFLER_PORT, async () => {
     console.log("Web-Server verfügbar!");
     startDigest();
     setupWebpush();
-
-    // tmp
-    sendCollectiveMails();
 });
