@@ -256,3 +256,13 @@ main {
         color: white;
     }
 }
+.appointment-detail-date {
+    font-family: "Aptos Mono", monospace;
+}
+.appointment-detail-course {
+    background-color: #f3e178;
+    border: 1px solid #FBB900;
+    color: black;
+    border-radius: 10px;
+    padding: 2px 5px;
+}

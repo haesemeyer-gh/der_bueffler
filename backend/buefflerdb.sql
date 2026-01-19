@@ -4,6 +4,7 @@ START TRANSACTION;
 CREATE TABLE `appointments` (
   `TerminID` int(11) NOT NULL AUTO_INCREMENT,
   `TeamID` int(11) NOT NULL,
+  `ZuletztGeaendert` int(11) NOT NULL,
   `Datum` date NOT NULL,
   `Titel` varchar(255) NOT NULL,
   `Fach` varchar(255) NOT NULL,
@@ -15,6 +16,7 @@ CREATE TABLE `appointments` (
 CREATE TABLE `changes` (
   `AenderungsID` int(11) NOT NULL AUTO_INCREMENT,
   `Timestamp` date NOT NULL,
+  `ZuletztGeaendert` int(11) NOT NULL,
   `TerminID` int(11) NOT NULL,
   `Datum` date NOT NULL,
   `Titel` varchar(255) NOT NULL,
