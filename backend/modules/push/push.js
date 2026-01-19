@@ -39,7 +39,7 @@ export async function sendPush() {
     for (const appointment of appointments) {
         let teamID = appointment.TeamID;
         let teamData = await listTeammates(teamID);
-        if (teamData.length > 0) {
+        if (teamData.length > 0 && teamData[0].Mitglieder !== null) {
             let teamMembers = teamData[0].Mitglieder;
 
             teamMembers.forEach((member) => {
