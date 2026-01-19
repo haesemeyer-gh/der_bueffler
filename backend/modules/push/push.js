@@ -21,7 +21,7 @@ export async function removeSubscriptions(userID) {
     return await query("DELETE FROM push_subscriptions WHERE (NutzerID = ?)", [userID]);
 }
 
-export function setupWebpush() {
+function setupWebpush() {
     const publicVapidKey = process.env.BUEFFLER_VAPID_PUBLIC;
     const privateVapidKey = process.env.BUEFFLER_VAPID_PRIVATE;
 
@@ -80,3 +80,5 @@ function formatAppointment(appointment) {
     const date = new Date(appointment.Datum);
     return JSON.stringify({title: appointment.Titel, body: `Datum: ${formatDate(date)}; Fach: ${appointment.Fach}; Lehrer: ${appointment.Lehrer}`})
 }
+
+export default setupWebpush;
