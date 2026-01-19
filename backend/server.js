@@ -8,7 +8,7 @@ import pushRouter from './modules/push/route.js';
 import teamsRouter from './modules/teams/route.js';
 import usersRouter from './modules/users/route.js';
 
-import { startDigest } from './modules/mails/mails.js';
+import startDigest from './modules/mails/mails.js';
 import { setupWebpush } from './modules/push/push.js';
 
 const app = express();
