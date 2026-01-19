@@ -15,7 +15,7 @@ async function registerServiceWorker() {
         applicationServerKey: publicVapidKey,
     });
 
-    await fetch("subscribe", {
+    await fetch("/push/subscribe", {
         method: "POST",
         body: JSON.stringify({"subscription": subscription, "token": localStorage.getItem("token")}),
         headers: {
