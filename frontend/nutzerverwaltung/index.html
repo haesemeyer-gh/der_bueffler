@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Startseite</title>
+    <title>Nutzerverwaltung</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/style.css">
-    <script src="scripts/login.js" defer></script>
-    <script src="scripts/clock.js" defer></script>
-    <script src="scripts/push.js" defer></script>
+    <link rel="stylesheet" href="../assets/style.css">
+    <script src="../scripts/login.js" defer></script>
+    <script src="../scripts/clock.js" defer></script>
+    <script src="../scripts/push.js" defer></script>
     <script src="index.js" defer></script>
 </head>
 <body>
@@ -39,9 +39,9 @@
     <header class="hidden requirelogin">
         <h1>Der Büffler!</h1>
         <nav>
-            <a class="current-page" href="#"><img src="assets/icons/home.svg" alt="Startseite"></a>
-            <a href="kalender"><img src="assets/icons/calendar.svg" alt="Kalenderansicht"></a>
-            <a href="nutzerverwaltung"><img src="assets/icons/team.svg" alt="Nutzerverwaltung"></a>
+            <a href="../"><img src="../assets/icons/home.svg" alt="Startseite"></a>
+            <a href="../kalender"><img src="../assets/icons/calendar.svg" alt="Kalenderansicht"></a>
+            <a class="current-page" href="#"><img src="../assets/icons/team.svg" alt="Nutzerverwaltung"></a>
             <!--
             <a href="Noten.html"><img src="assets/icons/test.svg" alt="Notenübersicht"></a>
             <a href="Einstellungen.html"><img src="assets/icons/gear.svg" alt="Einstellungen"></a>
@@ -54,9 +54,27 @@
 
         <h2 class="date-display">Datum: <i id="date"></i></h2>
 
-        <section id="dashboard">
+        <p><i>[schönes interface hier einfügen]</i></p>
 
-        </section>
+        <h2>Entwickler-Formulare</h2>
+
+        <div class="nv-dev-div">
+            <h3><code>/teams/create</code></h3>
+            <label>Team-Name:<br>
+                <input id="nv-dev-teams-create-name" class="nv-dev-input" type="text" />
+            </label><br>
+            <button id="nv-dev-teams-create-button" class="nv-dev-button">Abschicken</button>
+            <p id="nv-dev-teams-create-status"></p>
+        </div>
+
+        <div class="nv-dev-div">
+            <h3><code>/teams/delete</code></h3>
+            <label>Team-ID:<br>
+                <input id="nv-dev-teams-delete-id" class="nv-dev-input" type="text" />
+            </label><br>
+            <button id="nv-dev-teams-delete-button" class="nv-dev-button">Abschicken</button>
+            <p id="nv-dev-teams-delete-status"></p>
+        </div>
 
     </main>
 

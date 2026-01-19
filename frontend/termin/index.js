@@ -32,10 +32,6 @@ async function updateDashboard() {
             messageEl.innerText = appointments.title;
             detailEl.appendChild(messageEl)
 
-            let nowDate = new Date();
-            let todayDate = Date.parse(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate()));
-            let dayInMs = 8.64e+7;
-
             let day = Date.parse(new Date(appointments.date.getFullYear(), appointments.date.getMonth(), appointments.date.getDate()));
             let dateString = appointments.date.toLocaleString('de-DE', {weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'});
             let appointmentEl = document.createElement('ul');
