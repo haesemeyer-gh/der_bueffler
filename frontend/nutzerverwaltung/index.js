@@ -33,3 +33,21 @@ devTeamsDeleteButton.addEventListener('click', () => {
         devTeamsDeleteStatus.innerText = response.message;
     });
 });
+
+const devTeamsInfoID = document.getElementById('nv-dev-teams-info-id');
+const devTeamsInfoButton = document.getElementById('nv-dev-teams-info-button');
+const devTeamsInfoStatus = document.getElementById('nv-dev-teams-info-status');
+devTeamsInfoButton.addEventListener('click', () => {
+    fetch(APIURL+"/teams/info", {
+        method: "POST",
+        body: JSON.stringify({
+            token: cookieToken,
+            teamid: devTeamsInfoID.value,
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+    }).then((response) => response.json()).then((response) => {
+        devTeamsInfoStatus.innerText = response.message;
+    });
+});
