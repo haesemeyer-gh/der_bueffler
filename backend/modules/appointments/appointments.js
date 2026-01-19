@@ -12,27 +12,27 @@ export function appointmentToObject(title, teamid, date, course, teacher, notes)
     return appointmentObject;
 }
 
-function createAppointment(teamid, date, title, course, teacher, notes) {
+async function createAppointment(teamid, date, title, course, teacher, notes) {
     return query("INSERT INTO appointments (TeamID, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?)", [teamid, date, title, course, teacher, notes]);
 }
 
-function listAppointments(teamid) {
+async function listAppointments(teamid) {
     return query("SELECT Datum, Titel, Fach, Lehrer FROM appointments WHERE teamid = ?", [teamid]);
 }
 
-function viewAppointment(terminid) {
+async function viewAppointment(terminid) {
     return query("SELECT * FROM appointments WHERE teamid = ?", [terminid]);
 }
 
-function editAppointment(terminid, date, title, course, teacher, notes) {
-    return query("UPDATE appointments SET TerminID = ?, Datum = ?, Titel = ?, Fach = ?, Lehrer = ?, Notizen = ? WHERE terminid = ?", [terminid, date, title, course, teacher, notes]);
+async function editAppointment(terminid, date, title, course, teacher, notes) {
+    // viewAppointment() und in variable speichern
+    // vorherigen stand aus viewAppointment() in changes table schreiben
+    return query("UPDATE appointments SET Datum = ?, Titel = ?, Fach = ?, Lehrer = ?, Notizen = ? WHERE terminid = ?", [terminid, date, title, course, teacher, notes]);
 }
 
 async function deleteAppointment(terminid) {
-    let current = await query("SELECT * FROM appointments WHERE terminid = ?", [terminid])
+    let current = await viewAppointment(terminid);
     //query("INSERT INTO changes (Timestamp, TerminID, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?)", [new Date(), terminid, date, title, course, teacher, notes])
     //return query("DELETE FROM appointments WHERE terminid = ?", [terminid]);
     console.log(current[0].Titel)
 }
-
-deleteAppointment(3)
