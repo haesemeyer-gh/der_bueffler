@@ -11,6 +11,9 @@ import usersRouter from './modules/users/route.js';
 import startDigest from './modules/mails/mails.js';
 import setupWebpush from './modules/push/push.js';
 
+// tmp
+import { sendCollectiveMails } from './modules/mails/mails.js';
+
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }))
@@ -34,8 +37,6 @@ app.listen(process.env.BUEFFLER_PORT, async () => {
     startDigest();
     setupWebpush();
 
-    //tmp
-    //sendCollectiveMails();
-    //let test = await query("SELECT * FROM appointments WHERE TerminID=3;")
-    //console.log(test[0].Titel)
+    // tmp
+    sendCollectiveMails();
 });
