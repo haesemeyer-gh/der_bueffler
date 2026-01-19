@@ -12,13 +12,13 @@ import { listTeammates } from '../teams/teams.js';
 const transporter = nodemailer.createTransport({
     host: process.env.BUEFFLER_SMTP_HOST,
     port: process.env.BUEFFLER_SMTP_PORT,
-    secure: (process.env.BUEFFLER_SMTP_SSLPORT465==="true" ? true : false), // SSL (Port 465)
+    secure: (process.env.BUEFFLER_SMTP_SSLPORT465 === "true" ? true : false), // SSL (Port 465)
     auth: {
         user: process.env.BUEFFLER_SMTP_USER,
         pass: process.env.BUEFFLER_SMTP_PASS
     },
     tls: {
-        rejectUnauthorized: (process.env.BUEFFLER_SMTP_REJECTSELFSIGNED==="false" ? false : true) // erlaubt self-signed zertifikate
+        rejectUnauthorized: (process.env.BUEFFLER_SMTP_REJECTSELFSIGNED === "false" ? false : true) // erlaubt self-signed zertifikate
     }
 });
 
@@ -53,46 +53,34 @@ async function getWeeklyAppointments() {
 
 async function getMailArray() {
     let collectiveMailArray = [];
-    return new Promise(async (resolve, reject) => {
-        let weeklyAppointments = await getWeeklyAppointments();
-        weeklyAppointments.forEach(async (appointment, alli) => {
-            let teammemberResponse = await listTeammates(appointment.teamid);
-            if (teammemberResponse[0].Mitglieder !== null) {
-                teammemberResponse[0].Mitglieder.forEach(async (userid, i) => {
-                    let mailResponse = await getUserMail(userid);
-                    let alreadyMember = false;
-                    let alreadyMemberI = 0;
-                    collectiveMailArray.forEach((user, i) => {
-                        if (user.mail === mailResponse[0].Mail) {
-                            alreadyMember = true;
-                            alreadyMemberI = i;
-                        }
+    let weeklyAppointments = await getWeeklyAppointments();
+
+    for (const appointment of weeklyAppointments) {
+        let teammemberResponse = await listTeammates(appointment.teamid);
+        if (teammemberResponse[0].Mitglieder !== null) {
+            for (const userid of teammemberResponse[0].Mitglieder) {
+                let mailResponse = await getUserMail(userid);
+                let userMail = mailResponse[0].Mail;
+                let existingUser = collectiveMailArray.find(user => user.mail === userMail);
+
+                if (existingUser) {
+                    existingUser.appointments.push(appointment);
+                } else {
+                    collectiveMailArray.push({
+                        mail: userMail,
+                        appointments: [appointment]
                     });
-                    if (alreadyMember === false) {
-                        collectiveMailArray.push({
-                            mail: mailResponse[0].Mail,
-                            appointments: [
-                                appointment
-                            ]
-                        });
-                    } else {
-                        collectiveMailArray[alreadyMemberI].appointments.push(appointment);
-                    }
-                    if (alli+1 === weeklyAppointments.length && i+1 === teammemberResponse[0].Mitglieder.length) {
-                        resolve(collectiveMailArray)
-                    }
-                });
-            } else {
-                resolve([]);
+                }
             }
-        });
-    });
+        }
+    }
+    return collectiveMailArray;
 }
 
 async function sortMailArray() {
     let collectiveMailArray = await getMailArray();
     collectiveMailArray.forEach(user => {
-        user.appointments.sort((a,b) => a.date - b.date);
+        user.appointments.sort((a, b) => a.date - b.date);
     });
     return collectiveMailArray
 }
