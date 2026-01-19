@@ -20,8 +20,8 @@ function listAppointments(teamid) {
     return query("SELECT Datum, Titel, Fach, Lehrer FROM appointments WHERE teamid = ?", [teamid]);
 }
 
-function viewAppointment(teamid) {
-    return query("SELECT * FROM appointments WHERE teamid = ?", [teamid]);
+function viewAppointment(terminid) {
+    return query("SELECT * FROM appointments WHERE teamid = ?", [terminid]);
 }
 
 function editAppointment(terminid, date, title, course, teacher, notes) {
