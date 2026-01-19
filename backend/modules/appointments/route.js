@@ -6,7 +6,15 @@ import * as appointments from './appointments.js';
 const appointmentsRouter = express.Router();
 
 appointmentsRouter.post('/appointment/list', async(req, res) => {
-    const token = req.body.token;
+    let token = ''
+    try {
+    token = req.body.token;
+    } catch (error) {
+        console.error("FEHLER: Token nicht übergeben")
+        res.status(500)
+        res.json({message:"FEHLER: Token nicht übergeben"})
+        return
+    }
 
     let response;
     let permissions = await verifyToken(token);
