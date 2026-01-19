@@ -5,6 +5,7 @@ import cron from 'node-cron';
 import { query } from '../db/db.js';
 import { appointmentToObject } from '../appointments/appointments.js';
 import { getUserMail } from '../users/users.js';
+import { listTeammates } from '../teams/teams.js';
 
 /* SMTP */
 
@@ -56,30 +57,34 @@ async function getMailArray() {
         let weeklyAppointments = await getWeeklyAppointments();
         weeklyAppointments.forEach(async (appointment, alli) => {
             let teammemberResponse = await listTeammates(appointment.teamid);
-            teammemberResponse[0].Mitglieder.forEach(async (userid, i) => {
-                let mailResponse = await getUserMail(userid);
-                let alreadyMember = false;
-                let alreadyMemberI = 0;
-                collectiveMailArray.forEach((user, i) => {
-                    if (user.mail === mailResponse[0].Mail) {
-                        alreadyMember = true;
-                        alreadyMemberI = i;
+            if (teammemberResponse[0].Mitglieder !== null) {
+                teammemberResponse[0].Mitglieder.forEach(async (userid, i) => {
+                    let mailResponse = await getUserMail(userid);
+                    let alreadyMember = false;
+                    let alreadyMemberI = 0;
+                    collectiveMailArray.forEach((user, i) => {
+                        if (user.mail === mailResponse[0].Mail) {
+                            alreadyMember = true;
+                            alreadyMemberI = i;
+                        }
+                    });
+                    if (alreadyMember === false) {
+                        collectiveMailArray.push({
+                            mail: mailResponse[0].Mail,
+                            appointments: [
+                                appointment
+                            ]
+                        });
+                    } else {
+                        collectiveMailArray[alreadyMemberI].appointments.push(appointment);
+                    }
+                    if (alli+1 === weeklyAppointments.length && i+1 === teammemberResponse[0].Mitglieder.length) {
+                        resolve(collectiveMailArray)
                     }
                 });
-                if (alreadyMember === false) {
-                    collectiveMailArray.push({
-                        mail: mailResponse[0].Mail,
-                        appointments: [
-                            appointment
-                        ]
-                    });
-                } else {
-                    collectiveMailArray[alreadyMemberI].appointments.push(appointment);
-                }
-                if (alli+1 === weeklyAppointments.length && i+1 === teammemberResponse[0].Mitglieder.length) {
-                    resolve(collectiveMailArray)
-                }
-            });
+            } else {
+                resolve([]);
+            }
         });
     });
 }
@@ -92,7 +97,7 @@ async function sortMailArray() {
     return collectiveMailArray
 }
 
-async function sendCollectiveMails() {
+export async function sendCollectiveMails() {
     let collectiveMailArray = await sortMailArray();
     collectiveMailArray.forEach(user => {
         let digest = `<h1>Diese Woche stehen Termine an!<h1>`;
