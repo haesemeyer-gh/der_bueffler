@@ -18,6 +18,10 @@ async function updateDashboard() {
             notes: "Dies ist ein toller langer Text der eine Beschreibung für den Termin mit möglichen Informationen wie beispielsweise was in diesem Test abgefragt wird nennt."
         }
 
+        // dann fetche apis für teaminfo und nutzerinfo
+        const teamname = "temporäre Teamnamenvariable";
+        const nutzername = "hitler";
+
         detailEl.innerHTML = ``;
         if (appointments.length <= 0) { // change to if appointment does not exist
             let messageEl = document.createElement('h3');
@@ -27,11 +31,6 @@ async function updateDashboard() {
             let messageEl = document.createElement('h3');
             messageEl.innerText = appointments.title;
             detailEl.appendChild(messageEl)
-
-            /* Infos die fehlen:
-             * - welches Team
-             * - Zuletzt Geändert durch
-            */
 
             let nowDate = new Date();
             let todayDate = Date.parse(new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate()));
@@ -44,15 +43,20 @@ async function updateDashboard() {
             let courseContainerEl = document.createElement('li');
             let courseEl = document.createElement('span');
             let teacherEl = document.createElement('li');
-            dateEl.innerText = `${dateString}`;
+            let teamEl = document.createElement('li');
+            let lastChangedByEl = document.createElement('li');
+            dateEl.innerText = `Datum: ${dateString}`;
+            courseContainerEl.innerText = `Fach: `;
             courseEl.innerText = `${appointments.course}`;
-            teacherEl.innerText = `${appointments.teacher}`;
+            teacherEl.innerText = `Lehrer: ${appointments.teacher}`;
+            teamEl.innerText = `Team: ${teamname}`;
+            lastChangedByEl.innerText = `zuletzt geändert von: ${nutzername}`;
             dateEl.classList.add('appointment-detail-date');
             courseEl.classList.add('appointment-detail-course');
             teacherEl.classList.add('appointment-detail-teacher');
             appointmentEl.classList.add('appointment-detail-view');
             courseContainerEl.appendChild(courseEl);
-            appointmentEl.append(dateEl, courseContainerEl, teacherEl,);
+            appointmentEl.append(dateEl, courseContainerEl, teacherEl, teamEl, lastChangedByEl);
 
             let notesEl = document.createElement('p');
             notesEl.innerText = appointments.notes;
