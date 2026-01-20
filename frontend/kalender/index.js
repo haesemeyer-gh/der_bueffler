@@ -22,17 +22,39 @@ function updateTable() {
     let firstWeekDay = date.getDay();
 
     monthviewTbody.innerHTML = '';
+    let tableRow = document.createElement('tr');
 
-    let tableFirstRow = document.createElement('tr');
-
+    // add empty days at beginning of month
     while (firstWeekDay > 0) {
         let tableCell = document.createElement('td');
         tableCell.innerText = "x";
-        tableFirstRow.appendChild(tableCell);
+        tableRow.appendChild(tableCell);
         firstWeekDay--;
     }
 
-    monthviewTbody.append(tableFirstRow);
+    // add days
+    for (let i = 1; i <= daysThisMonth; i++) {
+        if (tableRow.children.length < 7) {
+            let tableCell = document.createElement('td');
+            tableCell.innerText = `${i}`;
+            tableRow.appendChild(tableCell);
+        } else { // new row
+            monthviewTbody.append(tableRow);
+            tableRow = document.createElement('tr');
+            let tableCell = document.createElement('td');
+            tableCell.innerText = `${i}`;
+            tableRow.appendChild(tableCell);
+        }
+    }
+
+    // add empty days at end of month
+    let daysInLastRow = tableRow.children.length;
+    for (let i = 0; i < 7 - daysInLastRow; i++) {
+        let tableCell = document.createElement('td');
+        tableCell.innerText = "x";
+        tableRow.appendChild(tableCell);
+    }
+    monthviewTbody.append(tableRow);
 
 }
 
