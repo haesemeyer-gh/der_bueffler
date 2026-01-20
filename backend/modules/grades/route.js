@@ -6,29 +6,22 @@ import * as grades from './grades.js';
 const gradesRouter = express.Router();
 
 
-
-
-gradesRouter.post('/grades/set', async(req, res) => {
+gradesRouter.post('/grades/add', async(req, res) => {
     const token = req.body.token;
     const grade = req.body.grade;
-    const targetUserID = req.body.targetID;
-    const terminID = req.body.terminID;
-
+    const studentID = req.body.studentID;
+    const course = req.body.course;
+    const timestamp = req.body.timestamp;
 
     let response;
     let permissions = await verifyToken(token);
-    if (permissions.Lehrer === 1){ // make it generally that each teacher can do it or only the one that is responsible for the appointment? 
+    if (permissions.Lehrer === 1) {
+        const teacherID = await getIDByToken(token);
 
-        if (await grades.gradeExists(terminID, targetUserID)) {
-            await grades.editGrade(terminID, targetUserID, grade)
-            response = "Successfully edited"
-            res.status(200)
-        }
-        else {
-            await grades.addGrade(terminID, targetUserID, grade)
-            response = "Successfully added"
-            res.status(201)
-        }
+        await grades.addGrade(teacherID, studentID, course, timestamp, grade);
+        
+        response = "Successfully added";
+        res.status(201);
     } else {
         res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
@@ -39,22 +32,19 @@ gradesRouter.post('/grades/set', async(req, res) => {
     });
 });
 
-
-gradesRouter.post('/grades/get', async(req, res) => {
+gradesRouter.post('/grades/list', async(req, res) => {
     const token = req.body.token;
-    const targetUserID = req.body.targetID;
-    const terminID = req.body.terminID;
+    const teacherID = req.body.teacherID;
+    const course = req.body.course;
+    const studentID = req.body.studentID;
 
 
     let response;
     let permissions = await verifyToken(token);
-    if (permissions && (permissions.Lehrer === 1 || await getIDByToken(token) === targetUserID)){
-
-        response = await grades.getGrade(terminID, targetUserID);
-        res.status(200);
-
+    if (permissions.Lehrer === 1) {
+        response = await grades.listGrades(teacherID, studentID, course)
+        res.status(200)
     } else {
-
         res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
@@ -63,19 +53,42 @@ gradesRouter.post('/grades/get', async(req, res) => {
         message: response
     });
 });
+
+
+gradesRouter.post('/grades/edit', async(req, res) => {
+    const token = req.body.token;
+    const gradeID = req.body.gradeID;
+    const grade = req.body.grade;
+
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions.Lehrer === 1) {
+        await grades.editGrade(gradeID, grade)
+        response = "Edit Successful"
+        res.status(200)
+    } else {
+        res.status(403);
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
+    res.json({
+        message: response
+    });
+});
+
 
 
 gradesRouter.post('/grades/get_avg', async(req, res) => {
     const token = req.body.token;
-    const targetUserID = req.body.targetID;
+    const studentID = req.body.studentID;
     const course = req.body.course;
-
 
     let response;
     let permissions = await verifyToken(token);
-    if (permissions && (permissions.Lehrer === 1 || await getIDByToken(token) === targetUserID)){
+    if (permissions && (permissions.Lehrer === 1 || await getIDByToken(token) === studentID)){
 
-        response = await grades.getAverageForCourse(targetUserID, course);
+        response = await grades.getAverageForCourse(studentID, course);
         res.status(200);
         
     } else {
