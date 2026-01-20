@@ -325,3 +325,9 @@ main {
         color: #5cdcff;
     }
 }
+.calendar-today {
+    background-color: #e5c5ff;
+    @media (prefers-color-scheme: dark) {
+        background-color: #72436c;
+    }
+}

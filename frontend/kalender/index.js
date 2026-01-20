@@ -90,9 +90,9 @@ function updateTable() {
     function addRealDay(day) {
         let tableCell = document.createElement('td');
         let numberAppointments = 0;
+        let currentString = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
         for (let a = 0; a < appointments.length; a++) {
             let appointmentString = appointments[a].date.toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
-            let currentString = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
             if (appointmentString === currentString) {
                 numberAppointments++;
             }
@@ -102,6 +102,10 @@ function updateTable() {
         let appointmentNumberSpan = document.createElement('span');
         let flexContainer = document.createElement('div');
         daySpan.innerText = `${day}`.padStart(2, '0');;
+        let todayString = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate()).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
+        if (currentString === todayString) {
+            tableCell.classList.add('calendar-today');
+        }
         let currentWeekday = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day).getDay();
         if (currentWeekday === 0 || currentWeekday === 6) {
             daySpan.classList.add('calendar-weekend');
