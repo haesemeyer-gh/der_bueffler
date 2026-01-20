@@ -14,8 +14,8 @@ export function appointmentToObject(title, teamid, date, course, teacher, notes)
     return appointmentObject;
 }
 
-export async function createAppointment(teamid, date, title, course, teacher, notes) {
-    return query("INSERT INTO appointments (TeamID, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?)", [teamid, date, title, course, teacher, notes]);
+export async function createAppointment(teamid, userid, date, title, course, teacher, notes) {
+    return query("INSERT INTO appointments (TeamID, ZuletztGeaendert, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?)", [teamid, userid, date, title, course, teacher, notes]);
 }
 
 export async function listAppointments(teamid) {
@@ -34,6 +34,6 @@ export async function editAppointment(terminid, date, title, course, teacher, no
 
 export async function deleteAppointment(terminid) {
     let current = await viewAppointment(terminid);
-    query("INSERT INTO changes (Timestamp, TerminID, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?)", [new Date(), current[0].TerminID, current[0].ZuletztGeaendert, current[0].Datum, current[0].Titel, current[0].Fach, current[0].Lehrer, current[0].Notizen])
+    query("INSERT INTO changes (Timestamp, TerminID, ZuletztGeaendert Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", [new Date(), current[0].TerminID, current[0].ZuletztGeaendert, current[0].Datum, current[0].Titel, current[0].Fach, current[0].Lehrer, current[0].Notizen])
     return query("DELETE FROM appointments WHERE terminid = ?", [terminid]);
 }
