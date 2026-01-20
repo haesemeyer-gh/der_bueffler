@@ -228,6 +228,36 @@ main {
     padding: 2px 5px;
 }
 
+#calendar-widget {
+    width: fit-content;
+}
+#calendar-widget > div {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+#calendar-widget > div > button {
+    padding: 0 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 3px;
+    border: 2px solid #565353;
+    background-color: #565363;
+    color: white;
+    @media (prefers-color-scheme: dark) {
+        border-color: #cccbcb;
+        background-color: #cccbcb;
+        color: black;
+    }
+}
+#monthview-currentmonth {
+    font-weight: bold;
+    color: #bf0808;
+    @media (prefers-color-scheme: dark) {
+        color: #e06a6a;
+    }
+}
+
 #monthview {
     margin: 20px 0;
     font-family: "Roboto Mono", monospace;
