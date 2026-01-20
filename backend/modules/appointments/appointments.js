@@ -39,6 +39,31 @@ async function deleteAppointment(terminid) {
 // Endpoints
 
 // Termin erstellen (nur Klassensprecher und Lehrer)
+app.post('/appointment/create', async (req,res) => {
+    const token = req.body.token;
+    const name = req.body.name;
+
+    let response
+
+    let permissions = await verifyToken(token);
+
+    if (permissions.Admin === 1) {
+        if (date && date.length > 0) {
+            res.status(/*TODO: Status angeben*/)
+            response = "Termin eingetragen"
+            createAppointment(teamid, date, title, course, teacher, notes)
+        } else {
+            res.status(422)
+            response = "Gib ein Datum an!"
+        }
+    } else {
+        res.status(403)
+        response = "Du hast nicht die benötigten Berechtigungen."
+    }
+    res.json({
+        message: response
+    });
+});
 
 // Alle Termine der Klasse einsehen
 
