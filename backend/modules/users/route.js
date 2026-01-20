@@ -11,8 +11,9 @@ usersRouter.post('/user/maketeacher', async(req, res) => {
 
     let response;
     let permissions = await verifyToken(token);
-    if (permissions) { // TODO: benötigte Berechtigungen definieren
-        // TODO: Funktionen schreiben
+    if (permissions.Lehrer === 1|| permissions.Admin === 1){
+        users.makeTeacher(userid)
+        response = "Nutzer wurde erfolgreich zum Lehrer gemacht";
     } else {
         res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
@@ -26,12 +27,30 @@ usersRouter.post('/user/maketeacher', async(req, res) => {
 usersRouter.post('/user/makeadmin', async(req, res) => {
     const token = req.body.token;
     const userid = req.body.userid;
-    const teamid = req.body.teamid;
 
     let response;
     let permissions = await verifyToken(token);
-    if (permissions) { // TODO: benötigte Berechtigungen definieren
-        // TODO: Funktionen schreiben
+    if (permissions.Admin === 1) {
+        userid.makeAdmin(userid) 
+        response = "Nutzer wurde erfolgreich zum Admin gemacht";
+    } else {
+        res.status(403);
+        response = "Du hast nicht die nötigen Berechtigungen.";
+    }
+
+    res.json({
+        message: response
+    });
+});
+
+usersRouter.post('/user/getUserInfo', async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) {
+        users.getUserInfo(userid)
     } else {
         res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
