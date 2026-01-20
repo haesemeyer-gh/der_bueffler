@@ -1,6 +1,13 @@
 /* JS */
 
 .hidden { display: none; }
+.screenreader {
+    position: absolute !important;
+    height: 1px; width: 1px;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
+}
 
 /* STYLES */
 
@@ -222,15 +229,48 @@ main {
 }
 
 #monthview {
+    margin: 20px 0;
     font-family: "Roboto Mono", monospace;
+    @media (width < 40rem) {
+        font-size: 1.3rem;
+    }
+    @media (width < 32rem) {
+        font-size: 1rem;
+    }
+}
+#monthview,
+#monthview th,
+#monthview td {
+    border: 2px solid #cccbcb;
+    @media (prefers-color-scheme: dark) {
+        border-color: #565353;
+    }
+    border-collapse: collapse;
+    padding: 5px;
+    @media (width < 40rem) {
+        padding: 3px;
+    }
+    @media (width < 32rem) {
+        padding: 1px;
+    }
 }
 #monthview-tbody > tr > td > div {
     padding: 5px;
     width: 70px;
+    @media (width < 40rem) {
+        padding: 3px;
+        width: 60px;
+    }
+    @media (width < 32rem) {
+        padding: 1px;
+        width: 50px;
+    }
     display: flex;
     flex-direction: row;
     justify-content: space-between;
 }
+#monthview > thead > tr > th:first-child,
+#monthview > thead > tr > th:last-child,
 .calendar-weekend {
     color: #bf0808;
     @media (prefers-color-scheme: dark) {
