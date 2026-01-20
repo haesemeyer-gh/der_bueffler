@@ -277,11 +277,12 @@ main {
 #monthview,
 #monthview th,
 #monthview td {
-    border: 2px solid #cccbcb;
+    /*border: 2px solid #cccbcb;
     @media (prefers-color-scheme: dark) {
         border-color: #565353;
     }
     border-collapse: collapse;
+    */
     padding: 5px;
     @media (width < 40rem) {
         padding: 3px;
@@ -305,6 +306,19 @@ main {
     flex-direction: row;
     justify-content: space-between;
 }
+#monthview > thead > tr > th {
+    text-align: left;
+    padding: 10px;
+    width: 70px;
+    @media (width < 40rem) {
+        padding: 6px;
+        width: 60px;
+    }
+    @media (width < 32rem) {
+        padding: 3px;
+        width: 50px;
+    }
+}
 #monthview > thead > tr > th:first-child,
 #monthview > thead > tr > th:last-child,
 .calendar-weekend {
@@ -314,21 +328,21 @@ main {
     }
 }
 .calendar-date-1 {
-    color: #057d37;
+    background-color: #057d37;
     @media (prefers-color-scheme: dark) {
-        color: #36d08d;
+        background-color: #36d08d;
     }
 }
 .calendar-date-2 {
-    color: #056a59;
+    background-color: #056a59;
     @media (prefers-color-scheme: dark) {
-        color: #24dabb;
+        background-color: #24dabb;
     }
 }
 .calendar-date-3 {
-    color: #0b71b5;
+    background-color: #0b71b5;
     @media (prefers-color-scheme: dark) {
-        color: #5cdcff;
+        background-color: #5cdcff;
     }
 }
 .calendar-today {
@@ -336,4 +350,13 @@ main {
     @media (prefers-color-scheme: dark) {
         background-color: #72436c;
     }
+}
+.calendar-date {
+    padding: 0 8px;
+    border-radius: 100%;
+    color: white;
+    @media (prefers-color-scheme: dark) {
+        color: black;
+    }
+    font-weight: bold;
 }

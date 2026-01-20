@@ -112,6 +112,7 @@ function updateTable() {
         }
         if (numberAppointments > 0) {
             appointmentSeperatorSpan.innerText = ": ";
+            appointmentSeperatorSpan.classList.add('screenreader');
             appointmentNumberSpan.innerText = numberAppointments;
                 appointmentNumberSpan.classList.add('calendar-date');
             switch (true) {
