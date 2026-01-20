@@ -139,7 +139,7 @@ teamsRouter.post("/teams/info", async(req, res) => {
 
     let response;
     let permissions = await verifyToken(token);
-    if (await userWithTokenExists(token))
+    if (permissions)
     {
         const dbRes = await teams.info(teamid)
         if (dbRes.length > 0) {
