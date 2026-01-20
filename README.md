@@ -20,6 +20,7 @@ Für das Backend wird außerdem eine MySQL/MariaDB Datenbank benötigt.
 CREATE DATABASE buefflerdb;
 ```
 In `backend/buefflerdb.sql` befindet sich ein Skript um die Tables einzurichten.
+In [`backend/buefflerdb.md`](backend/buefflerdb.md) ist die Struktur der Datenbank dokumentiert.
 
 Hat man eine Datenbank, kann man den Server starten.
 ```sh
