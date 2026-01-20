@@ -32,7 +32,6 @@ async function editAppointment(terminid, date, title, course, teacher, notes) {
 
 async function deleteAppointment(terminid) {
     let current = await viewAppointment(terminid);
-    query("INSERT INTO changes (Timestamp, TerminID, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?)", [new Date(), terminid, date, title, course, teacher, notes])
+    query("INSERT INTO changes (Timestamp, TerminID, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?)", [new Date(), current[0].TerminID, current[0].ZuletztGeaendert, current[0].Datum, current[0].Titel, current[0].Fach, current[0].Lehrer, current[0].Notizen])
     return query("DELETE FROM appointments WHERE terminid = ?", [terminid]);
-    console.log(current[0].Titel)
 }
