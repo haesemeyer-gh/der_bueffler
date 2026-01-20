@@ -1,7 +1,8 @@
 import express from 'express';
 
-import { verifyToken } from '../auth/auth.js';
+import { verifyToken, userWithTokenExists } from '../auth/auth.js';
 import * as teams from './teams.js';
+
 
 const teamsRouter = express.Router();
 
@@ -131,4 +132,34 @@ teamsRouter.post('/teams/demote', async(req, res) => {
     });
 });
 
+teamsRouter.post("/teams/info", async(req, res) => {
+    const token = req.body.token;
+    const userid = req.body.userid;
+    const teamid = req.body.teamid;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (await userWithTokenExists(token))
+    {
+        const dbRes = await teams.info(teamid)
+        if (dbRes.length > 0) {
+            response = dbRes[0]["TeamName"]
+        }
+        else {
+            response = "Team nicht vorhanden"
+        }
+        
+    }
+    else {
+        res.status(403);
+        response = "Du hast nicht die nötigen Berechtigungen.";
+        
+    }
+
+    res.json({
+            message: response
+        });
+
+
+} )
 export default teamsRouter;
