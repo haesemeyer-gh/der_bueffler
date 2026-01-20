@@ -1,23 +1,8 @@
 let monthDiff = 0; // später vielleicht url parameter?
 
-const monthviewPrevButton = document.getElementById('monthview-prev-button');
-const monthviewNextButton = document.getElementById('monthview-next-button');
-monthviewPrevButton.addEventListener('click', () => {
-    monthDiff--;
-    updateTable();
-});
-monthviewNextButton.addEventListener('click', () => {
-    monthDiff++;
-    updateTable();
-});
-
-let nowDate = new Date();
-const monthviewCurrentmonth = document.getElementById('monthview-currentmonth');
-const monthviewTbody = document.getElementById('monthview-tbody');
-function updateTable() {
-
+function fetchAPI() {
     // api fetchen
-    const appointments = [
+    return [
         {
             id: 1,
             date: new Date(),
@@ -68,6 +53,24 @@ function updateTable() {
             teacher: "aklsjdalskdm",
         }
     ]
+}
+
+const monthviewPrevButton = document.getElementById('monthview-prev-button');
+const monthviewNextButton = document.getElementById('monthview-next-button');
+monthviewPrevButton.addEventListener('click', () => {
+    monthDiff--;
+    updateTable();
+});
+monthviewNextButton.addEventListener('click', () => {
+    monthDiff++;
+    updateTable();
+});
+
+let nowDate = new Date();
+const monthviewCurrentmonth = document.getElementById('monthview-currentmonth');
+const monthviewTbody = document.getElementById('monthview-tbody');
+function updateTable() {
+    let appointments = fetchAPI();
 
     let date = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff);
     monthviewCurrentmonth.innerText = `${date.toLocaleString('de-DE', {month: 'long', year: 'numeric'})}`;
@@ -99,7 +102,7 @@ function updateTable() {
         }
         let daySpan = document.createElement('span');
         let appointmentSeperatorSpan = document.createElement('span');
-        let appointmentNumberSpan = document.createElement('span');
+        let appointmentNumberSpan = document.createElement('button');
         let flexContainer = document.createElement('div');
         daySpan.innerText = `${day}`.padStart(2, '0');;
         let todayString = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate()).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
@@ -110,11 +113,12 @@ function updateTable() {
         if (currentWeekday === 0 || currentWeekday === 6) {
             daySpan.classList.add('calendar-weekend');
         }
+        flexContainer.appendChild(daySpan);
+        appointmentNumberSpan.classList.add('calendar-date');
         if (numberAppointments > 0) {
             appointmentSeperatorSpan.innerText = ": ";
             appointmentSeperatorSpan.classList.add('screenreader');
             appointmentNumberSpan.innerText = numberAppointments;
-                appointmentNumberSpan.classList.add('calendar-date');
             switch (true) {
                 case (numberAppointments === 1):
                     appointmentNumberSpan.classList.add('calendar-date-1');
@@ -126,8 +130,11 @@ function updateTable() {
                     appointmentNumberSpan.classList.add('calendar-date-3');
                     break;
             }
+            appointmentNumberSpan.addEventListener('click', () => {
+                updateDailyAppointmentList(day);
+            });
+            flexContainer.append(appointmentSeperatorSpan, appointmentNumberSpan);
         }
-        flexContainer.append(daySpan, appointmentSeperatorSpan, appointmentNumberSpan);
         tableCell.appendChild(flexContainer);
         tableRow.appendChild(tableCell);
     }
@@ -155,6 +162,43 @@ function updateTable() {
     }
     monthviewTbody.append(tableRow);
 
+}
+
+const dailyAppointmentList = document.getElementById('calendar-daily-appointment-list');
+function updateDailyAppointmentList(day) {
+    let appointments = fetchAPI();
+
+    let dateToDisplay = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day)
+    let dateToDisplayString = dateToDisplay.toLocaleString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
+    dailyAppointmentList.classList.remove('hidden');
+
+    let listHeader = document.createElement('div');
+    let listHeaderText = document.createElement('h3');
+    listHeaderText.innerText = `Termine am ${dateToDisplayString}:`;
+    listHeader.appendChild(listHeaderText);
+
+    let listList = document.createElement('ul');
+    for (let i = 0; i < appointments.length; i++) {
+        let appointmentsDateString = appointments[i].date.toLocaleString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
+        if (appointmentsDateString === dateToDisplayString) {
+            let listItem = document.createElement('li');
+
+            let listItemCourse = document.createElement('span');
+            listItemCourse.innerText = appointments[i].course;
+            listItemCourse.classList.add('appointment-list-course');
+
+            let listItemLink = document.createElement('a');
+            listItemLink.innerText = appointments[i].title;
+            listItemLink.href = "/termin/index.html?t=" + appointments[i].id; //////////////////////////////////////////////////// index.html
+            listItemLink.classList.add('appointment-list-title');
+
+            listItem.append(listItemCourse, listItemLink);
+            listList.appendChild(listItem);
+        }
+    }
+
+    dailyAppointmentList.innerHTML = "";
+    dailyAppointmentList.append(listHeader, listList);
 }
 
 updateTable()

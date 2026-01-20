@@ -328,21 +328,21 @@ main {
     }
 }
 .calendar-date-1 {
-    background-color: #057d37;
+    background-color: #057d37 !important;
     @media (prefers-color-scheme: dark) {
-        background-color: #36d08d;
+        background-color: #36d08d !important;
     }
 }
 .calendar-date-2 {
-    background-color: #056a59;
+    background-color: #056a59 !important;
     @media (prefers-color-scheme: dark) {
-        background-color: #24dabb;
+        background-color: #24dabb !important;
     }
 }
 .calendar-date-3 {
-    background-color: #0b71b5;
+    background-color: #0b71b5 !important;
     @media (prefers-color-scheme: dark) {
-        background-color: #5cdcff;
+        background-color: #5cdcff !important;
     }
 }
 .calendar-today {
@@ -352,11 +352,52 @@ main {
     }
 }
 .calendar-date {
-    padding: 0 8px;
     border-radius: 100%;
     color: white;
     @media (prefers-color-scheme: dark) {
         color: black;
     }
     font-weight: bold;
+    font-size: 1rem;
+    padding: 0 11px;
+    @media (width < 40rem) {
+        padding: 0 9px;
+        font-size: 0.9rem;
+    }
+    @media (width < 32rem) {
+        padding: 0 8px;
+        font-size: 0.6rem;
+    }
+    border: none;
+    background-color: transparent;
+}
+
+#calendar-daily-appointment-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #dbd8d8;
+    @media (prefers-color-scheme: dark) {
+        background-color: #414047;
+    }
+    border-radius: 15px;
+}
+#calendar-daily-appointment-list > div {
+    width: 100%;
+    text-align: center;
+    background-color: #bdb9b9;
+    @media (prefers-color-scheme: dark) {
+        background-color: #323136;
+    }
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+#calendar-daily-appointment-list > ul {
+    margin: 15px 5px;
+}
+#calendar-daily-appointment-list > ul > li {
+    margin-bottom: 10px;
+}
+#calendar-daily-appointment-list .appointment-list-course {
+    margin-right: 10px;
 }
