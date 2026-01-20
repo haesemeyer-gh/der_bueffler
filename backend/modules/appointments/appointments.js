@@ -35,3 +35,15 @@ async function deleteAppointment(terminid) {
     query("INSERT INTO changes (Timestamp, TerminID, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?)", [new Date(), current[0].TerminID, current[0].ZuletztGeaendert, current[0].Datum, current[0].Titel, current[0].Fach, current[0].Lehrer, current[0].Notizen])
     return query("DELETE FROM appointments WHERE terminid = ?", [terminid]);
 }
+
+// Endpoints
+
+// Termin erstellen (nur Klassensprecher und Lehrer)
+
+// Alle Termine der Klasse einsehen
+
+// Einzelnen Termin via TerminID anzeigen
+
+// Termine bearbeiten (nur Klassensprecher und Lehrer)
+
+// Termin löschen (nur Klassensprecher und Lehrer)
