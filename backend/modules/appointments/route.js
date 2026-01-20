@@ -52,8 +52,7 @@ appointmentsRouter.post('/appointment/create', async(req, res) => {
     let response;
     let permissions = await verifyToken(token);
     if (permissions) { // TODO: benötigte Berechtigungen definieren
-        // TODO: Funktionen schreiben
-        let dbresponse = await appointments.createAppointment(teamid, date, title, course, teacher, notes)
+        let dbresponse = await appointments.createAppointment(teamid, permissions.ID, date, title, course, teacher, notes)
         if (dbresponse.code === "ER_BAD_NULL_ERROR") {
             res.status(422);
             response = "nicht null";
@@ -70,6 +69,7 @@ appointmentsRouter.post('/appointment/create', async(req, res) => {
         message: response
     });
 });
+// createAppointment in API testen
 
 appointmentsRouter.post('/appointment/edit', async(req, res) => {
     const token = req.body.token;
@@ -84,6 +84,14 @@ appointmentsRouter.post('/appointment/edit', async(req, res) => {
     let permissions = await verifyToken(token);
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
+         let dbresponse = await appointments.editAppointment(id, title, course, teacher, notes) //Werte anpassen (s. ./appointments.js)
+        if (dbresponse.code === "ER_BAD_NULL_ERROR") {
+            res.status(422);
+            response = "nicht null";
+        } else {
+            res.status(201);
+            response = "Termin erstellt";
+        }
     } else {
         res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
