@@ -59,10 +59,12 @@ const monthviewPrevButton = document.getElementById('monthview-prev-button');
 const monthviewNextButton = document.getElementById('monthview-next-button');
 monthviewPrevButton.addEventListener('click', () => {
     monthDiff--;
+    updateDailyAppointmentList();
     updateTable();
 });
 monthviewNextButton.addEventListener('click', () => {
     monthDiff++;
+    updateDailyAppointmentList();
     updateTable();
 });
 
@@ -166,39 +168,44 @@ function updateTable() {
 
 const dailyAppointmentList = document.getElementById('calendar-daily-appointment-list');
 function updateDailyAppointmentList(day) {
-    let appointments = fetchAPI();
+    if (day) {
+        let appointments = fetchAPI();
 
-    let dateToDisplay = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day)
-    let dateToDisplayString = dateToDisplay.toLocaleString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
-    dailyAppointmentList.classList.remove('hidden');
+        let dateToDisplay = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day)
+        let dateToDisplayString = dateToDisplay.toLocaleString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
+        dailyAppointmentList.classList.remove('hidden');
 
-    let listHeader = document.createElement('div');
-    let listHeaderText = document.createElement('h3');
-    listHeaderText.innerText = `Termine am ${dateToDisplayString}:`;
-    listHeader.appendChild(listHeaderText);
+        let listHeader = document.createElement('div');
+        let listHeaderText = document.createElement('h3');
+        listHeaderText.innerText = `Termine am ${dateToDisplayString}:`;
+        listHeader.appendChild(listHeaderText);
 
-    let listList = document.createElement('ul');
-    for (let i = 0; i < appointments.length; i++) {
-        let appointmentsDateString = appointments[i].date.toLocaleString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
-        if (appointmentsDateString === dateToDisplayString) {
-            let listItem = document.createElement('li');
+        let listList = document.createElement('ul');
+        for (let i = 0; i < appointments.length; i++) {
+            let appointmentsDateString = appointments[i].date.toLocaleString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
+            if (appointmentsDateString === dateToDisplayString) {
+                let listItem = document.createElement('li');
 
-            let listItemCourse = document.createElement('span');
-            listItemCourse.innerText = appointments[i].course;
-            listItemCourse.classList.add('appointment-list-course');
+                let listItemCourse = document.createElement('span');
+                listItemCourse.innerText = appointments[i].course;
+                listItemCourse.classList.add('appointment-list-course');
 
-            let listItemLink = document.createElement('a');
-            listItemLink.innerText = appointments[i].title;
-            listItemLink.href = "/termin/index.html?t=" + appointments[i].id; //////////////////////////////////////////////////// index.html
-            listItemLink.classList.add('appointment-list-title');
+                let listItemLink = document.createElement('a');
+                listItemLink.innerText = appointments[i].title;
+                listItemLink.href = "/termin/index.html?t=" + appointments[i].id; //////////////////////////////////////////////////// index.html
+                listItemLink.classList.add('appointment-list-title');
 
-            listItem.append(listItemCourse, listItemLink);
-            listList.appendChild(listItem);
+                listItem.append(listItemCourse, listItemLink);
+                listList.appendChild(listItem);
+            }
         }
-    }
 
-    dailyAppointmentList.innerHTML = "";
-    dailyAppointmentList.append(listHeader, listList);
+        dailyAppointmentList.innerHTML = "";
+        dailyAppointmentList.append(listHeader, listList);
+    } else {
+        dailyAppointmentList.innerHTML = "";
+        dailyAppointmentList.classList.add('hidden');
+    }
 }
 
 updateTable()

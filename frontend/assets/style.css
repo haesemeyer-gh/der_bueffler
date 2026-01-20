@@ -241,6 +241,9 @@ main {
     width: 100%;
     display: flex;
     justify-content: space-between;
+    @media (width < 35rem){
+        flex-direction: column;
+    }
 }
 #calendar-widget > div > button {
     padding: 0 10px;
@@ -257,6 +260,8 @@ main {
     }
 }
 #monthview-currentmonth {
+    padding: 10px;
+    text-align: center;
     font-weight: bold;
     color: #bf0808;
     @media (prefers-color-scheme: dark) {
