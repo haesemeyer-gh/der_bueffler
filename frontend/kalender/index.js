@@ -57,51 +57,49 @@ function updateTable() {
     monthviewTbody.innerHTML = '';
     let tableRow = document.createElement('tr');
 
-    // add empty days at beginning of month
-    while (firstWeekDay > 0) {
+    // adds an empty day to the current row
+    function addEmptyCell() {
         let tableCell = document.createElement('td');
         //tableCell.innerText = "x";
         tableRow.appendChild(tableCell);
         firstWeekDay--;
     }
 
+    // add a day to the current ray
+    function addRealDay(day) {
+        let tableCell = document.createElement('td');
+        let numberAppointments = 0;
+        for (let a = 0; a < appointments.length; a++) {
+            let appointmentString = appointments[a].date.toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
+            let currentString = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
+            if (appointmentString === currentString) {
+                numberAppointments++;
+            }
+        }
+        tableCell.innerText = `${day}${(numberAppointments ? ": "+numberAppointments : "")}`;
+        tableRow.appendChild(tableCell);
+    }
+
+    // add empty days at beginning of month
+    while (firstWeekDay > 0) {
+        addEmptyCell();
+    }
+
     // add days
     for (let i = 1; i <= daysThisMonth; i++) {
         if (tableRow.children.length < 7) {
-            let tableCell = document.createElement('td');
-            let numberAppointments = 0;
-            for (let a = 0; a < appointments.length; a++) {
-                let appointmentString = appointments[a].date.toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
-                let currentString = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, i).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
-                if (appointmentString === currentString) {
-                    numberAppointments++;
-                }
-            }
-            tableCell.innerText = `${i}${(numberAppointments ? ": "+numberAppointments : "")}`;
-            tableRow.appendChild(tableCell);
+            addRealDay(i);
         } else { // new row
             monthviewTbody.append(tableRow);
             tableRow = document.createElement('tr');
-            let tableCell = document.createElement('td');
-            let numberAppointments = 0;
-            for (let a = 0; a < appointments.length; a++) {
-                let appointmentString = appointments[a].date.toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
-                let currentString = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, i).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
-                if (appointmentString === currentString) {
-                    numberAppointments++;
-                }
-            }
-            tableCell.innerText = `${i}${(numberAppointments ? ": "+numberAppointments : "")}`;
-            tableRow.appendChild(tableCell);
+            addRealDay(i);
         }
     }
 
     // add empty days at end of month
     let daysInLastRow = tableRow.children.length;
     for (let i = 0; i < 7 - daysInLastRow; i++) {
-        let tableCell = document.createElement('td');
-        //tableCell.innerText = "x";
-        tableRow.appendChild(tableCell);
+        addEmptyCell();
     }
     monthviewTbody.append(tableRow);
 
