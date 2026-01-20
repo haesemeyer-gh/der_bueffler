@@ -26,6 +26,27 @@ function updateTable() {
             teacher: "asjdn",
         },
         {
+            id: 1,
+            date: new Date(),
+            title: "Toller Termin",
+            course: "SQL",
+            teacher: "asjdn",
+        },
+        {
+            id: 1,
+            date: new Date(),
+            title: "Toller Termin",
+            course: "SQL",
+            teacher: "asjdn",
+        },
+        {
+            id: 1,
+            date: new Date(),
+            title: "Toller Termin",
+            course: "SQL",
+            teacher: "asjdn",
+        },
+        {
             id: 2,
             date: new Date("2026-01-03"),
             title: "JavaScript Klassenarbeit",
@@ -76,7 +97,33 @@ function updateTable() {
                 numberAppointments++;
             }
         }
-        tableCell.innerText = `${day}${(numberAppointments ? ": "+numberAppointments : "")}`;
+        let daySpan = document.createElement('span');
+        let appointmentSeperatorSpan = document.createElement('span');
+        let appointmentNumberSpan = document.createElement('span');
+        let flexContainer = document.createElement('div');
+        daySpan.innerText = `${day}`.padStart(2, '0');;
+        let currentWeekday = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day).getDay();
+        if (currentWeekday === 0 || currentWeekday === 6) {
+            daySpan.classList.add('calendar-weekend');
+        }
+        if (numberAppointments > 0) {
+            appointmentSeperatorSpan.innerText = ": ";
+            appointmentNumberSpan.innerText = numberAppointments;
+                appointmentNumberSpan.classList.add('calendar-date');
+            switch (true) {
+                case (numberAppointments === 1):
+                    appointmentNumberSpan.classList.add('calendar-date-1');
+                    break;
+                case (numberAppointments === 2):
+                    appointmentNumberSpan.classList.add('calendar-date-2');
+                    break;
+                case (numberAppointments >= 3):
+                    appointmentNumberSpan.classList.add('calendar-date-3');
+                    break;
+            }
+        }
+        flexContainer.append(daySpan, appointmentSeperatorSpan, appointmentNumberSpan);
+        tableCell.appendChild(flexContainer);
         tableRow.appendChild(tableCell);
     }
 

@@ -220,3 +220,38 @@ main {
     border-radius: 10px;
     padding: 2px 5px;
 }
+
+#monthview {
+    font-family: "Roboto Mono", monospace;
+}
+#monthview-tbody > tr > td > div {
+    padding: 5px;
+    width: 70px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.calendar-weekend {
+    color: #bf0808;
+    @media (prefers-color-scheme: dark) {
+        color: #e06a6a;
+    }
+}
+.calendar-date-1 {
+    color: #057d37;
+    @media (prefers-color-scheme: dark) {
+        color: #36d08d;
+    }
+}
+.calendar-date-2 {
+    color: #056a59;
+    @media (prefers-color-scheme: dark) {
+        color: #24dabb;
+    }
+}
+.calendar-date-3 {
+    color: #0b71b5;
+    @media (prefers-color-scheme: dark) {
+        color: #5cdcff;
+    }
+}
