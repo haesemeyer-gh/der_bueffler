@@ -4,7 +4,7 @@ import cron from 'node-cron';
 
 import { query } from '../db/db.js';
 import { appointmentToObject } from '../appointments/appointments.js';
-import { getUserMail } from '../users/users.js';
+import { getUserInfo } from '../users/users.js';
 import { listTeammates } from '../teams/teams.js';
 
 /* SMTP */
@@ -59,7 +59,7 @@ async function getMailArray() {
         let teammemberResponse = await listTeammates(appointment.teamid);
         if (teammemberResponse[0].Mitglieder !== null) {
             for (const userid of teammemberResponse[0].Mitglieder) {
-                let mailResponse = await getUserMail(userid);
+                let mailResponse = await getUserInfo(userid).Mail;
                 let userMail = mailResponse[0].Mail;
                 let existingUser = collectiveMailArray.find(user => user.mail === userMail);
 

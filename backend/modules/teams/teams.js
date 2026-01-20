@@ -15,5 +15,3 @@ export function deleteTeam(teamID) {
 export function info(teamid) {
     return query("SELECT TeamName FROM teams WHERE TeamID LIKE ?", [teamid]);
 }
-
-
