@@ -49,29 +49,31 @@
 
         <h2 class="date-display">Datum: <i id="date"></i></h2>
 
-        <section id="calendar-widget">
-            <div>
-                <button id="monthview-prev-button">Vorheriger Monat</button>
-                <span id="monthview-currentmonth"></span>
-                <button id="monthview-next-button">Nächster Monat</button>
+        <section class="parent-center-vertically">
+            <div id="calendar-widget">
+                <div>
+                    <button id="monthview-prev-button">Vorheriger Monat</button>
+                    <span id="monthview-currentmonth"></span>
+                    <button id="monthview-next-button">Nächster Monat</button>
+                </div>
+
+                <table id="monthview">
+                    <thead>
+                        <tr>
+                            <th>So<span class="screenreader">nntag</span></th>
+                            <th>Mo<span class="screenreader">ntag</span></th>
+                            <th>Di<span class="screenreader">enstag</span></th>
+                            <th>Mi<span class="screenreader">ttwoch</span></th>
+                            <th>Do<span class="screenreader">nnerstag</span></th>
+                            <th>Fr<span class="screenreader">eitag</span></th>
+                            <th>Sa<span class="screenreader">mstag</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="monthview-tbody">
+
+                    </tbody>
+                </table>
             </div>
-
-            <table id="monthview">
-                <thead>
-                    <tr>
-                        <th>So<span class="screenreader">nntag</span></th>
-                        <th>Mo<span class="screenreader">ntag</span></th>
-                        <th>Di<span class="screenreader">enstag</span></th>
-                        <th>Mi<span class="screenreader">ttwoch</span></th>
-                        <th>Do<span class="screenreader">nnerstag</span></th>
-                        <th>Fr<span class="screenreader">eitag</span></th>
-                        <th>Sa<span class="screenreader">mstag</span></th>
-                    </tr>
-                </thead>
-                <tbody id="monthview-tbody">
-
-                </tbody>
-            </table>
         </section>
 
     </main>
