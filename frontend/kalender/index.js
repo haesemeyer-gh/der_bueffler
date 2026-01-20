@@ -15,6 +15,39 @@ let nowDate = new Date();
 const monthviewCurrentmonth = document.getElementById('monthview-currentmonth');
 const monthviewTbody = document.getElementById('monthview-tbody');
 function updateTable() {
+
+    // api fetchen
+    const appointments = [
+        {
+            id: 1,
+            date: new Date(),
+            title: "Toller Termin",
+            course: "SQL",
+            teacher: "asjdn",
+        },
+        {
+            id: 2,
+            date: new Date("2026-01-03"),
+            title: "JavaScript Klassenarbeit",
+            course: "JavaScript",
+            teacher: "Klose",
+        },
+        {
+            id: 3,
+            date: new Date("2026-01-10"),
+            title: "JavaScript Klassenarbeit 2",
+            course: "JavaScript",
+            teacher: "aklsjdalskdm",
+        },
+        {
+            id: 4,
+            date: new Date("2026-01-10"),
+            title: "JavaScript Klassenarbeit 2",
+            course: "JavaScript",
+            teacher: "aklsjdalskdm",
+        }
+    ]
+
     let date = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff);
     monthviewCurrentmonth.innerText = `${date.toLocaleString('de-DE', {month: 'long', year: 'numeric'})}`;
 
@@ -27,7 +60,7 @@ function updateTable() {
     // add empty days at beginning of month
     while (firstWeekDay > 0) {
         let tableCell = document.createElement('td');
-        tableCell.innerText = "x";
+        //tableCell.innerText = "x";
         tableRow.appendChild(tableCell);
         firstWeekDay--;
     }
@@ -36,13 +69,29 @@ function updateTable() {
     for (let i = 1; i <= daysThisMonth; i++) {
         if (tableRow.children.length < 7) {
             let tableCell = document.createElement('td');
-            tableCell.innerText = `${i}`;
+            let numberAppointments = 0;
+            for (let a = 0; a < appointments.length; a++) {
+                let appointmentString = appointments[a].date.toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
+                let currentString = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, i).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
+                if (appointmentString === currentString) {
+                    numberAppointments++;
+                }
+            }
+            tableCell.innerText = `${i}${(numberAppointments ? ": "+numberAppointments : "")}`;
             tableRow.appendChild(tableCell);
         } else { // new row
             monthviewTbody.append(tableRow);
             tableRow = document.createElement('tr');
             let tableCell = document.createElement('td');
-            tableCell.innerText = `${i}`;
+            let numberAppointments = 0;
+            for (let a = 0; a < appointments.length; a++) {
+                let appointmentString = appointments[a].date.toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
+                let currentString = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, i).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
+                if (appointmentString === currentString) {
+                    numberAppointments++;
+                }
+            }
+            tableCell.innerText = `${i}${(numberAppointments ? ": "+numberAppointments : "")}`;
             tableRow.appendChild(tableCell);
         }
     }
@@ -51,7 +100,7 @@ function updateTable() {
     let daysInLastRow = tableRow.children.length;
     for (let i = 0; i < 7 - daysInLastRow; i++) {
         let tableCell = document.createElement('td');
-        tableCell.innerText = "x";
+        //tableCell.innerText = "x";
         tableRow.appendChild(tableCell);
     }
     monthviewTbody.append(tableRow);
