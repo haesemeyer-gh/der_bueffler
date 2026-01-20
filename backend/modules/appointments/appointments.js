@@ -1,3 +1,5 @@
+import { query } from '../db/db.js';
+
 export function appointmentToObject(title, teamid, date, course, teacher, notes) {
     let dateString = new Date(date).toLocaleString('de-DE', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
     let appointmentObject = {
@@ -12,7 +14,7 @@ export function appointmentToObject(title, teamid, date, course, teacher, notes)
     return appointmentObject;
 }
 
-async function createAppointment(teamid, date, title, course, teacher, notes) {
+export async function createAppointment(teamid, date, title, course, teacher, notes) {
     return query("INSERT INTO appointments (TeamID, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?)", [teamid, date, title, course, teacher, notes]);
 }
 
@@ -35,40 +37,3 @@ async function deleteAppointment(terminid) {
     query("INSERT INTO changes (Timestamp, TerminID, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?)", [new Date(), current[0].TerminID, current[0].ZuletztGeaendert, current[0].Datum, current[0].Titel, current[0].Fach, current[0].Lehrer, current[0].Notizen])
     return query("DELETE FROM appointments WHERE terminid = ?", [terminid]);
 }
-
-// Endpoints
-
-// Termin erstellen (nur Klassensprecher und Lehrer)
-app.post('/appointment/create', async (req,res) => {
-    const token = req.body.token;
-    const name = req.body.name;
-
-    let response
-
-    let permissions = await verifyToken(token);
-
-    if (permissions.Admin === 1) {
-        if (date && date.length > 0) {
-            res.status(/*TODO: Status angeben*/)
-            response = "Termin eingetragen"
-            createAppointment(teamid, date, title, course, teacher, notes)
-        } else {
-            res.status(422)
-            response = "Gib ein Datum an!"
-        }
-    } else {
-        res.status(403)
-        response = "Du hast nicht die benötigten Berechtigungen."
-    }
-    res.json({
-        message: response
-    });
-});
-
-// Alle Termine der Klasse einsehen
-
-// Einzelnen Termin via TerminID anzeigen
-
-// Termine bearbeiten (nur Klassensprecher und Lehrer)
-
-// Termin löschen (nur Klassensprecher und Lehrer)
