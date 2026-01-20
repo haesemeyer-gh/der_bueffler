@@ -137,6 +137,9 @@ function updateTable() {
             });
             flexContainer.append(appointmentSeperatorSpan, appointmentNumberSpan);
         }
+        tableCell.addEventListener('click', () => {
+            updateDailyAppointmentList(day);
+        });
         tableCell.appendChild(flexContainer);
         tableRow.appendChild(tableCell);
     }
@@ -198,6 +201,11 @@ function updateDailyAppointmentList(day) {
                 listItem.append(listItemCourse, listItemLink);
                 listList.appendChild(listItem);
             }
+        }
+        if (listList.children.length === 0) {
+            let listItem = document.createElement('li');
+            listItem.innerText = "Es stehen keine Termine an!";
+            listList.appendChild(listItem);
         }
 
         dailyAppointmentList.innerHTML = "";

@@ -356,6 +356,19 @@ main {
         background-color: #72436c;
     }
 }
+.calendar-today:hover {
+    background-color: #f8ddff !important;
+    @media (prefers-color-scheme: dark) {
+        background-color: #8b5a8f !important;
+    }
+}
+#monthview > tbody > tr > td:hover {
+    background-color: #e2e2e2;
+    @media (prefers-color-scheme: dark) {
+        background-color: #545151;
+    }
+    cursor: pointer;
+}
 .calendar-date {
     border-radius: 100%;
     color: white;
@@ -375,6 +388,7 @@ main {
     }
     border: none;
     background-color: transparent;
+    cursor: pointer;
 }
 
 #calendar-daily-appointment-list {
