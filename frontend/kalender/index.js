@@ -195,7 +195,7 @@ function updateDailyAppointmentList(day) {
 
                 let listItemLink = document.createElement('a');
                 listItemLink.innerText = appointments[i].title;
-                listItemLink.href = "/termin/index.html?t=" + appointments[i].id; //////////////////////////////////////////////////// index.html
+                listItemLink.href = "../termin/index.html?t=" + appointments[i].id; //////////////////////////////////////////////////// index.html
                 listItemLink.classList.add('appointment-list-title');
 
                 listItem.append(listItemCourse, listItemLink);
