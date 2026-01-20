@@ -7,6 +7,7 @@ import authRouter from './modules/auth/route.js';
 import pushRouter from './modules/push/route.js';
 import teamsRouter from './modules/teams/route.js';
 import usersRouter from './modules/users/route.js';
+import gradesRouter from './modules/grades/route.js';
 
 import startDigest from './modules/mails/mails.js';
 import setupWebpush from './modules/push/push.js';
@@ -28,6 +29,7 @@ app.use(authRouter);
 app.use(pushRouter);
 app.use(teamsRouter);
 app.use(usersRouter);
+app.use(gradesRouter);
 
 app.listen(process.env.BUEFFLER_PORT, async () => {
     console.log("Web-Server verfügbar!");

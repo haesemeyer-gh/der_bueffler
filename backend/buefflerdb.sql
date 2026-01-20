@@ -61,4 +61,13 @@ CREATE TABLE `push_subscriptions` (
   UNIQUE(`Subscription`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+CREATE TABLE `grades` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NutzerID` int(11) NOT NULL,
+  `TerminID` int(11) NOT NULL,
+  `Note` int(11) DEFAULT NULL,
+  PRIMARY KEY(`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 COMMIT;
