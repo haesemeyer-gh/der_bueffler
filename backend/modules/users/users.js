@@ -11,10 +11,7 @@ export function makeAdmin(userid) {
 export function deleteTeacher(userid) {
     return query("UPDATE user SET Lehrer = 0 WHERE ID LIKE ?;", [userid]);
 }
-<<<<<<< Updated upstream
-=======
+
 export function getUserInfo(userid) {
     return query("SELECT Admin, Lehrer, Name, Mail  FROM user WHERE ID LIKE ?;", [userid]);
 }
-
->>>>>>> Stashed changes
