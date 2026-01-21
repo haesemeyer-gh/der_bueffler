@@ -40,6 +40,6 @@ app.listen(process.env.BUEFFLER_PORT, async () => {
 	setupWebpush();
 
 	//tmp
-	sendCollectiveMails();
+	//sendCollectiveMails();
 });
 
