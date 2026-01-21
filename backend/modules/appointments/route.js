@@ -74,6 +74,7 @@ appointmentsRouter.post('/appointment/create', async(req, res) => {
 appointmentsRouter.post('/appointment/edit', async(req, res) => {
     const token = req.body.token;
     const id = req.body.id;
+    const date = req.body.date;
     const title = req.body.title;
     const course = req.body.course;
     const teacher = req.body.teacher;
@@ -84,7 +85,7 @@ appointmentsRouter.post('/appointment/edit', async(req, res) => {
     let permissions = await verifyToken(token);
     if (permissions) { // TODO: benötigte Berechtigungen definieren
         // TODO: Funktionen schreiben
-         let dbresponse = await appointments.editAppointment(id, title, course, teacher, notes) //Werte anpassen (s. ./appointments.js)
+         let dbresponse = await appointments.editAppointment(id, permissions.ID, date, title, course, teacher, notes) //Werte anpassen (s. ./appointments.js)
         if (dbresponse.code === "ER_BAD_NULL_ERROR") {
             res.status(422);
             response = "nicht null";
