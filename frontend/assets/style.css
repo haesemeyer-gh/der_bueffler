@@ -420,3 +420,74 @@ main {
 #calendar-daily-appointment-list .appointment-list-course {
     margin-right: 10px;
 }
+
+.create-form {
+	padding: 10px;
+}
+.create-form-double {
+	display: flex;
+	flex-direction: row;
+	@media (width < 60rem) {
+		flex-direction: column;
+	}
+	gap: 20px;
+	margin-bottom: 10px;
+}
+.create-form-double div,
+.create-form-double label {
+	width: 100%;
+}
+.create-form-double input {
+	width: 98%;
+    border: 2px solid black;
+    @media (prefers-color-scheme: dark) {
+        border-color: white;
+    }
+    padding: 5px;
+    font-family: "Roboto Mono", monospace;
+    font-size: 1.5rem;
+}
+.create-form-double:first-of-type {
+	margin: 20px 0;
+}
+.create-form-double > .create-form-double input {
+	@media (width >= 60rem) {
+		width: 96%;
+	}
+}
+.create-form-textarea {
+	width: 99%;
+	@media (width < 60rem) {
+		width: 98%;
+	}
+	height: 200px;
+	border: 2px solid black;
+	@media (prefers-color-scheme: dark) {
+		border-color: white;
+	}
+	padding: 5px;
+	font-family: "Roboto Mono", monospace;
+	font-size: 1.5rem;
+}
+.create-form-button {
+    width: 20rem;
+    margin-top: 10px;
+    padding: 10px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    border: 5px solid black;
+    background-color: white;
+    color: black;
+    @media (prefers-color-scheme: dark) {
+        border-color: white
+    }
+}
+.create-form-button:hover {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+.create-form-button:active {
+    translate: 0 5px;
+}
+

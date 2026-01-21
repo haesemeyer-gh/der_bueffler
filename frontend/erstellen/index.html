@@ -56,24 +56,42 @@
         <h2 class="date-display">Datum: <i id="date"></i></h2>
 
         <div class="create-form">
-            <label>Team-ID: <i>(tmp)</i><br>
-                <input id="create-form-teamid" class="create-form-input" type="number" />
-            </label><br>
-            <label>Datum: <i>(tmp)</i><br>
-                <input id="create-form-date" class="create-form-input" type="datetime-local" />
-            </label><br>
-            <label>Titel: <i>(tmp)</i><br>
-                <input id="create-form-title" class="create-form-input" type="text" />
-            </label><br>
-            <label>Fach: <i>(tmp)</i><br>
-                <input id="create-form-course" class="create-form-input" type="text" />
-            </label><br>
-            <label>Lehrer: <i>(tmp)</i><br>
-                <input id="create-form-teacher" class="create-form-input" type="text" />
-            </label><br>
-            <label>Notizen:<br>
-                <textarea id="create-form-notes" class="create-form-textarea"></textarea>
-            </label><br>
+			<div class="create-form-double">
+				<div>
+					<label>Team-ID: <i>(tmp)</i><br>
+						<input id="create-form-teamid" class="create-form-input" type="number" />
+					</label>
+				</div>
+				<div>
+					<label>Datum: <i>(tmp)</i><br>
+						<input id="create-form-date" class="create-form-input" type="datetime-local" />
+					</label>
+				</div>
+			</div>
+			<div class="create-form-double">
+				<div>
+					<label>Titel:<br>
+						<input id="create-form-title" class="create-form-input" type="text" />
+					</label>
+				</div>
+				<div class="create-form-double">
+					<div>
+						<label>Fach:<br>
+							<input id="create-form-course" class="create-form-input" type="text" />
+						</label>
+					</div>
+					<div>
+						<label>Lehrer:<br>
+							<input id="create-form-teacher" class="create-form-input" type="text" />
+						</label>
+					</div>
+				</div>
+			</div>
+			<div>
+				<label>Notizen:<br>
+					<textarea id="create-form-notes" class="create-form-textarea"></textarea>
+				</label>
+			</div>
             <button id="create-form-button" class="create-form-button">Abschicken</button>
             <p id="create-form-status"></p>
         </div>
