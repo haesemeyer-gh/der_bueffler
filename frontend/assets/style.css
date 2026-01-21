@@ -2,423 +2,423 @@
 
 .hidden { display: none; }
 .screenreader {
-    position: absolute !important;
-    height: 1px; width: 1px;
-    overflow: hidden;
-    clip: rect(1px 1px 1px 1px);
-    clip: rect(1px, 1px, 1px, 1px);
+	position: absolute !important;
+	height: 1px; width: 1px;
+	overflow: hidden;
+	clip: rect(1px 1px 1px 1px);
+	clip: rect(1px, 1px, 1px, 1px);
 }
 
 .parent-center-vertically {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 /* STYLES */
 
 body {
-    margin: 0;
-    font-family: "Roboto", sans-serif;
-    font-size: 1.5rem;
-    @media (width < 50rem) {
-        font-size: 1.2rem;
-    }
-    @media (prefers-color-scheme: dark) {
-        background-color: #1F1F1F;
-        color: white;
-    }
+	margin: 0;
+	font-family: "Roboto", sans-serif;
+	font-size: 1.5rem;
+	@media (width < 50rem) {
+		font-size: 1.2rem;
+	}
+	@media (prefers-color-scheme: dark) {
+		background-color: #1F1F1F;
+		color: white;
+	}
 }
 
 header {
-    background-color: #FBB900;
-    color: black;
-    padding: 10px 20px;
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    @media (width < 36rem) {
-        flex-direction: column;
-    }
+	background-color: #FBB900;
+	color: black;
+	padding: 10px 20px;
+	display: flex;
+	justify-content: space-between;
+	flex-direction: row;
+	@media (width < 36rem) {
+		flex-direction: column;
+	}
 }
 header > h1 {
-    margin: 0;
-    font-weight: 900;
-    @media (width < 36rem) {
-        text-align: center;
-    }
+	margin: 0;
+	font-weight: 900;
+	@media (width < 36rem) {
+		text-align: center;
+	}
 }
 nav {
-    display: flex;
-    gap: 15px;
+	display: flex;
+	gap: 15px;
 }
 nav > a > img {
-    height: 48px;
+	height: 48px;
 }
 nav > a > img:hover {
-    filter: saturate(100%) invert(20%) sepia(90%) saturate(1000%) hue-rotate(185deg) brightness(90%) contrast(90%);
+	filter: saturate(100%) invert(20%) sepia(90%) saturate(1000%) hue-rotate(185deg) brightness(90%) contrast(90%);
 }
 nav > .current-page > img,
 nav > .current-page > img:hover {
-    filter: saturate(100%) invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
+	filter: saturate(100%) invert(100%) sepia(100%) saturate(100%) hue-rotate(0deg) brightness(100%) contrast(100%);
 }
 
 #login-main {
-    border-radius: 20px;
-    background-color: rgba(0, 0, 0, 0.1);
-    @media (prefers-color-scheme: dark) {
-        background-color: rgba(255, 255, 255, 0.2);
-    }
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 30px 0;
-    @media (width >= 36rem) {
-        margin: 30px 20%;
-    }
-    @media (width >= 75rem) {
-        margin: 30px 30%;
-    }
+	border-radius: 20px;
+	background-color: rgba(0, 0, 0, 0.1);
+	@media (prefers-color-scheme: dark) {
+		background-color: rgba(255, 255, 255, 0.2);
+	}
+	padding: 40px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 30px 0;
+	@media (width >= 36rem) {
+		margin: 30px 20%;
+	}
+	@media (width >= 75rem) {
+		margin: 30px 30%;
+	}
 }
 #login label {
-    width: 100%;
-    margin: 0 12px 0 0;
+	width: 100%;
+	margin: 0 12px 0 0;
 }
 #login input {
-    width: 100%;
-    margin: 5px 0;
-    border: 2px solid black;
-    @media (prefers-color-scheme: dark) {
-        border-color: white;
-    }
-    padding: 5px;
-    font-family: "Roboto Mono", monospace;
-    font-size: 1.5rem;
+	width: 100%;
+	margin: 5px 0;
+	border: 2px solid black;
+	@media (prefers-color-scheme: dark) {
+		border-color: white;
+	}
+	padding: 5px;
+	font-family: "Roboto Mono", monospace;
+	font-size: 1.5rem;
 }
 #login button {
-    width: 100%;
-    margin-top: 10px;
-    padding: 10px;
-    font-size: 1.3rem;
-    font-weight: bold;
-    border: 5px solid black;
-    background-color: white;
-    color: black;
-    @media (prefers-color-scheme: dark) {
-        border-color: white
-    }
+	width: 100%;
+	margin-top: 10px;
+	padding: 10px;
+	font-size: 1.3rem;
+	font-weight: bold;
+	border: 5px solid black;
+	background-color: white;
+	color: black;
+	@media (prefers-color-scheme: dark) {
+		border-color: white
+	}
 }
 #login button:hover {
-    background-color: black;
-    color: white;
-    cursor: pointer;
+	background-color: black;
+	color: white;
+	cursor: pointer;
 }
 #login button:active {
-    translate: 0 5px;
+	translate: 0 5px;
 }
 #login #register-button {
-    border-color: #63B32E;
-    color: #63B32E;
+	border-color: #63B32E;
+	color: #63B32E;
 }
 #login #register-button:hover {
-    background-color: #63B32E;
-    color: white;
+	background-color: #63B32E;
+	color: white;
 }
 #login #login-button {
-    border-color: #107D91;
-    color: #107D91;
+	border-color: #107D91;
+	color: #107D91;
 }
 #login #login-button:hover {
-    background-color: #107D91;
-    color: white;
+	background-color: #107D91;
+	color: white;
 }
 #login #login-status {
-    color: #D73B3C;
+	color: #D73B3C;
 }
 
 main {
-    padding: 10px;
+	padding: 10px;
 }
 
 .date-display {
-    font-size: 1.3rem;
-    font-weight: normal;
+	font-size: 1.3rem;
+	font-weight: normal;
 }
 
 .nv-dev-input {
-    width: 75%;
-    margin: 5px 0;
-    border: 2px solid black;
-    @media (prefers-color-scheme: dark) {
-        border-color: white;
-    }
-    padding: 5px;
-    font-family: "Roboto Mono", monospace;
-    font-size: 1.5rem;
+	width: 75%;
+	margin: 5px 0;
+	border: 2px solid black;
+	@media (prefers-color-scheme: dark) {
+		border-color: white;
+	}
+	padding: 5px;
+	font-family: "Roboto Mono", monospace;
+	font-size: 1.5rem;
 }
 .nv-dev-button {
-    width: 20rem;
-    margin-top: 10px;
-    padding: 10px;
-    font-size: 1.3rem;
-    font-weight: bold;
-    border: 5px solid black;
-    background-color: white;
-    color: black;
-    @media (prefers-color-scheme: dark) {
-        border-color: white
-    }
+	width: 20rem;
+	margin-top: 10px;
+	padding: 10px;
+	font-size: 1.3rem;
+	font-weight: bold;
+	border: 5px solid black;
+	background-color: white;
+	color: black;
+	@media (prefers-color-scheme: dark) {
+		border-color: white
+	}
 }
 .nv-dev-button:hover {
-    background-color: black;
-    color: white;
-    cursor: pointer;
+	background-color: black;
+	color: white;
+	cursor: pointer;
 }
 .nv-dev-button:active {
-    translate: 0 5px;
+	translate: 0 5px;
 }
 
 .nv-dev-div,
 #dashboard details {
-    margin: 0 0 20px 0;
-    border: 2px solid black;
-    @media (prefers-color-scheme: dark) {
-        border-color: white;
-    }
-    padding: 10px;
+	margin: 0 0 20px 0;
+	border: 2px solid black;
+	@media (prefers-color-scheme: dark) {
+		border-color: white;
+	}
+	padding: 10px;
 }
 #dashboard summary {
-    font-weight: bold;
-    cursor: pointer;
+	font-weight: bold;
+	cursor: pointer;
 }
 #dashboard details > ul > li {
-    margin: 10px 0;
+	margin: 10px 0;
 }
 #dashboard details > ul > li > span {
-    margin-right: 10px;
+	margin-right: 10px;
 }
 .appointment-list-date {
-    margin-left: 10px;
-    font-family: "Roboto Mono", monospace;
+	margin-left: 10px;
+	font-family: "Roboto Mono", monospace;
 }
 .appointment-list-course {
-    background-color: #f3e178;
-    border: 1px solid #FBB900;
-    color: black;
-    border-radius: 10px;
-    padding: 2px 5px;
+	background-color: #f3e178;
+	border: 1px solid #FBB900;
+	color: black;
+	border-radius: 10px;
+	padding: 2px 5px;
 }
 .appointment-list-teacher {
-    background-color: #f3e178;
-    border: 1px solid #FBB900;
-    color: black;
-    border-radius: 10px;
-    padding: 2px 5px;
+	background-color: #f3e178;
+	border: 1px solid #FBB900;
+	color: black;
+	border-radius: 10px;
+	padding: 2px 5px;
 }
 .appointment-list-title {
-    font-weight: bold;
-    color: black;
-    @media (prefers-color-scheme: dark) {
-        color: white;
-    }
+	font-weight: bold;
+	color: black;
+	@media (prefers-color-scheme: dark) {
+		color: white;
+	}
 }
 .appointment-detail-date {
-    font-family: "Roboto Mono", monospace;
+	font-family: "Roboto Mono", monospace;
 }
 .appointment-detail-course {
-    background-color: #f3e178;
-    border: 1px solid #FBB900;
-    color: black;
-    border-radius: 10px;
-    padding: 2px 5px;
+	background-color: #f3e178;
+	border: 1px solid #FBB900;
+	color: black;
+	border-radius: 10px;
+	padding: 2px 5px;
 }
 
 #calendar-widget {
-    width: fit-content;
+	width: fit-content;
 }
 #calendar-widget > div {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    @media (width < 35rem){
-        flex-direction: column;
-    }
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	@media (width < 35rem){
+		flex-direction: column;
+	}
 }
 #calendar-widget > div > button {
-    padding: 0 10px;
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 3px;
-    border: 2px solid #565353;
-    background-color: #565363;
-    color: white;
-    @media (prefers-color-scheme: dark) {
-        border-color: #cccbcb;
-        background-color: #cccbcb;
-        color: black;
-    }
+	padding: 0 10px;
+	font-size: 1rem;
+	font-weight: bold;
+	border-radius: 3px;
+	border: 2px solid #565353;
+	background-color: #565363;
+	color: white;
+	@media (prefers-color-scheme: dark) {
+		border-color: #cccbcb;
+		background-color: #cccbcb;
+		color: black;
+	}
 }
 #monthview-currentmonth {
-    padding: 10px;
-    text-align: center;
-    font-weight: bold;
-    color: #bf0808;
-    @media (prefers-color-scheme: dark) {
-        color: #e06a6a;
-    }
+	padding: 10px;
+	text-align: center;
+	font-weight: bold;
+	color: #bf0808;
+	@media (prefers-color-scheme: dark) {
+		color: #e06a6a;
+	}
 }
 
 #monthview {
-    margin: 20px 0;
-    font-family: "Roboto Mono", monospace;
-    @media (width < 40rem) {
-        font-size: 1.3rem;
-    }
-    @media (width < 32rem) {
-        font-size: 1rem;
-    }
+	margin: 20px 0;
+	font-family: "Roboto Mono", monospace;
+	@media (width < 40rem) {
+		font-size: 1.3rem;
+	}
+	@media (width < 32rem) {
+		font-size: 1rem;
+	}
 }
 #monthview,
 #monthview th,
 #monthview td {
-    /*border: 2px solid #cccbcb;
-    @media (prefers-color-scheme: dark) {
-        border-color: #565353;
-    }
-    border-collapse: collapse;
-    */
-    padding: 5px;
-    @media (width < 40rem) {
-        padding: 3px;
-    }
-    @media (width < 32rem) {
-        padding: 1px;
-    }
+	/*border: 2px solid #cccbcb;
+	@media (prefers-color-scheme: dark) {
+		border-color: #565353;
+	}
+	border-collapse: collapse;
+	*/
+	padding: 5px;
+	@media (width < 40rem) {
+		padding: 3px;
+	}
+	@media (width < 32rem) {
+		padding: 1px;
+	}
 }
 #monthview-tbody > tr > td > div {
-    padding: 5px;
-    width: 70px;
-    @media (width < 40rem) {
-        padding: 3px;
-        width: 60px;
-    }
-    @media (width < 32rem) {
-        padding: 1px;
-        width: 50px;
-    }
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+	padding: 5px;
+	width: 70px;
+	@media (width < 40rem) {
+		padding: 3px;
+		width: 60px;
+	}
+	@media (width < 32rem) {
+		padding: 1px;
+		width: 50px;
+	}
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
 }
 #monthview > thead > tr > th {
-    text-align: left;
-    padding: 10px;
-    width: 70px;
-    @media (width < 40rem) {
-        padding: 6px;
-        width: 60px;
-    }
-    @media (width < 32rem) {
-        padding: 3px;
-        width: 50px;
-    }
+	text-align: left;
+	padding: 10px;
+	width: 70px;
+	@media (width < 40rem) {
+		padding: 6px;
+		width: 60px;
+	}
+	@media (width < 32rem) {
+		padding: 3px;
+		width: 50px;
+	}
 }
 #monthview > thead > tr > th:first-child,
 #monthview > thead > tr > th:last-child,
 .calendar-weekend {
-    color: #bf0808;
-    @media (prefers-color-scheme: dark) {
-        color: #e06a6a;
-    }
+	color: #bf0808;
+	@media (prefers-color-scheme: dark) {
+		color: #e06a6a;
+	}
 }
 .calendar-date-1 {
-    background-color: #057d37 !important;
-    @media (prefers-color-scheme: dark) {
-        background-color: #36d08d !important;
-    }
+	background-color: #057d37 !important;
+	@media (prefers-color-scheme: dark) {
+		background-color: #36d08d !important;
+	}
 }
 .calendar-date-2 {
-    background-color: #056a59 !important;
-    @media (prefers-color-scheme: dark) {
-        background-color: #24dabb !important;
-    }
+	background-color: #056a59 !important;
+	@media (prefers-color-scheme: dark) {
+		background-color: #24dabb !important;
+	}
 }
 .calendar-date-3 {
-    background-color: #0b71b5 !important;
-    @media (prefers-color-scheme: dark) {
-        background-color: #5cdcff !important;
-    }
+	background-color: #0b71b5 !important;
+	@media (prefers-color-scheme: dark) {
+		background-color: #5cdcff !important;
+	}
 }
 .calendar-today {
-    background-color: #e5c5ff;
-    @media (prefers-color-scheme: dark) {
-        background-color: #72436c;
-    }
+	background-color: #e5c5ff;
+	@media (prefers-color-scheme: dark) {
+		background-color: #72436c;
+	}
 }
 .calendar-today:hover {
-    background-color: #f8ddff !important;
-    @media (prefers-color-scheme: dark) {
-        background-color: #8b5a8f !important;
-    }
+	background-color: #f8ddff !important;
+	@media (prefers-color-scheme: dark) {
+		background-color: #8b5a8f !important;
+	}
 }
 #monthview > tbody > tr > td:hover {
-    background-color: #e2e2e2;
-    @media (prefers-color-scheme: dark) {
-        background-color: #545151;
-    }
-    cursor: pointer;
+	background-color: #e2e2e2;
+	@media (prefers-color-scheme: dark) {
+		background-color: #545151;
+	}
+	cursor: pointer;
 }
 .calendar-date {
-    border-radius: 100%;
-    color: white;
-    @media (prefers-color-scheme: dark) {
-        color: black;
-    }
-    font-weight: bold;
-    font-size: 1rem;
-    padding: 0 11px;
-    @media (width < 40rem) {
-        padding: 0 9px;
-        font-size: 0.9rem;
-    }
-    @media (width < 32rem) {
-        padding: 0 8px;
-        font-size: 0.6rem;
-    }
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
+	border-radius: 100%;
+	color: white;
+	@media (prefers-color-scheme: dark) {
+		color: black;
+	}
+	font-weight: bold;
+	font-size: 1rem;
+	padding: 0 11px;
+	@media (width < 40rem) {
+		padding: 0 9px;
+		font-size: 0.9rem;
+	}
+	@media (width < 32rem) {
+		padding: 0 8px;
+		font-size: 0.6rem;
+	}
+	border: none;
+	background-color: transparent;
+	cursor: pointer;
 }
 
 #calendar-daily-appointment-list {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    background-color: #dbd8d8;
-    @media (prefers-color-scheme: dark) {
-        background-color: #414047;
-    }
-    border-radius: 15px;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	background-color: #dbd8d8;
+	@media (prefers-color-scheme: dark) {
+		background-color: #414047;
+	}
+	border-radius: 15px;
 }
 #calendar-daily-appointment-list > div {
-    width: 100%;
-    text-align: center;
-    background-color: #bdb9b9;
-    @media (prefers-color-scheme: dark) {
-        background-color: #323136;
-    }
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+	width: 100%;
+	text-align: center;
+	background-color: #bdb9b9;
+	@media (prefers-color-scheme: dark) {
+		background-color: #323136;
+	}
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
 }
 #calendar-daily-appointment-list > ul {
-    margin: 15px 5px;
+	margin: 15px 5px;
 }
 #calendar-daily-appointment-list > ul > li {
-    margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 #calendar-daily-appointment-list .appointment-list-course {
-    margin-right: 10px;
+	margin-right: 10px;
 }
 
 .create-form {
@@ -439,13 +439,13 @@ main {
 }
 .create-form-double input {
 	width: 98%;
-    border: 2px solid black;
-    @media (prefers-color-scheme: dark) {
-        border-color: white;
-    }
-    padding: 5px;
-    font-family: "Roboto Mono", monospace;
-    font-size: 1.5rem;
+	border: 2px solid black;
+	@media (prefers-color-scheme: dark) {
+		border-color: white;
+	}
+	padding: 5px;
+	font-family: "Roboto Mono", monospace;
+	font-size: 1.5rem;
 }
 .create-form-double:first-of-type {
 	margin: 20px 0;
@@ -470,24 +470,24 @@ main {
 	font-size: 1.5rem;
 }
 .create-form-button {
-    width: 20rem;
-    margin-top: 10px;
-    padding: 10px;
-    font-size: 1.3rem;
-    font-weight: bold;
-    border: 5px solid black;
-    background-color: white;
-    color: black;
-    @media (prefers-color-scheme: dark) {
-        border-color: white
-    }
+	width: 20rem;
+	margin-top: 10px;
+	padding: 10px;
+	font-size: 1.3rem;
+	font-weight: bold;
+	border: 5px solid black;
+	background-color: white;
+	color: black;
+	@media (prefers-color-scheme: dark) {
+		border-color: white
+	}
 }
 .create-form-button:hover {
-    background-color: black;
-    color: white;
-    cursor: pointer;
+	background-color: black;
+	color: white;
+	cursor: pointer;
 }
 .create-form-button:active {
-    translate: 0 5px;
+	translate: 0 5px;
 }
 

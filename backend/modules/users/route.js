@@ -6,59 +6,60 @@ import * as users from './users.js';
 const usersRouter = express.Router();
 
 usersRouter.post('/user/maketeacher', async(req, res) => {
-    const token = req.body.token;
-    const id = req.body.id;
+	const token = req.body.token;
+	const id = req.body.id;
 
-    let response;
-    let permissions = await verifyToken(token);
-    if (permissions.Lehrer === 1|| permissions.Admin === 1){
-        users.makeTeacher(userid)
-        response = "Nutzer wurde erfolgreich zum Lehrer gemacht";
-    } else {
-        res.status(403);
-        response = "Du hast nicht die nötigen Berechtigungen.";
-    }
+	let response;
+	let permissions = await verifyToken(token);
+	if (permissions.Lehrer === 1|| permissions.Admin === 1){
+		users.makeTeacher(userid)
+		response = "Nutzer wurde erfolgreich zum Lehrer gemacht";
+	} else {
+		res.status(403);
+		response = "Du hast nicht die nötigen Berechtigungen.";
+	}
 
-    res.json({
-        message: response
-    });
+	res.json({
+		message: response
+	});
 });
 
 usersRouter.post('/user/makeadmin', async(req, res) => {
-    const token = req.body.token;
-    const userid = req.body.userid;
+	const token = req.body.token;
+	const userid = req.body.userid;
 
-    let response;
-    let permissions = await verifyToken(token);
-    if (permissions.Admin === 1) {
-        userid.makeAdmin(userid) 
-        response = "Nutzer wurde erfolgreich zum Admin gemacht";
-    } else {
-        res.status(403);
-        response = "Du hast nicht die nötigen Berechtigungen.";
-    }
+	let response;
+	let permissions = await verifyToken(token);
+	if (permissions.Admin === 1) {
+		userid.makeAdmin(userid)
+		response = "Nutzer wurde erfolgreich zum Admin gemacht";
+	} else {
+		res.status(403);
+		response = "Du hast nicht die nötigen Berechtigungen.";
+	}
 
-    res.json({
-        message: response
-    });
+	res.json({
+		message: response
+	});
 });
 
 usersRouter.post('/user/getUserInfo', async(req, res) => {
-    const token = req.body.token;
-    const userid = req.body.userid;
+	const token = req.body.token;
+	const userid = req.body.userid;
 
-    let response;
-    let permissions = await verifyToken(token);
-    if (permissions) {
-        users.getUserInfo(userid)
-    } else {
-        res.status(403);
-        response = "Du hast nicht die nötigen Berechtigungen.";
-    }
+	let response;
+	let permissions = await verifyToken(token);
+	if (permissions) {
+		users.getUserInfo(userid)
+	} else {
+		res.status(403);
+		response = "Du hast nicht die nötigen Berechtigungen.";
+	}
 
-    res.json({
-        message: response
-    });
+	res.json({
+		message: response
+	});
 });
 
 export default usersRouter;
+

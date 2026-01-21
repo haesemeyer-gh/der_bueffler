@@ -22,9 +22,9 @@ app.use(cors())
 app.use("/", express.static("../frontend"))
 
 app.get('/ping', (req, res) => {
-    res.json({
-        message: "pong"
-    });
+	res.json({
+		message: "pong"
+	});
 });
 
 app.use(appointmentsRouter);
@@ -35,9 +35,9 @@ app.use(usersRouter);
 app.use(gradesRouter);
 
 app.listen(process.env.BUEFFLER_PORT, async () => {
-    console.log("Web-Server verfügbar!");
-    startDigest();
-    setupWebpush();
+	console.log("Web-Server verfügbar!");
+	startDigest();
+	setupWebpush();
 
 	//tmp
 	sendCollectiveMails();

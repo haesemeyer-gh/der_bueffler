@@ -1,85 +1,85 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalenderansicht</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../assets/style.css">
-    <script src="../scripts/login.js" defer></script>
-    <script src="../scripts/clock.js" defer></script>
-    <script src="../scripts/push.js" defer></script> <!--?-->
-    <script src="index.js" defer></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Kalenderansicht</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="../assets/style.css">
+	<script src="../scripts/login.js" defer></script>
+	<script src="../scripts/clock.js" defer></script>
+	<script src="../scripts/push.js" defer></script> <!--?-->
+	<script src="index.js" defer></script>
 </head>
 <body>
 
-    <section id="login">
-        <header>
-            <h1>Der Büffler - Anmeldung</h1>
-        </header>
-        <div id="login-main">
-            <label>E-Mail Adresse:<br>
-                <input id="login-mail" type="text" />
-            </label><br>
-            <label>Passwort:<br>
-                <input id="login-pass" type="password" />
-            </label><br>
-            <label>Anzeigename: <i>(nur Registierung)</i><br>
-                <input id="register-uname" type="text" />
-            </label><br>
-            <button id="register-button" class="anmelde-button">Registrieren</button>
-            <button id="login-button" class="anmelde-button">Anmelden</button>
-            <!--<button id="reset" class="anmelde-button">Passwort vergessen?</button>-->
-            <p id="login-status"></p>
-        </div>
-    </section>
+	<section id="login">
+		<header>
+			<h1>Der Büffler - Anmeldung</h1>
+		</header>
+		<div id="login-main">
+			<label>E-Mail Adresse:<br>
+				<input id="login-mail" type="text" />
+			</label><br>
+			<label>Passwort:<br>
+				<input id="login-pass" type="password" />
+			</label><br>
+			<label>Anzeigename: <i>(nur Registierung)</i><br>
+				<input id="register-uname" type="text" />
+			</label><br>
+			<button id="register-button" class="anmelde-button">Registrieren</button>
+			<button id="login-button" class="anmelde-button">Anmelden</button>
+			<!--<button id="reset" class="anmelde-button">Passwort vergessen?</button>-->
+			<p id="login-status"></p>
+		</div>
+	</section>
 
-    <header class="hidden requirelogin">
-        <h1>Der Büffler!</h1>
-        <nav>
-            <a href="../"><img src="../assets/icons/home.svg" alt="Startseite"></a>
-            <a class="current-page" href="#"><img src="../assets/icons/calendar.svg" alt="Kalenderansicht"></a>
-            <a href="../erstellen"><img src="../assets/icons/pen.svg" alt="Termin Erstellen"></a>
-            <a href="../nutzerverwaltung"><img src="../assets/icons/team.svg" alt="Nutzerverwaltung"></a>
-        </nav>
-    </header>
+	<header class="hidden requirelogin">
+		<h1>Der Büffler!</h1>
+		<nav>
+			<a href="../"><img src="../assets/icons/home.svg" alt="Startseite"></a>
+			<a class="current-page" href="#"><img src="../assets/icons/calendar.svg" alt="Kalenderansicht"></a>
+			<a href="../erstellen"><img src="../assets/icons/pen.svg" alt="Termin Erstellen"></a>
+			<a href="../nutzerverwaltung"><img src="../assets/icons/team.svg" alt="Nutzerverwaltung"></a>
+		</nav>
+	</header>
 
-    <main class="hidden requirelogin">
+	<main class="hidden requirelogin">
 
-        <h2 class="date-display">Datum: <i id="date"></i></h2>
+		<h2 class="date-display">Datum: <i id="date"></i></h2>
 
-        <section class="parent-center-vertically">
-            <div id="calendar-widget">
-                <div>
-                    <button id="monthview-prev-button">Vorheriger Monat</button>
-                    <span id="monthview-currentmonth"></span>
-                    <button id="monthview-next-button">Nächster Monat</button>
-                </div>
+		<section class="parent-center-vertically">
+			<div id="calendar-widget">
+				<div>
+					<button id="monthview-prev-button">Vorheriger Monat</button>
+					<span id="monthview-currentmonth"></span>
+					<button id="monthview-next-button">Nächster Monat</button>
+				</div>
 
-                <table id="monthview">
-                    <thead>
-                        <tr>
-                            <th>So<span class="screenreader">nntag</span></th>
-                            <th>Mo<span class="screenreader">ntag</span></th>
-                            <th>Di<span class="screenreader">enstag</span></th>
-                            <th>Mi<span class="screenreader">ttwoch</span></th>
-                            <th>Do<span class="screenreader">nnerstag</span></th>
-                            <th>Fr<span class="screenreader">eitag</span></th>
-                            <th>Sa<span class="screenreader">mstag</span></th>
-                        </tr>
-                    </thead>
-                    <tbody id="monthview-tbody">
+				<table id="monthview">
+					<thead>
+						<tr>
+							<th>So<span class="screenreader">nntag</span></th>
+							<th>Mo<span class="screenreader">ntag</span></th>
+							<th>Di<span class="screenreader">enstag</span></th>
+							<th>Mi<span class="screenreader">ttwoch</span></th>
+							<th>Do<span class="screenreader">nnerstag</span></th>
+							<th>Fr<span class="screenreader">eitag</span></th>
+							<th>Sa<span class="screenreader">mstag</span></th>
+						</tr>
+					</thead>
+					<tbody id="monthview-tbody">
 
-                    </tbody>
-                </table>
+					</tbody>
+				</table>
 
-                <div id="calendar-daily-appointment-list" class="hidden"></div>
-            </div>
-        </section>
+				<div id="calendar-daily-appointment-list" class="hidden"></div>
+			</div>
+		</section>
 
-    </main>
+	</main>
 
 <!--
 <h2>Aktuelles Datum: 04.12.2025</h2>
@@ -139,3 +139,4 @@
 
 </body>
 </html>
+
