@@ -4,12 +4,12 @@ export async function listTeammates(teamid) {
 	return await query("SELECT TeamName, Mitglieder FROM teams WHERE TeamID LIKE ?", [teamid]);
 }
 
-export function createTeam(teamName){
-	return query("INSERT INTO teams (TeamName) VALUES (?)", [teamName]);
+export function createTeam(teamname){
+	return query("INSERT INTO teams (TeamName) VALUES (?)", [teamname]);
 }
 
-export function deleteTeam(teamID) {
-	return query("DELETE FROM teams WHERE (TeamID = ?)", [teamID]);
+export function deleteTeam(teamid) {
+	return query("DELETE FROM teams WHERE (TeamID = ?)", [teamid]);
 }
 
 export function info(teamid) {

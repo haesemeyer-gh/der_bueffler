@@ -5,10 +5,10 @@
 // Diese Funktion schickt ein SQL-Statement an die Datenbank.
 // Konkret nimmt sie die angegebene Variable `teamName` und erstellt ein neues Team mit diesem Namen.
 // Sie gibt zurück, was die Datenbank antwortet. Das ist vorallem nützlich für ein SELECT-Statement.
-function createTeam(teamName){
+function createTeam(teamname){
 	// Die Funktion `query()` akzeptiert zwei Argumente, einen 'Template String' und einen Array mit Variablen, die eingesetzt werden.
 	// (Werden keine Variablen eingesetzt, kann der Array einfach leer sein.)
-	return query("INSERT INTO teams (TeamName) VALUES (?)", [teamName]);
+	return query("INSERT INTO teams (TeamName) VALUES (?)", [teamname]);
 	// Warum nicht einfach die Variablen direkt in den String schreiben? z.B.:
 	//      query(`INSERT INTO teams (TeamName) VALUES '${teamName}'`);
 	// Ganz einfach: Der Nutzer könnte sein Team wie folgt nennen:

@@ -13,6 +13,6 @@ export function deleteTeacher(userid) {
 }
 
 export function getUserInfo(userid) {
-	return query("SELECT Admin, Lehrer, Name, Mail  FROM user WHERE ID LIKE ?;", [userid]);
+	return query("SELECT Admin, Lehrer, Name, Mail FROM user WHERE ID LIKE ?;", [userid]);
 }
 
