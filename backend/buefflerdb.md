@@ -1,5 +1,7 @@
 # BuefflerDB Struktur
 
+Ein Skript, um diese Datenbank einzurichten, befindet sich in [`./buefflerdb.sql`](./buefflerdb.sql).
+
 ## Table Liste
 
 - [appointments](#appointments): aktueller Stand aller Termine
@@ -34,7 +36,10 @@ Wird ein Termin bearbeitet, wird der aktuelle Stand in den `changes`-Table kopie
 
 ## session
 
-tbd
+Der `session`-Table enthält alle aktuellen Session Tokens.
+
+- `Token` ist der Session Token
+- `NutzerID` ist die ID des Nutzers, der hiermit angemeldet wird
 
 ## teams
 
@@ -44,3 +49,31 @@ Der `teams`-Table enthält alle Teams (z.B. Schulklassen)
 - `TeamName` ist eine kurze Beschreibung des Teams
 - `Mitglieder` ist ein Array mit IDs von Nutzern, die dieses Team einsehen dürfen
 - `Klassensprecher` ist ein Array mit IDs von Nutzern, die in diesem Team Klassensprecher sind
+
+## user
+
+Der `user`-Table enthält alle Nutzerprofile, Berechtigungen und Anmeldedaten.
+
+- `ID` ist die einzigartige ID des Nutzers
+- `Mail` ist die E-Mail des Nutzers zur Anmeldung
+- `Passwort` ist das gehashte Passwort des Nutzers
+- `Name` ist der frei wählbare Anzeigename des Nutzers
+- `Lehrer` ist 1, wenn der Nutzer ein Lehrer ist
+- `Admin` ist 1, wenn der Nutzer ein Administrator ist
+- `online` ist der Timestamp, an dem der Nutzer sich zuletzt einen neuen Session Token generieren ließ
+
+## push_subscriptions
+
+tbd
+
+## grades
+
+Der `grades`-Table enthält alle Schulnoten.
+
+- `ID` ist die einzigartige ID der Schulnoten
+- `SchuelerID` ist die ID des Nutzers, der diese Note erhalten hat
+- `LehrerID` ist die ID des Nutzers, der diese Note vergeben hat
+- `Fach` ist das Fach, in dem diese Note vergeben wurde
+- `Timestamp` ist der Zeitpunkt, an dem diese Note vergeben wurde
+- `Note` ist die Schulnote
+
