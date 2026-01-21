@@ -5,7 +5,7 @@ CREATE TABLE `appointments` (
   `TerminID` int(11) NOT NULL AUTO_INCREMENT,
   `TeamID` int(11) NOT NULL,
   `ZuletztGeaendert` int(11) NOT NULL,
-  `Datum` date NOT NULL,
+  `Datum` datetime NOT NULL,
   `Titel` varchar(255) NOT NULL,
   `Fach` varchar(255) NOT NULL,
   `Lehrer` varchar(255) NOT NULL,
@@ -15,10 +15,10 @@ CREATE TABLE `appointments` (
 
 CREATE TABLE `changes` (
   `AenderungsID` int(11) NOT NULL AUTO_INCREMENT,
-  `Timestamp` date NOT NULL,
+  `Timestamp` datetime NOT NULL,
   `ZuletztGeaendert` int(11) NOT NULL,
   `TerminID` int(11) NOT NULL,
-  `Datum` date NOT NULL,
+  `Datum` datetime NOT NULL,
   `Titel` varchar(255) NOT NULL,
   `Fach` varchar(255) NOT NULL,
   `Lehrer` varchar(255) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `user` (
   `Name` varchar(255) NOT NULL,
   `Lehrer` tinyint(1) NOT NULL,
   `Admin` tinyint(1) NOT NULL,
-  `online` date DEFAULT NULL,
+  `online` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -66,10 +66,11 @@ CREATE TABLE `grades` (
   `SchuelerID` int(11) NOT NULL,
   `LehrerID` int(11) NOT NULL,
   `Fach` varchar(255) NOT NULL,
-  `Timestamp` date NOT NULL,
+  `Timestamp` datetime NOT NULL,
   `Note` int(11) DEFAULT NULL,
   PRIMARY KEY(`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
 COMMIT;
+

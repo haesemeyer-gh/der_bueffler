@@ -16,10 +16,8 @@ gradesRouter.post('/grades/add', async(req, res) => {
     let response;
     let permissions = await verifyToken(token);
     if (permissions.Lehrer === 1) {
-        const teacherID = await getIDByToken(token);
+        await grades.addGrade(permissions.ID, studentID, course, timestamp, grade);
 
-        await grades.addGrade(teacherID, studentID, course, timestamp, grade);
-        
         response = "Successfully added";
         res.status(201);
     } else {
@@ -37,7 +35,6 @@ gradesRouter.post('/grades/list', async(req, res) => {
     const teacherID = req.body.teacherID;
     const course = req.body.course;
     const studentID = req.body.studentID;
-
 
     let response;
     let permissions = await verifyToken(token);
@@ -90,7 +87,7 @@ gradesRouter.post('/grades/get_avg', async(req, res) => {
 
         response = await grades.getAverageForCourse(studentID, course);
         res.status(200);
-        
+
     } else {
 
         res.status(403);
@@ -103,3 +100,4 @@ gradesRouter.post('/grades/get_avg', async(req, res) => {
 });
 
 export default gradesRouter;
+

@@ -80,9 +80,7 @@ export function formatDate(date) {
 }
 
 export async function markOnline(userID) {
-    const date = new Date()
-
-    return await query("UPDATE user SET online = ? WHERE (ID = ?)", [formatDate(date), userID])
+    return await query("UPDATE user SET online = ? WHERE (ID = ?)", [formatDate(new Date()), userID])
 }
 
 export async function getUserPermissions(userid) {
@@ -99,3 +97,4 @@ export async function verifyToken(token) {
         return false;
     }
 }
+

@@ -59,8 +59,8 @@ async function getMailArray() {
         let teammemberResponse = await listTeammates(appointment.teamid);
         if (teammemberResponse[0].Mitglieder !== null) {
             for (const userid of teammemberResponse[0].Mitglieder) {
-                let mailResponse = await getUserInfo(userid).Mail;
-                let userMail = mailResponse[0].Mail;
+                let mailResponse = await getUserInfo(userid);
+				let userMail = mailResponse[0].Mail;
                 let existingUser = collectiveMailArray.find(user => user.mail === userMail);
 
                 if (existingUser) {
@@ -106,3 +106,4 @@ export async function sendCollectiveMails() {
 }
 
 export default startDigest;
+
