@@ -1,53 +1,28 @@
-const devTeamsCreateName = document.getElementById('nv-dev-teams-create-name');
-const devTeamsCreateButton = document.getElementById('nv-dev-teams-create-button');
-const devTeamsCreateStatus = document.getElementById('nv-dev-teams-create-status');
-devTeamsCreateButton.addEventListener('click', () => {
-    fetch(APIURL+"/teams/create", {
+const createFormTeamID = document.getElementById('create-form-teamid');
+const createFormDate = document.getElementById('create-form-date');
+const createFormTitle = document.getElementById('create-form-title');
+const createFormCourse = document.getElementById('create-form-course');
+const createFormTeacher = document.getElementById('create-form-teacher');
+const createFormNotes = document.getElementById('create-form-notes');
+const createFormButton = document.getElementById('create-form-button');
+const createFormStatus = document.getElementById('create-form-status');
+createFormButton.addEventListener('click', () => {
+    fetch(APIURL+"/appointment/create", {
         method: "POST",
         body: JSON.stringify({
             token: cookieToken,
-            name: devTeamsCreateName.value,
+			teamid: createFormTeamID.value,
+			date: createFormDate.value,
+			title: createFormTitle.value,
+			course: createFormCourse.value,
+			teacher: createFormTeacher.value,
+			notes: createFormNotes.value
         }),
         headers: {
             "Content-type": "application/json; charset=UTF-8"
         }
     }).then((response) => response.json()).then((response) => {
-        devTeamsCreateStatus.innerText = response.message;
+        createFormStatus.innerText = response.message;
     });
 });
 
-const devTeamsDeleteID = document.getElementById('nv-dev-teams-delete-id');
-const devTeamsDeleteButton = document.getElementById('nv-dev-teams-delete-button');
-const devTeamsDeleteStatus = document.getElementById('nv-dev-teams-delete-status');
-devTeamsDeleteButton.addEventListener('click', () => {
-    fetch(APIURL+"/teams/delete", {
-        method: "POST",
-        body: JSON.stringify({
-            token: cookieToken,
-            id: devTeamsDeleteID.value,
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
-    }).then((response) => response.json()).then((response) => {
-        devTeamsDeleteStatus.innerText = response.message;
-    });
-});
-
-const devTeamsInfoID = document.getElementById('nv-dev-teams-info-id');
-const devTeamsInfoButton = document.getElementById('nv-dev-teams-info-button');
-const devTeamsInfoStatus = document.getElementById('nv-dev-teams-info-status');
-devTeamsInfoButton.addEventListener('click', () => {
-    fetch(APIURL+"/teams/info", {
-        method: "POST",
-        body: JSON.stringify({
-            token: cookieToken,
-            teamid: devTeamsInfoID.value,
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        }
-    }).then((response) => response.json()).then((response) => {
-        devTeamsInfoStatus.innerText = response.message;
-    });
-});

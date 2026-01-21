@@ -15,9 +15,10 @@ export async function query(sqlQuery, values = []) {
         const res = await conn.query(sqlQuery, values);
         return res;
     } catch (err) {
-        //console.error(err);
+        console.error(err);
         return err;
     } finally {
         if (conn) conn.end();
     }
 }
+
