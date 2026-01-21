@@ -11,7 +11,8 @@ usersRouter.post('/user/maketeacher', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions.Lehrer === 1|| permissions.Admin === 1){
+	if (permissions.Admin === 1){
+		res.status(201)
 		users.makeTeacher(userid)
 		response = "Nutzer wurde erfolgreich zum Lehrer gemacht";
 	} else {
@@ -24,6 +25,27 @@ usersRouter.post('/user/maketeacher', async(req, res) => {
 	});
 });
 
+usersRouter.post('/user/deleteteacher', async(req, res) => {
+	const token = req.body.token;
+	const id = req.body.id;
+
+	let response;
+	let permissions = await verifyToken(token);
+	if (permissions.Admin === 1){
+		res.status(201)
+		users.deleteTeacher(userid)
+		response = "Dem Nutzer wurde erfolgreich der Lehrerstatus aberkannt";
+	} else {
+		res.status(403);
+		response = "Du hast nicht die nötigen Berechtigungen.";
+	}
+
+	res.json({
+		message: response
+	});
+});
+
+
 usersRouter.post('/user/makeadmin', async(req, res) => {
 	const token = req.body.token;
 	const id = req.body.id;
@@ -31,6 +53,7 @@ usersRouter.post('/user/makeadmin', async(req, res) => {
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions.Admin === 1) {
+		res.status(201);
 		userid.makeAdmin(id)
 		response = "Nutzer wurde erfolgreich zum Admin gemacht";
 	} else {
@@ -50,7 +73,8 @@ usersRouter.post('/user/getUserInfo', async(req, res) => {
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions) {
-		users.getUserInfo(id)
+		res.status(201);
+		response = await users.getUserInfo(id)
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
