@@ -9,16 +9,16 @@ async function getAllAppointmentsWithinTimeframe(start, end) {
 	return await query("SELECT * FROM appointments WHERE Datum BETWEEN ? AND ?", [formatDate(start), formatDate(end)]);
 }
 
-async function getSubscriptions(userID) {
-	return await query("SELECT Subscription FROM push_subscriptions WHERE (NutzerID = ?)", [userID])
+async function getSubscriptions(userid) {
+	return await query("SELECT Subscription FROM push_subscriptions WHERE (NutzerID = ?)", [userid])
 }
 
-export async function addSubscriptions(userID, subscription) {
-	return await query("INSERT IGNORE INTO push_subscriptions (Subscription, NutzerID) VALUES (?, ?)", [subscription, userID]);
+export async function addSubscriptions(userid, subscription) {
+	return await query("INSERT IGNORE INTO push_subscriptions (Subscription, NutzerID) VALUES (?, ?)", [subscription, userid]);
 }
 
-export async function removeSubscriptions(userID) {
-	return await query("DELETE FROM push_subscriptions WHERE (NutzerID = ?)", [userID]);
+export async function removeSubscriptions(userid) {
+	return await query("DELETE FROM push_subscriptions WHERE (NutzerID = ?)", [userid]);
 }
 
 function setupWebpush() {
@@ -37,8 +37,7 @@ export async function sendPush() {
 
 	const toSend = {}
 	for (const appointment of appointments) {
-		let teamID = appointment.TeamID;
-		let teamData = await listTeammates(teamID);
+		let teamData = await listTeammates(appointment.TeamID);
 		if (teamData.length > 0 && teamData[0].Mitglieder !== null) {
 			let teamMembers = teamData[0].Mitglieder;
 
@@ -56,16 +55,16 @@ export async function sendPush() {
 
 	const subscriptions = {}
 
-	for (const userID of Object.keys(toSend)) {
-		let pushSubscriptions = await getSubscriptions(userID)
+	for (const userid of Object.keys(toSend)) {
+		let pushSubscriptions = await getSubscriptions(userid)
 		if (pushSubscriptions.length > 0) {
-			subscriptions[userID] = pushSubscriptions;
+			subscriptions[userid] = pushSubscriptions;
 		}
 
 	}
 
-	for (const [userID, pushsubscriptions] of Object.entries(subscriptions)) {
-		let appointments = toSend[userID];
+	for (const [userid, pushsubscriptions] of Object.entries(subscriptions)) {
+		let appointments = toSend[userid];
 		for (const address of pushsubscriptions) {
 			for (const appointment of appointments) {
 				console.log(address.Subscription)

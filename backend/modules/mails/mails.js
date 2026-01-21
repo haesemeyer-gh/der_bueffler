@@ -45,7 +45,7 @@ async function getWeeklyAppointments() {
 	let appointmentResponse = await query("SELECT * FROM appointments WHERE Datum BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);", []);
 	let weeklyAppointments = [];
 	appointmentResponse.forEach((appointment, i) => {
-		let appointmentObject = appointmentToObject(appointment.Titel, appointment.TeamID, appointment.Datum, appointment.Fach, appointment.Lehrer, appointment.Notizen);
+		let appointmentObject = appointmentToObject(appointment.Titel, appointment.TeamID, appointment.ZuletztGeaendert, appointment.Datum, appointment.Fach, appointment.Lehrer, appointment.Notizen);
 		weeklyAppointments.push(appointmentObject);
 	});
 	return weeklyAppointments;

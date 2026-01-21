@@ -33,23 +33,23 @@ export async function createNewUser(uname, email, password) {
 	return await query("INSERT INTO user (Mail, Passwort, Name, Lehrer, Admin) VALUES (?, ?, ?, 0, 0)", [email, hash, uname])
 }
 
-export async function resetPassword(userID, password) {
+export async function resetPassword(userid, password) {
 	const hash = await encrypt(password)
-	return await query("UPDATE user SET Passwort = ? WHERE (ID = ?)", [hash, userID])
+	return await query("UPDATE user SET Passwort = ? WHERE (ID = ?)", [hash, userid])
 }
 
-export async function userWithIDExists(userID) {
-	const data = await query("SELECT 1 FROM user WHERE (ID = ?)", [userID]);
+export async function userWithIDExists(userid) {
+	const data = await query("SELECT 1 FROM user WHERE (ID = ?)", [userid]);
 	return data.length > 0
 }
 
 export async function getUserID(email) {
 	const data = await query("SELECT ID FROM user WHERE (Mail = ?)", [email])
-	return data[0]["ID"]
+	return data[0].ID
 }
 
-export async function removeUser(userID) {
-	return await query("DELETE FROM user WHERE (ID = ?)", [userID])
+export async function removeUser(userid) {
+	return await query("DELETE FROM user WHERE (ID = ?)", [userid])
 }
 
 export async function getIDByToken(token) {
@@ -59,28 +59,27 @@ export async function getIDByToken(token) {
 
 export async function verifyPassword(password, email) {
 	const data = await query("SELECT Passwort FROM user WHERE (Mail = ?)", [email])
-	return await verify(data[0]["Passwort"], password)
+	return await verify(data[0].Passwort, password)
 }
 
-export async function createSession(userID) {
+export async function createSession(userid) {
 	const uuid = crypto.randomUUID();
-	await closeSession(userID)
-	await query("INSERT INTO session (Token, NutzerID) VALUES (?, ?)", [uuid, userID])
-	await markOnline(userID)
+	await closeSession(userid)
+	await query("INSERT INTO session (Token, NutzerID) VALUES (?, ?)", [uuid, userid])
+	await markOnline(userid)
 	return uuid
-
 }
 
-export async function closeSession(userID) {
-	return await query("DELETE FROM session WHERE (NutzerID = ?)", [userID])
+export async function closeSession(userid) {
+	return await query("DELETE FROM session WHERE (NutzerID = ?)", [userid])
 }
 
 export function formatDate(date) {
 	return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`
 }
 
-export async function markOnline(userID) {
-	return await query("UPDATE user SET online = ? WHERE (ID = ?)", [formatDate(new Date()), userID])
+export async function markOnline(userid) {
+	return await query("UPDATE user SET online = ? WHERE (ID = ?)", [formatDate(new Date()), userid])
 }
 
 export async function getUserPermissions(userid) {
