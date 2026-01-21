@@ -7,11 +7,15 @@ const appointmentsRouter = express.Router();
 
 appointmentsRouter.post('/appointment/list', async(req, res) => {
 	const token = req.body.token;
+    const teamid = req.body.teamid
 
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions) { // TODO: benötigte Berechtigungen definieren
 		// TODO: Funktionen schreiben
+        let dbresponse = await appointments.listAppointments(teamid)
+        response = dbresponse
+        res.status(201)
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
@@ -24,12 +28,15 @@ appointmentsRouter.post('/appointment/list', async(req, res) => {
 
 appointmentsRouter.post('/appointment/view', async(req, res) => {
 	const token = req.body.token;
-	const id = req.body.id;
+	const terminid = req.body.terminid;
 
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions) { // TODO: benötigte Berechtigungen definieren
 		// TODO: Funktionen schreiben
+        let dbresponse = await appointments.viewAppointment(terminid)
+        response = dbresponse[0]
+        res.status(201)
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
@@ -73,7 +80,7 @@ appointmentsRouter.post('/appointment/create', async(req, res) => {
 
 appointmentsRouter.post('/appointment/edit', async(req, res) => {
 	const token = req.body.token;
-	const id = req.body.id;
+	const terminid = req.body.terminid;
 	const date = req.body.date;
 	const title = req.body.title;
 	const course = req.body.course;
@@ -85,7 +92,7 @@ appointmentsRouter.post('/appointment/edit', async(req, res) => {
 	let permissions = await verifyToken(token);
 	if (permissions) { // TODO: benötigte Berechtigungen definieren
 		// TODO: Funktionen schreiben
-		 let dbresponse = await appointments.editAppointment(id, permissions.ID, date, title, course, teacher, notes) //Werte anpassen (s. ./appointments.js)
+		 let dbresponse = await appointments.editAppointment(terminid, permissions.ID, date, title, course, teacher, notes) //Werte anpassen (s. ./appointments.js)
 		if (dbresponse.code === "ER_BAD_NULL_ERROR") {
 			res.status(422);
 			response = "nicht null";
@@ -105,12 +112,15 @@ appointmentsRouter.post('/appointment/edit', async(req, res) => {
 
 appointmentsRouter.post('/appointment/delete', async(req, res) => {
 	const token = req.body.token;
-	const id = req.body.id;
+	const terminid = req.body.terminid;
 
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions) { // TODO: benötigte Berechtigungen definieren
 		// TODO: Funktionen schreiben
+        await appointments.deleteAppointment(terminid)
+        response = "Termin gelöscht!"
+        res.status(201)
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
