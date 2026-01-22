@@ -20,7 +20,7 @@ export async function createAppointment(teamid, userid, date, title, course, tea
 }
 
 export async function listAppointments(teamid) {
-	return query("SELECT Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ?", [teamid]);
+	return query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ?", [teamid]);
 }
 
 export async function viewAppointment(terminid) {
