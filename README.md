@@ -33,3 +33,4 @@ Er ist standardgemäß unter [localhost:8080](http://localhost:8080) verfügbar.
 
 Der Server kann mit Umgebungsvariablen konfiguriert werden.
 Eine Beispiel-Konfiguration ist unter `dist.env` verfügbar.
+
