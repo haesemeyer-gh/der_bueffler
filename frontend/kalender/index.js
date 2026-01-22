@@ -12,7 +12,9 @@ async function fetchAPI() {
 		}
 	});
 	let json = await response.json();
-	return json.message;
+	return await json.message.sort((a, b) => {
+		return new Date(a.Datum) - new Date(b.Datum)
+	});
 }
 
 const monthviewPrevButton = document.getElementById('monthview-prev-button');
