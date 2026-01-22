@@ -12,7 +12,6 @@ appointmentsRouter.post('/appointment/list', async(req, res) => {
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions) { // TODO: benötigte Berechtigungen definieren
-		// TODO: Funktionen schreiben
         let dbresponse = await appointments.listAppointments(teamid)
         response = dbresponse
         res.status(201)
@@ -33,7 +32,6 @@ appointmentsRouter.post('/appointment/view', async(req, res) => {
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions) { // TODO: benötigte Berechtigungen definieren
-		// TODO: Funktionen schreiben
         let dbresponse = await appointments.viewAppointment(terminid)
         response = dbresponse[0]
         res.status(201)
@@ -76,7 +74,6 @@ appointmentsRouter.post('/appointment/create', async(req, res) => {
 		message: response
 	});
 });
-// createAppointment in API testen
 
 appointmentsRouter.post('/appointment/edit', async(req, res) => {
 	const token = req.body.token;
@@ -91,7 +88,6 @@ appointmentsRouter.post('/appointment/edit', async(req, res) => {
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions) { // TODO: benötigte Berechtigungen definieren
-		// TODO: Funktionen schreiben
 		 let dbresponse = await appointments.editAppointment(terminid, permissions.ID, date, title, course, teacher, notes) //Werte anpassen (s. ./appointments.js)
 		if (dbresponse.code === "ER_BAD_NULL_ERROR") {
 			res.status(422);
@@ -117,7 +113,6 @@ appointmentsRouter.post('/appointment/delete', async(req, res) => {
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions) { // TODO: benötigte Berechtigungen definieren
-		// TODO: Funktionen schreiben
         await appointments.deleteAppointment(terminid)
         response = "Termin gelöscht!"
         res.status(201)
