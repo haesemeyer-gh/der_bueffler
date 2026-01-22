@@ -2,11 +2,10 @@ import 'dotenv/config';
 import webpush from 'web-push';
 
 import { query } from '../db/db.js';
-import { formatDate } from '../auth/auth.js';
 import { listTeammates } from '../teams/teams.js';
 
 async function getAllAppointmentsWithinTimeframe(start, end) {
-	return await query("SELECT * FROM appointments WHERE Datum BETWEEN ? AND ?", [formatDate(start), formatDate(end)]);
+	return await query("SELECT * FROM appointments WHERE Datum BETWEEN ? AND ?", [start, end]);
 }
 
 async function getSubscriptions(userid) {
@@ -77,7 +76,7 @@ export async function sendPush() {
 
 function formatAppointment(appointment) {
 	const date = new Date(appointment.Datum);
-	return JSON.stringify({title: appointment.Titel, body: `Datum: ${formatDate(date)}; Fach: ${appointment.Fach}; Lehrer: ${appointment.Lehrer}`})
+	return JSON.stringify({title: appointment.Titel, body: `Datum: ${date}; Fach: ${appointment.Fach}; Lehrer: ${appointment.Lehrer}`})
 }
 
 export default setupWebpush;

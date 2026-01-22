@@ -74,10 +74,6 @@ export async function closeSession(userid) {
 	return await query("DELETE FROM session WHERE (NutzerID = ?)", [userid])
 }
 
-export function formatDate(date) {
-	return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`
-}
-
 export async function markOnline(userid) {
 	return await query("UPDATE user SET online = ? WHERE (ID = ?)", [new Date(), userid])
 }
