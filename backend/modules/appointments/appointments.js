@@ -23,6 +23,23 @@ export async function listAppointments(teamid) {
 	return query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ?", [teamid]);
 }
 
+export async function listUserAppointments(userid) {
+	let teamIds = []
+	let allTeams = await query("SELECT TeamID, Mitglieder FROM teams")
+	for (let i = 0; i < allTeams.length; i++) {
+		if (allTeams[i].Mitglieder.includes(userid)) {
+			teamIds.push(allTeams[i].TeamID)
+		}
+	}
+	console.log(teamIds)
+	let appointments = []
+	for (let i = 0; i < teamIds.length; i++) {
+		let current = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ?", [teamIds[i]])
+		appointments.push(...current)
+	}
+	return appointments
+}
+
 export async function viewAppointment(terminid) {
 	return query("SELECT * FROM appointments WHERE TerminID = ?", [terminid]);
 }

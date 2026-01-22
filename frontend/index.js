@@ -11,6 +11,7 @@ async function updateDashboard() {
 			"Content-type": "application/json; charset=UTF-8"
 		}
 	}).then((response) => response.json()).then((response) => {
+		console.log(response.message)
 		let appointments = response.message.sort((a, b) => {
 			return new Date(a.Datum) - new Date(b.Datum)
 		});

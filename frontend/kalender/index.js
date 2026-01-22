@@ -1,11 +1,10 @@
 let monthDiff = 0; // später vielleicht url parameter?
 
 async function fetchAPI() {
-	let response = await fetch(APIURL+"/appointment/list", {
+	let response = await fetch(APIURL+"/appointment/list-user", {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			teamid: "4",
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
