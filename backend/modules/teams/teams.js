@@ -16,3 +16,12 @@ export function info(teamid) {
 	return query("SELECT TeamName FROM teams WHERE TeamID LIKE ?", [teamid]);
 }
 
+export async function addTeammate(userid, teamID) {
+    let memberarray = await query("SELECT Mitglieder FROM teams WHERE TeamID LIKE ?", [teamID]);
+    console.log(memberarray[0])
+    if (!memberarray[0].Mitglieder.includes(userid)) {
+        memberarray[0].Mitglieder.push(userid)
+    }
+    console.log(memberarray[0].Mitglieder)
+    return query("UPDATE teams SET Mitglieder = ? WHERE TeamID = ?", [JSON.stringify(memberarray[0].Mitglieder), teamID]);
+}
