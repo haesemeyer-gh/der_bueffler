@@ -11,7 +11,9 @@ async function updateDashboard() {
 			"Content-type": "application/json; charset=UTF-8"
 		}
 	}).then((response) => response.json()).then((response) => {
-		let appointments = response.message;
+		let appointments = response.message.sort((a, b) => {
+			return new Date(a.Datum) - new Date(b.Datum)
+		});
 
 		dashboardEl.innerHTML = ``;
 		if (appointments.length <= 0) {
@@ -68,11 +70,12 @@ async function updateDashboard() {
 				titleEl.classList.add('appointment-list-title');
 				appointmentEl.append(dateEl, courseEl, /*teacherEl,*/ titleEl);
 
-				if (day <= todayDate+dayInMs*7) {
+				console.log(appointmentdate, day, todayDate)
+				if (day > todayDate-dayInMs*1 && day <= todayDate+dayInMs*7) {
 					listElNow.appendChild(appointmentEl);
-				} else if (day <= todayDate+dayInMs*30) {
+				} else if (day > todayDate-dayInMs*1 && day <= todayDate+dayInMs*30) {
 					listElSoon.appendChild(appointmentEl);
-				} else {
+				} else if (day > todayDate-dayInMs*1) {
 					listElLater.appendChild(appointmentEl);
 				}
 			}
