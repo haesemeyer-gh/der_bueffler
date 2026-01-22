@@ -79,7 +79,7 @@ export function formatDate(date) {
 }
 
 export async function markOnline(userid) {
-	return await query("UPDATE user SET online = ? WHERE (ID = ?)", [formatDate(new Date()), userid])
+	return await query("UPDATE user SET online = ? WHERE (ID = ?)", [new Date(), userid])
 }
 
 export async function getUserPermissions(userid) {
