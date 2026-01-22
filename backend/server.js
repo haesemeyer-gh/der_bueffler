@@ -43,6 +43,5 @@ app.listen(process.env.BUEFFLER_PORT, async () => {
 
 	//tmp
 	//sendCollectiveMails();
-	console.log(await listUserAppointments(1))
 });
 

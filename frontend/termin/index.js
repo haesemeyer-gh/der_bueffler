@@ -16,11 +16,7 @@ async function updateDashboard() {
 				"Content-type": "application/json; charset=UTF-8"
 			}
 		}).then((response) => response.json()).then((response) => {
-			let appointments = response.message;
-
-			// dann fetche apis für teaminfo und nutzerinfo
-			const teamname = "temporäre Teamnamenvariable";
-			const nutzername = "hitler";
+			let appointments = response.message
 
 			detailEl.innerHTML = ``;
 			if (appointments.length <= 0) { // change to if appointment does not exist
@@ -46,8 +42,8 @@ async function updateDashboard() {
 				courseContainerEl.innerText = `Fach: `;
 				courseEl.innerText = `${appointments.Fach}`;
 				teacherEl.innerText = `Lehrer: ${appointments.Lehrer}`;
-				teamEl.innerText = `Team: ${teamname}`;
-				lastChangedByEl.innerText = `zuletzt geändert von: ${nutzername}`;
+				teamEl.innerText = `Team: ${appointments.TeamName}`;
+				lastChangedByEl.innerText = `zuletzt geändert von: ${appointments.ZuletztGeaendertName}`;
 				dateEl.classList.add('appointment-detail-date');
 				courseEl.classList.add('appointment-detail-course');
 				teacherEl.classList.add('appointment-detail-teacher');

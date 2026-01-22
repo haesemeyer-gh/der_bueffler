@@ -41,7 +41,21 @@ export async function listUserAppointments(userid) {
 }
 
 export async function viewAppointment(terminid) {
-	return query("SELECT * FROM appointments WHERE TerminID = ?", [terminid]);
+	return query(
+	   `SELECT appointments.TerminID,
+		appointments.TeamID,
+		appointments.ZuletztGeaendert,
+		appointments.Datum,
+		appointments.Titel,
+		appointments.Fach,
+		appointments.Lehrer,
+		appointments.Notizen,
+		user.Name AS ZuletztGeaendertName,
+		teams.TeamName
+		FROM appointments
+		INNER JOIN user ON appointments.ZuletztGeaendert = user.ID
+		INNER JOIN teams ON appointments.TeamID = teams.TeamID
+		WHERE TerminID = ?`, [terminid])
 }
 
 export async function editAppointment(terminid, userid, date, title, course, teacher, notes) {
