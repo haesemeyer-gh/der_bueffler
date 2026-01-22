@@ -1,58 +1,18 @@
 let monthDiff = 0; // später vielleicht url parameter?
 
-function fetchAPI() {
-	// api fetchen
-	return [
-		{
-			id: 1,
-			date: new Date(),
-			title: "Toller Termin",
-			course: "SQL",
-			teacher: "asjdn",
-		},
-		{
-			id: 1,
-			date: new Date(),
-			title: "Toller Termin",
-			course: "SQL",
-			teacher: "asjdn",
-		},
-		{
-			id: 1,
-			date: new Date(),
-			title: "Toller Termin",
-			course: "SQL",
-			teacher: "asjdn",
-		},
-		{
-			id: 1,
-			date: new Date(),
-			title: "Toller Termin",
-			course: "SQL",
-			teacher: "asjdn",
-		},
-		{
-			id: 2,
-			date: new Date("2026-01-03"),
-			title: "JavaScript Klassenarbeit",
-			course: "JavaScript",
-			teacher: "Klose",
-		},
-		{
-			id: 3,
-			date: new Date("2026-01-10"),
-			title: "JavaScript Klassenarbeit 2",
-			course: "JavaScript",
-			teacher: "aklsjdalskdm",
-		},
-		{
-			id: 4,
-			date: new Date("2026-01-10"),
-			title: "JavaScript Klassenarbeit 2",
-			course: "JavaScript",
-			teacher: "aklsjdalskdm",
+async function fetchAPI() {
+	let response = await fetch(APIURL+"/appointment/list", {
+		method: "POST",
+		body: JSON.stringify({
+			token: cookieToken,
+			teamid: "4",
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
 		}
-	]
+	});
+	let json = await response.json();
+	return json.message;
 }
 
 const monthviewPrevButton = document.getElementById('monthview-prev-button');
@@ -71,8 +31,8 @@ monthviewNextButton.addEventListener('click', () => {
 let nowDate = new Date();
 const monthviewCurrentmonth = document.getElementById('monthview-currentmonth');
 const monthviewTbody = document.getElementById('monthview-tbody');
-function updateTable() {
-	let appointments = fetchAPI();
+async function updateTable() {
+	let appointments = await fetchAPI();
 
 	let date = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff);
 	monthviewCurrentmonth.innerText = `${date.toLocaleString('de-DE', {month: 'long', year: 'numeric'})}`;
@@ -97,7 +57,8 @@ function updateTable() {
 		let numberAppointments = 0;
 		let currentString = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
 		for (let a = 0; a < appointments.length; a++) {
-			let appointmentString = appointments[a].date.toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
+			let appointmentdate = new Date(appointments[a].Datum);
+			let appointmentString = appointmentdate.toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric'});
 			if (appointmentString === currentString) {
 				numberAppointments++;
 			}
@@ -170,9 +131,9 @@ function updateTable() {
 }
 
 const dailyAppointmentList = document.getElementById('calendar-daily-appointment-list');
-function updateDailyAppointmentList(day) {
+async function updateDailyAppointmentList(day) {
 	if (day) {
-		let appointments = fetchAPI();
+		let appointments = await fetchAPI();
 
 		let dateToDisplay = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day)
 		let dateToDisplayString = dateToDisplay.toLocaleString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
@@ -185,17 +146,18 @@ function updateDailyAppointmentList(day) {
 
 		let listList = document.createElement('ul');
 		for (let i = 0; i < appointments.length; i++) {
-			let appointmentsDateString = appointments[i].date.toLocaleString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
+			let appointmentdate = new Date(appointments[i].Datum);
+			let appointmentsDateString = appointmentdate.toLocaleString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
 			if (appointmentsDateString === dateToDisplayString) {
 				let listItem = document.createElement('li');
 
 				let listItemCourse = document.createElement('span');
-				listItemCourse.innerText = appointments[i].course;
+				listItemCourse.innerText = appointments[i].Fach;
 				listItemCourse.classList.add('appointment-list-course');
 
 				let listItemLink = document.createElement('a');
-				listItemLink.innerText = appointments[i].title;
-				listItemLink.href = "../termin/index.html?t=" + appointments[i].id; //////////////////////////////////////////////////// index.html
+				listItemLink.innerText = appointments[i].Titel;
+				listItemLink.href = "../termin/index.html?t=" + appointments[i].TerminID; //////////////////////////////////////////////////// index.html
 				listItemLink.classList.add('appointment-list-title');
 
 				listItem.append(listItemCourse, listItemLink);
