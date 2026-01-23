@@ -113,7 +113,7 @@ appointmentsRouter.post('/appointment/edit', async(req, res) => {
 			response = "nicht null";
 		} else {
 			res.status(201);
-			response = "Termin erstellt";
+			response = "Termin bearbeitet";
 		}
 	} else {
 		res.status(403);
@@ -132,7 +132,7 @@ appointmentsRouter.post('/appointment/delete', async(req, res) => {
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions) { // TODO: benötigte Berechtigungen definieren
-        await appointments.deleteAppointment(terminid)
+        await appointments.deleteAppointment(permissions.ID, terminid)
         response = "Termin gelöscht!"
         res.status(201)
 	} else {
