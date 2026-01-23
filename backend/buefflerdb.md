@@ -64,7 +64,11 @@ Der `user`-Table enthält alle Nutzerprofile, Berechtigungen und Anmeldedaten.
 
 ## push_subscriptions
 
-tbd
+Der `push_subscriptions`-Table enthält Push-Subscription Credentials für Nutzer
+
+- `ID` ist die einzigartige ID der Push-Subscription
+- `Subscription` ist die Credentials dieser Push-Subscription
+- `NutzerID` ist die ID des Nutzers, der die diese Push-Subscription bestellt hat
 
 ## grades
 
