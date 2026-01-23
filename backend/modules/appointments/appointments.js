@@ -40,14 +40,23 @@ export async function listUserAppointments(userid) {
 	return appointments
 }
 
-export async function listMonthlyAppointments(/*Nötige Parameter: UserID (per Token), Datum (speziell der Monat)*/) {
-	//Hole alle Termine aus der Datenbank
-	let appointments = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE userid = ?", [userid])
-	let month = 1
-	//Filtere nach angeforderten Monat
-
-	//Gib Ergebnis zurück
+export async function listMonthlyAppointments(userid, month, year) {
+	let teamIds = []
+	let allTeams = await query("SELECT TeamID, Mitglieder FROM teams")
+	for (let i = 0; i < allTeams.length; i++) {
+		if (allTeams[i].Mitglieder.includes(userid)) {
+			teamIds.push(allTeams[i].TeamID)
+		}
+	}
+	console.log(teamIds)
+	let appointments = []
+	for (let i = 0; i < teamIds.length; i++) {
+		let current = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ? AND MONTH(Datum) = ? AND YEAR(Datum) = ?", [teamIds[i],month, year])
+		appointments.push(...current)
+	}
+	return appointments
 }
+
 
 export async function viewAppointment(terminid) {
 	return query(

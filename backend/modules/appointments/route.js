@@ -44,6 +44,27 @@ appointmentsRouter.post('/appointment/list-user', async(req,res) => {
 	});
 });
 
+appointmentsRouter.post('/appointments/list-month', async(req,res) => {
+	const token = req.body.token
+	const month = req.body.month
+	const year = req.body.year
+
+	let response;
+	let permissions = await verifyToken(token)
+	if (permissions) {
+		let dbresponse = await appointments.listMonthlyAppointments(permissions.ID, month, year)
+		response = dbresponse
+		res.status(201)
+	} else {
+		res.status(403)
+		response = "Du hast nicht die nötigen Berechtigungen."
+	}
+
+	res.json({
+		message:response
+	});
+});
+
 appointmentsRouter.post('/appointment/view', async(req, res) => {
 	const token = req.body.token;
 	const terminid = req.body.terminid;

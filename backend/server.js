@@ -15,6 +15,8 @@ import setupWebpush from './modules/push/push.js';
 //tmp
 import { sendCollectiveMails } from './modules/mails/mails.js';
 import { addTeammate } from './modules/teams/teams.js';
+import { listUserAppointments } from './modules/appointments/appointments.js';
+import { listMonthlyAppointments } from './modules/appointments/appointments.js';
 
 
 const app = express();
@@ -43,6 +45,6 @@ app.listen(process.env.BUEFFLER_PORT, async () => {
 
 	//tmp
 	//sendCollectiveMails();
-	
+	//console.log(await listMonthlyAppointments(1,2,2026))
 });
 
