@@ -62,7 +62,7 @@
 		<div class="nv-dev-div">
 			<h3><code>/teams/create</code></h3>
 			<label>Team-Name:<br>
-				<input id="nv-dev-teams-create-name" class="nv-dev-input" type="text" />
+				<input id="nv-dev-teams-create-name" class="nv-dev-input" type="number" />
 			</label><br>
 			<button id="nv-dev-teams-create-button" class="nv-dev-button">Abschicken</button>
 			<p id="nv-dev-teams-create-status"></p>
@@ -71,7 +71,7 @@
 		<div class="nv-dev-div">
 			<h3><code>/teams/delete</code></h3>
 			<label>Team-ID:<br>
-				<input id="nv-dev-teams-delete-id" class="nv-dev-input" type="text" />
+				<input id="nv-dev-teams-delete-id" class="nv-dev-input" type="number" />
 			</label><br>
 			<button id="nv-dev-teams-delete-button" class="nv-dev-button">Abschicken</button>
 			<p id="nv-dev-teams-delete-status"></p>
@@ -80,10 +80,47 @@
 		<div class="nv-dev-div">
 			<h3><code>/teams/info</code></h3>
 			<label>Team-ID:<br>
-				<input id="nv-dev-teams-info-id" class="nv-dev-input" type="text" />
+				<input id="nv-dev-teams-info-id" class="nv-dev-input" type="number" />
 			</label><br>
 			<button id="nv-dev-teams-info-button" class="nv-dev-button">Abschicken</button>
 			<p id="nv-dev-teams-info-status"></p>
+		</div>
+
+
+		<div class="nv-dev-div">
+			<h3><code>/user/maketeacher</code></h3>
+			<label>Nutzer-ID:<br>
+				<input id="nv-dev-user-maketeacher-id" class="nv-dev-input" type="number" />
+			</label><br>
+			<button id="nv-dev-user-maketeacher-button" class="nv-dev-button">Abschicken</button>
+			<p id="nv-dev-user-maketeacher-status"></p>
+		</div>
+
+		<div class="nv-dev-div">
+			<h3><code>/user/deleteteacher</code></h3>
+			<label>Nutzer-ID:<br>
+				<input id="nv-dev-user-deleteteacher-id" class="nv-dev-input" type="number" />
+			</label><br>
+			<button id="nv-dev-user-deleteteacher-button" class="nv-dev-button">Abschicken</button>
+			<p id="nv-dev-user-deletetacher-status"></p>
+		</div>
+
+		<div class="nv-dev-div">
+			<h3><code>/user/makeadmin</code></h3>
+			<label>Nutzer-ID:<br>
+				<input id="nv-dev-user-makeadmin-id" class="nv-dev-input" type="number" />
+			</label><br>
+			<button id="nv-dev-user-makeadmin-button" class="nv-dev-button">Abschicken</button>
+			<p id="nv-dev-user-makeadmin-status"></p>
+		</div>
+
+		<div class="nv-dev-div">
+			<h3><code>/user/getuserinfo</code></h3>
+			<label>Nutzer-ID:<br>
+				<input id="nv-dev-user-getuserinfo-id" class="nv-dev-input" type="number" />
+			</label><br>
+			<button id="nv-dev-user-getuserinfo-button" class="nv-dev-button">Abschicken</button>
+			<p id="nv-dev-user-getuserinfo-status"></p>
 		</div>
 
 	</main>

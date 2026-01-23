@@ -66,7 +66,7 @@ usersRouter.post('/user/makeadmin', async(req, res) => {
 	});
 });
 
-usersRouter.post('/user/getUserInfo', async(req, res) => {
+usersRouter.post('/user/getuserinfo', async(req, res) => {
 	const token = req.body.token;
 	const id = req.body.id;
 
