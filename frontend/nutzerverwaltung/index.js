@@ -52,6 +52,86 @@ devTeamsInfoButton.addEventListener('click', () => {
 	});
 });
 
+const devTeamsAddTeamID document.getElementById('nv-dev-teams-add-teamid');
+const devTeamsAddUserID document.getElementById('nv-dev-teams-add-userid');
+const devTeamsAddButton = document.getElementById('nv-dev-teams-add-button');
+const devTeamsAddStatus = document.getElementById('nv-dev-teams-add-status');
+devTeamsAddButton.addEventListener('click', () => {
+	fetch(APIURL+"/teams/add", {
+		method: "POST",
+		body: JSON.stringify({
+			token: cookieToken,
+			teamid: devTeamsAddTeamID.value,
+			userid: devTeamsAddUserID.value,
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	}).then((response) => response.json()).then((response) => {
+		devTeamsAddStatus.innerText = response.message;
+	});
+});
+
+const devTeamsRemoveTeamID document.getElementById('nv-dev-teams-remove-teamid');
+const devTeamsRemoveUserID document.getElementById('nv-dev-teams-remove-userid');
+const devTeamsRemoveButton = document.getElementById('nv-dev-teams-remove-button');
+const devTeamsRemoveStatus = document.getElementById('nv-dev-teams-remove-status');
+devTeamsRemoveButton.addEventListener('click', () => {
+	fetch(APIURL+"/teams/remove", {
+		method: "POST",
+		body: JSON.stringify({
+			token: cookieToken,
+			teamid: devTeamsRemoveTeamID.value,
+			userid: devTeamsRemoveUserID.value,
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	}).then((response) => response.json()).then((response) => {
+		devTeamsRemoveStatus.innerText = response.message;
+	});
+});
+
+const devTeamsPromoteTeamID document.getElementById('nv-dev-teams-promote-teamid');
+const devTeamsPromoteUserID document.getElementById('nv-dev-teams-promote-userid');
+const devTeamsPromoteButton = document.getElementById('nv-dev-teams-promote-button');
+const devTeamsPromoteStatus = document.getElementById('nv-dev-teams-promote-status');
+devTeamsPromoteButton.addEventListener('click', () => {
+	fetch(APIURL+"/teams/promote", {
+		method: "POST",
+		body: JSON.stringify({
+			token: cookieToken,
+			teamid: devTeamsPromoteTeamID.value,
+			userid: devTeamsPromoteUserID.value,
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	}).then((response) => response.json()).then((response) => {
+		devTeamsPromoteStatus.innerText = response.message;
+	});
+});
+
+const devTeamsDemoteTeamID document.getElementById('nv-dev-teams-demote-teamid');
+const devTeamsDemoteUserID document.getElementById('nv-dev-teams-demote-userid');
+const devTeamsDemoteButton = document.getElementById('nv-dev-teams-demote-button');
+const devTeamsDemoteStatus = document.getElementById('nv-dev-teams-demote-status');
+devTeamsDemoteButton.addEventListener('click', () => {
+	fetch(APIURL+"/teams/demote", {
+		method: "POST",
+		body: JSON.stringify({
+			token: cookieToken,
+			teamid: devTeamsDemoteTeamID.value,
+			userid: devTeamsDemoteUserID.value,
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	}).then((response) => response.json()).then((response) => {
+		devTeamsDemoteStatus.innerText = response.message;
+	});
+});
+
 const devUserMaketeacherID = document.getElementById('nv-dev-user-maketeacher-id');
 const devUserMaketeacherButton = document.getElementById('nv-dev-user-maketeacher-button');
 const devUserMaketeacherStatus = document.getElementById('nv-dev-user-maketeacher-status');
