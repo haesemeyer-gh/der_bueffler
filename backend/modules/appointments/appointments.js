@@ -40,6 +40,14 @@ export async function listUserAppointments(userid) {
 	return appointments
 }
 
+export async function listMonthlyAppointments(/*Nötige Parameter: UserID (per Token), Datum (speziell der Monat)*/) {
+	//Hole alle Termine aus der Datenbank
+
+	//Filtere nach angeforderten Monat
+
+	//Gib Ergebnis zurück
+}
+
 export async function viewAppointment(terminid) {
 	return query(
 	   `SELECT appointments.TerminID,
