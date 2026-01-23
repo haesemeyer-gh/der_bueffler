@@ -24,7 +24,7 @@ devTeamsDeleteButton.addEventListener('click', () => {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			id: devTeamsDeleteID.value,
+			id: parseInt(devTeamsDeleteID.value),
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
@@ -42,7 +42,7 @@ devTeamsInfoButton.addEventListener('click', () => {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			teamid: devTeamsInfoID.value,
+			teamid: parseInt(devTeamsInfoID.value),
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
@@ -61,8 +61,8 @@ devTeamsAddButton.addEventListener('click', () => {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			teamid: devTeamsAddTeamID.value,
-			userid: devTeamsAddUserID.value,
+			teamid: parseInt(devTeamsAddTeamID.value),
+			userid: parseInt(devTeamsAddUserID.value),
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
@@ -81,8 +81,8 @@ devTeamsRemoveButton.addEventListener('click', () => {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			teamid: devTeamsRemoveTeamID.value,
-			userid: devTeamsRemoveUserID.value,
+			teamid: parseInt(devTeamsRemoveTeamID.value),
+			userid: parseInt(devTeamsRemoveUserID.value),
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
@@ -101,8 +101,8 @@ devTeamsPromoteButton.addEventListener('click', () => {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			teamid: devTeamsPromoteTeamID.value,
-			userid: devTeamsPromoteUserID.value,
+			teamid: parseInt(devTeamsPromoteTeamID.value),
+			userid: parseInt(devTeamsPromoteUserID.value),
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
@@ -121,8 +121,8 @@ devTeamsDemoteButton.addEventListener('click', () => {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			teamid: devTeamsDemoteTeamID.value,
-			userid: devTeamsDemoteUserID.value,
+			teamid: parseInt(devTeamsDemoteTeamID.value),
+			userid: parseInt(devTeamsDemoteUserID.value),
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
@@ -140,7 +140,7 @@ devUserMaketeacherButton.addEventListener('click', () => {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			id: devUserMaketeacherID.value,
+			id: parseInt(devUserMaketeacherID.value),
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
@@ -158,7 +158,7 @@ devUserDeleteteacherButton.addEventListener('click', () => {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			id: devUserDeleteteacherID.value,
+			id: parseInt(devUserDeleteteacherID.value),
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
@@ -176,7 +176,7 @@ devUserMakeadminButton.addEventListener('click', () => {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			id: devUserMakeadminID.value,
+			id: parseInt(devUserMakeadminID.value),
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
