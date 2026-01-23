@@ -31,7 +31,6 @@ export async function listUserAppointments(userid) {
 			teamIds.push(allTeams[i].TeamID)
 		}
 	}
-	console.log(teamIds)
 	let appointments = []
 	for (let i = 0; i < teamIds.length; i++) {
 		let current = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ?", [teamIds[i]])
@@ -48,7 +47,6 @@ export async function listMonthlyAppointments(userid, month, year) {
 			teamIds.push(allTeams[i].TeamID)
 		}
 	}
-	console.log(teamIds)
 	let appointments = []
 	for (let i = 0; i < teamIds.length; i++) {
 		let current = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ? AND MONTH(Datum) = ? AND YEAR(Datum) = ?", [teamIds[i],month, year])

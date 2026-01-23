@@ -1,10 +1,12 @@
 let monthDiff = 0; // später vielleicht url parameter?
 
-async function fetchAPI() {
-	let response = await fetch(APIURL+"/appointment/list-user", {
+async function fetchAPI(date) {
+	let response = await fetch(APIURL+"/appointment/list-month", {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
+			month: date.getMonth() + 1,
+			year: date.getFullYear()
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
@@ -33,13 +35,13 @@ let nowDate = new Date();
 const monthviewCurrentmonth = document.getElementById('monthview-currentmonth');
 const monthviewTbody = document.getElementById('monthview-tbody');
 async function updateTable() {
-	let appointments = await fetchAPI();
-
 	let date = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff);
 	monthviewCurrentmonth.innerText = `${date.toLocaleString('de-DE', {month: 'long', year: 'numeric'})}`;
-
+	
 	let daysThisMonth = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff+1, 0).getDate();
 	let firstWeekDay = date.getDay();
+
+	let appointments = await fetchAPI(date);
 
 	monthviewTbody.innerHTML = '';
 	let tableRow = document.createElement('tr');
@@ -134,11 +136,12 @@ async function updateTable() {
 const dailyAppointmentList = document.getElementById('calendar-daily-appointment-list');
 async function updateDailyAppointmentList(day) {
 	if (day) {
-		let appointments = await fetchAPI();
-
+		
 		let dateToDisplay = new Date(nowDate.getFullYear(), nowDate.getMonth()+monthDiff, day)
 		let dateToDisplayString = dateToDisplay.toLocaleString('de-DE', {weekday: 'long', day: '2-digit', month: '2-digit', year: 'numeric'});
 		dailyAppointmentList.classList.remove('hidden');
+		
+		let appointments = await fetchAPI(dateToDisplay);
 
 		let listHeader = document.createElement('div');
 		let listHeaderText = document.createElement('h3');

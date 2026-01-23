@@ -44,7 +44,7 @@ appointmentsRouter.post('/appointment/list-user', async(req,res) => {
 	});
 });
 
-appointmentsRouter.post('/appointments/list-month', async(req,res) => {
+appointmentsRouter.post('/appointment/list-month', async(req,res) => {
 	const token = req.body.token
 	const month = req.body.month
 	const year = req.body.year

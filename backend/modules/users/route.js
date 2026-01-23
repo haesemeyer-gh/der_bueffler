@@ -13,7 +13,7 @@ usersRouter.post('/user/maketeacher', async(req, res) => {
 	let permissions = await verifyToken(token);
 	if (permissions.Admin === 1){
 		res.status(201)
-		users.makeTeacher(userid)
+		users.makeTeacher(id)
 		response = "Nutzer wurde erfolgreich zum Lehrer gemacht";
 	} else {
 		res.status(403);
@@ -33,7 +33,7 @@ usersRouter.post('/user/deleteteacher', async(req, res) => {
 	let permissions = await verifyToken(token);
 	if (permissions.Admin === 1){
 		res.status(201)
-		users.deleteTeacher(userid)
+		users.deleteTeacher(id)
 		response = "Dem Nutzer wurde erfolgreich der Lehrerstatus aberkannt";
 	} else {
 		res.status(403);
