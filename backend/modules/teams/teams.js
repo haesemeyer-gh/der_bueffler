@@ -18,10 +18,19 @@ export function info(teamid) {
 
 export async function addTeammate(userid, teamID) {
     let memberarray = await query("SELECT Mitglieder FROM teams WHERE TeamID LIKE ?", [teamID]);
-    console.log(memberarray[0])
+   
     if (!memberarray[0].Mitglieder.includes(userid)) {
         memberarray[0].Mitglieder.push(userid)
     }
     console.log(memberarray[0].Mitglieder)
+    return query("UPDATE teams SET Mitglieder = ? WHERE TeamID = ?", [JSON.stringify(memberarray[0].Mitglieder), teamID]);
+}
+
+export async function removeTeammate(userid, teamID) {
+    let memberarray = await query("SELECT Mitglieder FROM teams WHERE TeamID LIKE ?", [teamID]);
+
+    if (!memberarray[0].Mitglieder.includes(userid)) {
+       memberarray[0].Mitglieder = memberarray[0].Mitglieder.filter((Mitglied) => Mitglied != userid)
+    }
     return query("UPDATE teams SET Mitglieder = ? WHERE TeamID = ?", [JSON.stringify(memberarray[0].Mitglieder), teamID]);
 }

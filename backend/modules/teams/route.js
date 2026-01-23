@@ -63,7 +63,6 @@ teamsRouter.post('/teams/add', async(req, res) => {
 
     let response;
     let permissions = await verifyToken(token);
-    
     if (permissions.Lehrer === 1) { 
         teams.addTeammate(userid,teamid)
         res.status(201);
@@ -85,8 +84,10 @@ teamsRouter.post('/teams/remove', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions) { // TODO: benötigte Berechtigungen definieren
-		// TODO: Funktionen schreiben
+	if (permissions.Lehrer === 1) { 
+		teams.removeTeammate(userid, teamid)
+		res.status(200);
+		response = "Mitglied entfernt";
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";

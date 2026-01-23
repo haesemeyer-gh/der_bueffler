@@ -52,8 +52,8 @@ devTeamsInfoButton.addEventListener('click', () => {
 	});
 });
 
-const devTeamsAddTeamID document.getElementById('nv-dev-teams-add-teamid');
-const devTeamsAddUserID document.getElementById('nv-dev-teams-add-userid');
+const devTeamsAddTeamID = document.getElementById('nv-dev-teams-add-teamid');
+const devTeamsAddUserID = document.getElementById('nv-dev-teams-add-userid');
 const devTeamsAddButton = document.getElementById('nv-dev-teams-add-button');
 const devTeamsAddStatus = document.getElementById('nv-dev-teams-add-status');
 devTeamsAddButton.addEventListener('click', () => {
@@ -72,8 +72,8 @@ devTeamsAddButton.addEventListener('click', () => {
 	});
 });
 
-const devTeamsRemoveTeamID document.getElementById('nv-dev-teams-remove-teamid');
-const devTeamsRemoveUserID document.getElementById('nv-dev-teams-remove-userid');
+const devTeamsRemoveTeamID = document.getElementById('nv-dev-teams-remove-teamid');
+const devTeamsRemoveUserID = document.getElementById('nv-dev-teams-remove-userid');
 const devTeamsRemoveButton = document.getElementById('nv-dev-teams-remove-button');
 const devTeamsRemoveStatus = document.getElementById('nv-dev-teams-remove-status');
 devTeamsRemoveButton.addEventListener('click', () => {
@@ -92,8 +92,8 @@ devTeamsRemoveButton.addEventListener('click', () => {
 	});
 });
 
-const devTeamsPromoteTeamID document.getElementById('nv-dev-teams-promote-teamid');
-const devTeamsPromoteUserID document.getElementById('nv-dev-teams-promote-userid');
+const devTeamsPromoteTeamID = document.getElementById('nv-dev-teams-promote-teamid');
+const devTeamsPromoteUserID = document.getElementById('nv-dev-teams-promote-userid');
 const devTeamsPromoteButton = document.getElementById('nv-dev-teams-promote-button');
 const devTeamsPromoteStatus = document.getElementById('nv-dev-teams-promote-status');
 devTeamsPromoteButton.addEventListener('click', () => {
@@ -112,8 +112,8 @@ devTeamsPromoteButton.addEventListener('click', () => {
 	});
 });
 
-const devTeamsDemoteTeamID document.getElementById('nv-dev-teams-demote-teamid');
-const devTeamsDemoteUserID document.getElementById('nv-dev-teams-demote-userid');
+const devTeamsDemoteTeamID = document.getElementById('nv-dev-teams-demote-teamid');
+const devTeamsDemoteUserID = document.getElementById('nv-dev-teams-demote-userid');
 const devTeamsDemoteButton = document.getElementById('nv-dev-teams-demote-button');
 const devTeamsDemoteStatus = document.getElementById('nv-dev-teams-demote-status');
 devTeamsDemoteButton.addEventListener('click', () => {
