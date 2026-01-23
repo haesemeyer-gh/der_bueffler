@@ -3,6 +3,7 @@ import cors from 'cors';
 import express from 'express';
 
 import appointmentsRouter from './modules/appointments/route.js';
+import historyRouter from './modules/history/route.js';
 import authRouter from './modules/auth/route.js';
 import pushRouter from './modules/push/route.js';
 import teamsRouter from './modules/teams/route.js';
@@ -17,7 +18,7 @@ import { sendCollectiveMails } from './modules/mails/mails.js';
 import { addTeammate } from './modules/teams/teams.js';
 import { listUserAppointments } from './modules/appointments/appointments.js';
 import { listMonthlyAppointments } from './modules/appointments/appointments.js';
-
+import { listHistory } from './modules/history/history.js';
 
 const app = express();
 app.use(express.json());
@@ -32,6 +33,7 @@ app.get('/ping', (req, res) => {
 });
 
 app.use(appointmentsRouter);
+app.use(historyRouter)
 app.use(authRouter);
 app.use(pushRouter);
 app.use(teamsRouter);
@@ -46,5 +48,6 @@ app.listen(process.env.BUEFFLER_PORT, async () => {
 	//tmp
 	//sendCollectiveMails();
 	//console.log(await listMonthlyAppointments(1,2,2026))
+	//console.log(await listHistory(16))
 });
 
