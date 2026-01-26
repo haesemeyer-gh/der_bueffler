@@ -16,8 +16,9 @@ CREATE TABLE `appointments` (
 CREATE TABLE `changes` (
   `AenderungsID` int(11) NOT NULL AUTO_INCREMENT,
   `Timestamp` datetime NOT NULL,
-  `ZuletztGeaendert` int(11) NOT NULL,
   `TerminID` int(11) NOT NULL,
+  `TeamID` int(11) NOT NULL,
+  `ZuletztGeaendert` int(11) NOT NULL,
   `Datum` datetime NOT NULL,
   `Titel` varchar(255) NOT NULL,
   `Fach` varchar(255) NOT NULL,
