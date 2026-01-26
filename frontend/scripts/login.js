@@ -77,3 +77,17 @@ function logIn() {
 	}
 }
 
+const passwordVisibilityButton = document.getElementById('password-visibility-button');
+const passwordVisibilityIndicator = document.getElementById('password-visibility-indicator');
+passwordVisibilityButton.addEventListener('click', () => {
+	if (passwordVisibilityIndicator.alt === "Passwort anzeigen") {
+		passwordVisibilityIndicator.alt = "Passwort verstecken";
+		passwordVisibilityIndicator.src = '/assets/icons/eye-hidden.svg';
+		passEl.type = 'text';
+	} else {
+		passwordVisibilityIndicator.alt = "Passwort anzeigen";
+		passwordVisibilityIndicator.src = '/assets/icons/eye.svg';
+		passEl.type = 'password';
+	}
+})
+

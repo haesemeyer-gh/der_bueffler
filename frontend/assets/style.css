@@ -136,6 +136,43 @@ nav > .current-page > img:hover {
 #login #login-status {
 	color: #D73B3C;
 }
+#password-box {
+	margin: 5px 0;
+	padding: 0 5px;
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	background-color: white;
+	border: 2px solid black;
+	@media (prefers-color-scheme: dark) {
+		border-color: white;
+	}
+	gap: 2px;
+}
+#login-pass {
+	margin: 5px 0 !important;
+	padding: 0 !important;
+	height: 30px !important;
+	border: 0 solid transparent !important;
+}
+#password-visibility-button {
+	margin: 0 !important;
+	padding: 0 !important;
+	width: 50px !important;
+	border: 0 solid transparent !important;
+}
+#password-visibility-button:hover {
+	background-color: grey !important;
+	color: black !important;
+	cursor: pointer;
+}
+#password-visibility-button:active {
+	translate: none !important;
+}
+#password-visibility-button > img {
+	width: 30px;
+	height: 30px;
+}
 
 main {
 	padding: 10px;
