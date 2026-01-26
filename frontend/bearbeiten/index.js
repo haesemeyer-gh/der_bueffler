@@ -5,6 +5,7 @@ const createFormCourse = document.getElementById('create-form-course');
 const createFormTeacher = document.getElementById('create-form-teacher');
 const createFormNotes = document.getElementById('create-form-notes');
 const createFormButton = document.getElementById('create-form-button');
+const createFormDelete = document.getElementById('create-form-delete');
 const createFormStatus = document.getElementById('create-form-status');
 createFormButton.addEventListener('click', () => {
 	fetch(APIURL+"/appointment/edit", {
@@ -23,6 +24,21 @@ createFormButton.addEventListener('click', () => {
 		}
 	}).then((response) => response.json()).then((response) => {
 		createFormStatus.innerText = response.message;
+	});
+});
+createFormDelete.addEventListener('click', () => {
+	fetch(APIURL+"/appointment/delete", {
+		method: "POST",
+		body: JSON.stringify({
+			token: cookieToken,
+			terminid: createFormTerminID.value
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	}).then((response) => response.json()).then((response) => {
+		createFormStatus.innerText = response.message;
+		createFormTerminID.value = "";
 	});
 });
 
