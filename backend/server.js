@@ -46,7 +46,7 @@ app.listen(process.env.BUEFFLER_PORT, async () => {
 	setupWebpush();
 
 	//tmp
-	//sendCollectiveMails();
+	sendCollectiveMails();
 	//console.log(await listMonthlyAppointments(1,2,2026))
 	//console.log(await listHistory(16))
 });

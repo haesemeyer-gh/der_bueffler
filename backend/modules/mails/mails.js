@@ -41,16 +41,20 @@ function startDigest() {
 	});
 };
 
+// liest alle Appointments dieser Woche aus der Datenbank aus und gibt einen Array an appointmentObjects zurück
 async function getWeeklyAppointments() {
 	let appointmentResponse = await query("SELECT * FROM appointments WHERE Datum BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);", []);
 	let weeklyAppointments = [];
 	appointmentResponse.forEach((appointment, i) => {
-		let appointmentObject = appointmentToObject(appointment.Titel, appointment.TeamID, appointment.ZuletztGeaendert, appointment.Datum, appointment.Fach, appointment.Lehrer, appointment.Notizen);
+		let appointmentObject = appointmentToObject(appointment.TerminID, appointment.Titel, appointment.TeamID, appointment.ZuletztGeaendert, appointment.Datum, appointment.Fach, appointment.Lehrer, appointment.Notizen);
 		weeklyAppointments.push(appointmentObject);
 	});
 	return weeklyAppointments;
 }
 
+// führt getWeelkyAppointments() aus,
+// erstellt damit einen neuen Array, der die E-Mails der Nutzer und dazugehörige Arrays enthält,
+// in denen alle Appointments sind, die der jeweilige Nutzer sehen darf
 async function getMailArray() {
 	let collectiveMailArray = [];
 	let weeklyAppointments = await getWeeklyAppointments();
@@ -77,6 +81,7 @@ async function getMailArray() {
 	return collectiveMailArray;
 }
 
+// führt getMailArray() aus, sortiert die Appointments von jedem Nutzer nach Zeit (früheste zuerst)
 async function sortMailArray() {
 	let collectiveMailArray = await getMailArray();
 	collectiveMailArray.forEach(user => {
@@ -85,6 +90,7 @@ async function sortMailArray() {
 	return collectiveMailArray
 }
 
+// führt sortMailArray() aus, schickt dann eine E-Mail an jeden Nutzer mit Terminen, in der alle Appointments aufgelistet sind
 export async function sendCollectiveMails() {
 	let collectiveMailArray = await sortMailArray();
 	collectiveMailArray.forEach(user => {
@@ -92,6 +98,7 @@ export async function sendCollectiveMails() {
 		user.appointments.forEach((appointment) => {
 			digest += `
 			<h2>${appointment.title}</h2>
+			<a href="${process.env.BUEFFLER_MAIL_FRONTENDLINK}/termin?t=${appointment.id}">[diesen Termin online ansehen]</a>
 			<ul>
 			<li>Datum: <b>${appointment.dateString}</b></li>
 			<li>Fach: <b>${appointment.course}</b></li>
