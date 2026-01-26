@@ -105,8 +105,10 @@ teamsRouter.post('/teams/promote', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions) { // TODO: benötigte Berechtigungen definieren
-		// TODO: Funktionen schreiben
+	if (permissions.Lehrer === 1) { 
+		teams.promote(userid, teamid)
+		res.status(200);
+		response = "Befördert"
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
@@ -124,8 +126,10 @@ teamsRouter.post('/teams/demote', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions) { // TODO: benötigte Berechtigungen definieren
-		// TODO: Funktionen schreiben
+	if (permissions.Lehrer === 1) { 
+		teams.demote(userid, teamid)
+		res.status(200);
+		response = "Defördert"
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";

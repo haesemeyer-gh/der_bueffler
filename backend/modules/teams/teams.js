@@ -18,19 +18,39 @@ export function info(teamid) {
 
 export async function addTeammate(userid, teamID) {
     let memberarray = await query("SELECT Mitglieder FROM teams WHERE TeamID LIKE ?", [teamID]);
-   
-    if (!memberarray[0].Mitglieder.includes(userid)) {
-        memberarray[0].Mitglieder.push(userid)
+    let mitglieder = JSON.parse(memberarray[0].Mitglieder)
+    if (!mitglieder.includes(userid)) {
+       mitglieder.push(userid)
     }
-    console.log(memberarray[0].Mitglieder)
-    return query("UPDATE teams SET Mitglieder = ? WHERE TeamID = ?", [JSON.stringify(memberarray[0].Mitglieder), teamID]);
+    return query("UPDATE teams SET Mitglieder = ? WHERE TeamID = ?", [JSON.stringify(mitglieder), teamID]);
 }
 
 export async function removeTeammate(userid, teamID) {
+    console.log("3")
     let memberarray = await query("SELECT Mitglieder FROM teams WHERE TeamID LIKE ?", [teamID]);
-
-    if (!memberarray[0].Mitglieder.includes(userid)) {
-       memberarray[0].Mitglieder = memberarray[0].Mitglieder.filter((Mitglied) => Mitglied != userid)
+    let mitglieder = JSON.parse(memberarray[0].Mitglieder)
+        console.log(mitglieder)
+    if (!mitglieder.includes(userid)) {
+       mitglieder = mitglieder.filter((Mitglied) => Mitglied != userid)
+       console.log(mitglieder)
     }
-    return query("UPDATE teams SET Mitglieder = ? WHERE TeamID = ?", [JSON.stringify(memberarray[0].Mitglieder), teamID]);
+    return query("UPDATE teams SET Mitglieder = ? WHERE TeamID = ?", [JSON.stringify(mitglieder), teamID]);
+}
+
+export async function promote(userid, teamid) {
+    let memberarray = await query("SELECT Klassensprecher FROM teams WHERE TeamID LIKE ?", [teamid]);
+    let mitglieder = JSON.parse(memberarray[0].Klassensprecher)
+    if (!mitglieder.includes(userid)) {
+        mitglieder.push(userid)
+    }
+    return query("UPDATE teams SET Klassensprecher = ? WHERE TeamID = ?", [JSON.stringify(mitglieder),teamid]);
+}
+
+export async function demote(userid, teamid) {
+    let memberarray = await query("SELECT Klassensprecher FROM teams WHERE TeamID LIKE ?", [teamid]);
+    let mitglieder = JSON.parse(memberarray[0].Klassensprecher)
+    if (!mitglieder.includes(userid)) {
+        mitglieder = mitglieder.filter((Klassensprecher) => Klassensprecher != userid)
+    }
+    return query("UPDATE teams SET Klassensprecher = ? WHERE TeamID = ?", [JSON.stringify(mitglieder),teamid]);
 }

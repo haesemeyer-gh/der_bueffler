@@ -37,8 +37,8 @@ ALTER TABLE `session`
 CREATE TABLE `teams` (
   `TeamID` int(11) NOT NULL AUTO_INCREMENT,
   `TeamName` varchar(255) NOT NULL,
-  `Mitglieder` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`Mitglieder`)),
-  `Klassensprecher` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`Klassensprecher`)),
+  `Mitglieder` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT ([]) CHECK (json_valid(`Mitglieder`)),
+  `Klassensprecher` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT ([]) CHECK (json_valid(`Klassensprecher`)),
   PRIMARY KEY (`TeamID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
