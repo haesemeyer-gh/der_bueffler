@@ -3,6 +3,7 @@ START TRANSACTION;
 
 CREATE TABLE `appointments` (
   `TerminID` int(11) NOT NULL AUTO_INCREMENT,
+  `Geloescht` tinyint(1) NOT NULL,
   `TeamID` int(11) NOT NULL,
   `ZuletztGeaendert` int(11) NOT NULL,
   `Datum` datetime NOT NULL,
@@ -17,6 +18,7 @@ CREATE TABLE `changes` (
   `AenderungsID` int(11) NOT NULL AUTO_INCREMENT,
   `Timestamp` datetime NOT NULL,
   `TerminID` int(11) NOT NULL,
+  `Geloescht` tinyint(1) NOT NULL,
   `TeamID` int(11) NOT NULL,
   `ZuletztGeaendert` int(11) NOT NULL,
   `Datum` datetime NOT NULL,

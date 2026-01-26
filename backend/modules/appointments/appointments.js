@@ -1,9 +1,8 @@
 import { query } from '../db/db.js';
 
-export function appointmentToObject(id, title, teamid, lastchangedby, date, course, teacher, notes) {
+export function appointmentToObject(title, teamid, lastchangedby, date, course, teacher, notes) {
 	let dateString = new Date(date).toLocaleString('de-DE', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
 	let appointmentObject = {
-		id: id,
 		title: title,
 		lastchangedby: lastchangedby,
 		teamid: teamid,
@@ -17,11 +16,11 @@ export function appointmentToObject(id, title, teamid, lastchangedby, date, cour
 }
 
 export async function createAppointment(teamid, userid, date, title, course, teacher, notes) {
-	return query("INSERT INTO appointments (TeamID, ZuletztGeaendert, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?)", [teamid, userid, date, title, course, teacher, notes]);
+	return query("INSERT INTO appointments (Geloescht, TeamID, ZuletztGeaendert, Datum, Titel, Fach, Lehrer, Notizen) VALUES (0, ?, ?, ?, ?, ?, ?, ?)", [teamid, userid, date, title, course, teacher, notes]);
 }
 
 export async function listAppointments(teamid) {
-	return query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ?", [teamid]);
+	return query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ? AND Geloescht = 0", [teamid]);
 }
 
 export async function listUserAppointments(userid) {
@@ -34,7 +33,7 @@ export async function listUserAppointments(userid) {
 	}
 	let appointments = []
 	for (let i = 0; i < teamIds.length; i++) {
-		let current = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ?", [teamIds[i]])
+		let current = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ? AND Geloescht = 0", [teamIds[i]])
 		appointments.push(...current)
 	}
 	return appointments
@@ -50,7 +49,7 @@ export async function listMonthlyAppointments(userid, month, year) {
 	}
 	let appointments = []
 	for (let i = 0; i < teamIds.length; i++) {
-		let current = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ? AND MONTH(Datum) = ? AND YEAR(Datum) = ?", [teamIds[i],month, year])
+		let current = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer FROM appointments WHERE TeamID = ? AND MONTH(Datum) = ? AND YEAR(Datum) = ? AND Geloescht = 0", [teamIds[i],month, year])
 		appointments.push(...current)
 	}
 	return appointments
@@ -72,7 +71,7 @@ export async function viewAppointment(terminid) {
 		FROM appointments
 		INNER JOIN user ON appointments.ZuletztGeaendert = user.ID
 		INNER JOIN teams ON appointments.TeamID = teams.TeamID
-		WHERE TerminID = ?`, [terminid])
+		WHERE TerminID = ? AND Geloescht = 0`, [terminid])
 }
 
 export async function editAppointment(terminid, userid, date, title, course, teacher, notes) {
@@ -83,8 +82,7 @@ export async function editAppointment(terminid, userid, date, title, course, tea
 
 export async function deleteAppointment(userid, terminid) {
 	let current = await viewAppointment(terminid);
-    query("INSERT INTO changes (Timestamp, TerminID, TeamID, ZuletztGeaendert, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [new Date(), current[0].TerminID, current[0].TeamID, current[0].ZuletztGeaendert, current[0].Datum, current[0].Titel, current[0].Fach, current[0].Lehrer, current[0].Notizen])
-	query("INSERT INTO changes (Timestamp, TerminID, TeamID, ZuletztGeaendert, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [new Date(), current[0].TerminID, current[0].TeamID, userid, current[0].Datum, "--GELÖSCHT--", current[0].Fach, current[0].Lehrer, current[0].Notizen])
-	return query("DELETE FROM appointments WHERE TerminID = ?", [terminid]);
+    query("INSERT INTO changes (Timestamp, TerminID, TeamID, ZuletztGeaendert, Datum, Titel, Fach, Lehrer, Notizen) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", [new Date(), current[0].TerminID, current[0].TeamID, userid, current[0].Datum, current[0].Titel, current[0].Fach, current[0].Lehrer, current[0].Notizen])
+	return query("UPDATE appointments SET ZuletztGeaendert = ?, Geloescht = 1 WHERE TerminID = ?", [userid, terminid]);
 }
 
