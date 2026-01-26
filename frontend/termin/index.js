@@ -55,18 +55,23 @@ async function updateDashboard() {
 			courseContainerEl.appendChild(courseEl);
 			appointmentEl.append(dateEl, courseContainerEl, teacherEl, teamEl, lastChangedByEl);
 
+			let editLink = document.createElement('a');
+			editLink.innerText = "Termin bearbeiten"
+			editLink.href = `../bearbeiten?t=${searchID}`
+			editLink.classList.add('appointment-detail-editnav');
+
 			let notesEl = document.createElement('p');
 			notesEl.innerText = appointments.Notizen;
 
-			detailEl.append(appointmentEl, notesEl);
+			detailEl.append(appointmentEl, editLink, notesEl);
 		}
 
-} else {
-	detailEl.innerHTML = ``;
-	let messageEl = document.createElement('h3');
-	messageEl.innerText = 'Fehler: Keine angegebene Termin-ID!'
-	detailEl.appendChild(messageEl)
-}
+	} else {
+		detailEl.innerHTML = ``;
+		let messageEl = document.createElement('h3');
+		messageEl.innerText = 'Fehler: Keine angegebene Termin-ID!'
+		detailEl.appendChild(messageEl)
+	}
 }
 
 updateDashboard()

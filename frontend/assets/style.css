@@ -270,6 +270,13 @@ main {
 	border-radius: 10px;
 	padding: 2px 5px;
 }
+.appointment-detail-editnav {
+	color: #FBB900;
+	font-weight: bold;
+}
+.appointment-detail-editnav:visited {
+	color: #FBB900;
+}
 
 #calendar-widget {
 	width: fit-content;
