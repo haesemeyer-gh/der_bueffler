@@ -120,7 +120,7 @@ appointmentsRouter.post('/appointment/create', async(req, res) => {
 		let dbresponse = await appointments.createAppointment(teamid, permissions.ID, date, title, course, teacher, notes)
 		if (dbresponse.code === "ER_BAD_NULL_ERROR") {
 			res.status(422);
-			response = "nicht null";
+			response = "Nicht alle Pflichtfelder ausgefüllt";
 		} else {
 			res.status(201);
 			response = "Termin erstellt";
@@ -151,7 +151,7 @@ appointmentsRouter.post('/appointment/edit', async(req, res) => {
 		 let dbresponse = await appointments.editAppointment(terminid, permissions.ID, date, title, course, teacher, notes) //Werte anpassen (s. ./appointments.js)
 		if (dbresponse.code === "ER_BAD_NULL_ERROR") {
 			res.status(422);
-			response = "nicht null";
+			response = "Nicht alle Pflichtfelder ausgefüllt";
 		} else {
 			res.status(201);
 			response = "Termin bearbeitet";
@@ -174,8 +174,8 @@ appointmentsRouter.post('/appointment/delete', async(req, res) => {
 	let permissions = await verifyToken(token);
 	if (permissions) { // TODO: benötigte Berechtigungen definieren
         await appointments.deleteAppointment(permissions.ID, terminid)
-        response = "Termin gelöscht!"
         res.status(201)
+        response = "Termin gelöscht!"
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
