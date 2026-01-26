@@ -108,7 +108,7 @@ export async function sendCollectiveMails() {
 			<p>${appointment.notes}</p>
 			`;
 		});
-		digest += "<hr>\n<p>Diese E-Mail enthält nicht immer den aktuellen Stand aller Termine. Termine können bearbeitet und neu erstellt werden. Sie können <a href="${process.env.BUEFFLER_MAIL_FRONTENDLINK}">online</a> immer die aktuellste Version einsehen.</p>"
+		digest += `<hr>\n<p>Diese E-Mail enthält nicht immer den aktuellen Stand aller Termine. Termine können bearbeitet und neu erstellt werden. Sie können <a href="${process.env.BUEFFLER_MAIL_FRONTENDLINK}">online</a> immer die aktuellste Version einsehen.</p>`;
 		sendmail(user.mail, "Diese Woche stehen Termine an!", digest);
 	});
 }
