@@ -18,7 +18,7 @@ export function info(teamid) {
 
 export async function addTeammate(userid, teamID) {
     let memberarray = await query("SELECT Mitglieder FROM teams WHERE TeamID LIKE ?", [teamID]);
-    let mitglieder = JSON.parse(memberarray[0].Mitglieder)
+    let mitglieder = memberarray[0].Mitglieder
     if (!mitglieder.includes(userid)) {
        mitglieder.push(userid)
     }
@@ -28,9 +28,9 @@ export async function addTeammate(userid, teamID) {
 export async function removeTeammate(userid, teamID) {
     console.log("3")
     let memberarray = await query("SELECT Mitglieder FROM teams WHERE TeamID LIKE ?", [teamID]);
-    let mitglieder = JSON.parse(memberarray[0].Mitglieder)
+    let mitglieder = memberarray[0].Mitglieder
         console.log(mitglieder)
-    if (!mitglieder.includes(userid)) {
+    if (mitglieder.includes(userid)) {
        mitglieder = mitglieder.filter((Mitglied) => Mitglied != userid)
        console.log(mitglieder)
     }
@@ -39,7 +39,7 @@ export async function removeTeammate(userid, teamID) {
 
 export async function promote(userid, teamid) {
     let memberarray = await query("SELECT Klassensprecher FROM teams WHERE TeamID LIKE ?", [teamid]);
-    let mitglieder = JSON.parse(memberarray[0].Klassensprecher)
+    let mitglieder = memberarray[0].Klassensprecher
     if (!mitglieder.includes(userid)) {
         mitglieder.push(userid)
     }
@@ -48,8 +48,8 @@ export async function promote(userid, teamid) {
 
 export async function demote(userid, teamid) {
     let memberarray = await query("SELECT Klassensprecher FROM teams WHERE TeamID LIKE ?", [teamid]);
-    let mitglieder = JSON.parse(memberarray[0].Klassensprecher)
-    if (!mitglieder.includes(userid)) {
+    let mitglieder = memberarray[0].Klassensprecher
+    if (mitglieder.includes(userid)) {
         mitglieder = mitglieder.filter((Klassensprecher) => Klassensprecher != userid)
     }
     return query("UPDATE teams SET Klassensprecher = ? WHERE TeamID = ?", [JSON.stringify(mitglieder),teamid]);
