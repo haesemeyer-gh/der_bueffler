@@ -26,13 +26,10 @@ export async function addTeammate(userid, teamID) {
 }
 
 export async function removeTeammate(userid, teamID) {
-    console.log("3")
     let memberarray = await query("SELECT Mitglieder FROM teams WHERE TeamID LIKE ?", [teamID]);
     let mitglieder = memberarray[0].Mitglieder
-        console.log(mitglieder)
     if (mitglieder.includes(userid)) {
        mitglieder = mitglieder.filter((Mitglied) => Mitglied != userid)
-       console.log(mitglieder)
     }
     return query("UPDATE teams SET Mitglieder = ? WHERE TeamID = ?", [JSON.stringify(mitglieder), teamID]);
 }
