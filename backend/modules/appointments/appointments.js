@@ -55,6 +55,9 @@ export async function listMonthlyAppointments(userid, month, year) {
 	return appointments
 }
 
+export async function listDeletedAppointments(teamid) {
+	return query("SELECT TerminID, ZuletztGeaendert, Datum, Titel, Fach, Lehrer, Notizen FROM appointments WHERE TeamID = ? AND Geloescht = 1", [teamid])
+}
 
 export async function viewAppointment(terminid) {
 	return query(

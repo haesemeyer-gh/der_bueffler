@@ -65,6 +65,26 @@ appointmentsRouter.post('/appointment/list-month', async(req,res) => {
 	});
 });
 
+appointmentsRouter.post('/appointment/list-deleted', async(req,res) => {
+	const token = req.body.token
+	const teamid = req.body.teamid
+
+	let response;
+	let permissions = await verifyToken(token)
+	if (permissions) {
+		let dbresponse = await appointments.listDeletedAppointments(teamid)
+		response = dbresponse
+		res.status(201)
+	} else {
+		res.status(418)
+		response = "Ich bin ein Teekessel!"
+	}
+
+	res.json({
+		message:response
+	})
+})
+
 appointmentsRouter.post('/appointment/view', async(req, res) => {
 	const token = req.body.token;
 	const terminid = req.body.terminid;
