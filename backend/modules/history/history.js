@@ -5,7 +5,7 @@ export async function listHistory(terminid) {
 }
 
 export async function viewHistory(aenderungsid) {
-    return query("SELECT Timestamp, ZuletztGeaendert, TerminID, Datum, Titel, Fach, Lehrer, Notizen WHERE AenderungsID = ?", [aenderungsid])
+    return query("SELECT Timestamp, ZuletztGeaendert, TerminID, Datum, Titel, Fach, Lehrer, Notizen FROM changes WHERE AenderungsID = ?", [aenderungsid])
 }
 
 export async function reverseChange(/*TBD*/) {

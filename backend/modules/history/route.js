@@ -25,4 +25,24 @@ historyRouter.post('/history/list', async(req,res) => {
     })
 })
 
+historyRouter.post('/history/view', async(req,res) => {
+    const token = req.body.token
+    const aenderungsid = req.body.aenderungsid
+
+    let response;
+    let permissions = await verifyToken(token)
+    if (permissions) {
+        let dbresponse = await history.viewHistory(aenderungsid)
+        response = dbresponse
+        res.status(201)
+    } else {
+        res.status(403)
+        response = "du hast nicht die nötigen Berechtigungen."
+    }
+
+    res.json({
+        message:response
+    })
+})
+
 export default historyRouter;
