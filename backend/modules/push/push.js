@@ -5,7 +5,7 @@ import { query } from '../db/db.js';
 import { listTeammates } from '../teams/teams.js';
 
 async function getAllAppointmentsWithinTimeframe(start, end) {
-	return await query("SELECT * FROM appointments WHERE Datum BETWEEN ? AND ?", [start, end]);
+	return await query("SELECT * FROM appointments WHERE ((Datum BETWEEN ? AND ?) AND Geloescht = 0)", [start, end]);
 }
 
 async function getSubscriptions(userid) {
