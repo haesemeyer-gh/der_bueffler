@@ -25,10 +25,6 @@ async function updateDashboard() {
 		messageEl.innerText = 'Es stehen keine Termine an! :D'
 		dashboardEl.appendChild(messageEl)
 	} else {
-		let messageEl = document.createElement('h3');
-		messageEl.innerText = 'Anstehende Termine:';
-		dashboardEl.appendChild(messageEl)
-
 		let detailsElNow = document.createElement('details');
 		let summaryElNow = document.createElement('summary');
 		let listElNow = document.createElement('ul');
@@ -83,6 +79,14 @@ async function updateDashboard() {
 				listElLater.appendChild(appointmentEl);
 			}
 		}
+
+		let messageEl = document.createElement('h3');
+		if (listElNow.innerHTML == `` && listElSoon.innerHTML == `` && listElLater.innerHTML == ``) {
+			messageEl.innerText = 'Du hast keine Termine in Zukunft :)';
+		} else {
+		messageEl.innerText = 'Anstehende Termine:';
+		}
+		dashboardEl.appendChild(messageEl)
 
 		if (listElNow.innerHTML != ``) {
 			dashboardEl.appendChild(detailsElNow)
