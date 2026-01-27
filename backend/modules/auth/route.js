@@ -9,8 +9,6 @@ authRouter.post('/auth/register', async (req, res) => {
 	const email = req.body.email;
 	const password = req.body.password;
 
-	var validEmail = new RegExp
-
 	if (uname.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0) {
 		res.status(422);
 		return res.json({
