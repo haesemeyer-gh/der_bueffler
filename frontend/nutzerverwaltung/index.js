@@ -204,3 +204,9 @@ devUserGetuserinfoButton.addEventListener('click', () => {
 	});
 });
 
+const resetPasswordContainer = document.getElementById('user-settings-container');
+let resetPassword = document.createElement('a')
+resetPassword.href = `/reset?s=${cookieToken}`;
+resetPassword.innerHTML = "Passwort zurücksetzen";
+resetPasswordContainer.appendChild(resetPassword);
+

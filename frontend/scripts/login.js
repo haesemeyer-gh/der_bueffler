@@ -1,5 +1,3 @@
-const APIURL = 'http://localhost:3000';
-
 const loginEl = document.getElementById('login');
 const elementsThatRequireLogin = document.getElementsByClassName('requirelogin');
 

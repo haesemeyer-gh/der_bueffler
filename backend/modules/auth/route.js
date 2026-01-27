@@ -90,7 +90,10 @@ authRouter.post("/auth/reset", async (req, res)  => {
 	if (await auth.userWithTokenExists(token)) {
 		const userID = await auth.getIDByToken(token);
 		auth.resetPassword(userID, newPassword);
-		return res.status(200).end();
+		auth.createSession(userID);
+		return res.status(201).json({
+			message: "Reset password! You may now log in!"
+		});
 
 	}
 	else {
