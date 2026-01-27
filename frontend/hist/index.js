@@ -1,12 +1,12 @@
 const urlParams = new URLSearchParams(window.location.search);
-const searchID = urlParams.get('t');
+const searchID = urlParams.get('c');
 
 async function fetchAPI() {
-	let response = await fetch(APIURL+"/appointment/view", {
+	let response = await fetch(APIURL+"/history/view", {
 		method: "POST",
 		body: JSON.stringify({
 			token: cookieToken,
-			terminid: searchID,
+			aenderungsid: searchID,
 		}),
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"

@@ -33,7 +33,7 @@ historyRouter.post('/history/view', async(req,res) => {
     let permissions = await verifyToken(token)
     if (permissions) {
         let dbresponse = await history.viewHistory(aenderungsid)
-        response = dbresponse
+        response = dbresponse[0]
         res.status(201)
     } else {
         res.status(403)
@@ -46,3 +46,4 @@ historyRouter.post('/history/view', async(req,res) => {
 })
 
 export default historyRouter;
+
