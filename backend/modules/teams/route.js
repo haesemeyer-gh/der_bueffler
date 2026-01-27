@@ -1,6 +1,6 @@
-import express from 'express';
+import express, { response } from 'express';
 
-import { verifyToken, userWithTokenExists } from '../auth/auth.js';
+import { verifyToken, userWithTokenExists, userWithIDExists } from '../auth/auth.js';
 import * as teams from './teams.js';
 
 
@@ -39,9 +39,14 @@ teamsRouter.post('/teams/delete', async (req, res) => {
 	let permissions = await verifyToken(token);
 	if (permissions.Lehrer === 1) {
 		if (id) {
-			res.status(201);
-			response = "Team gelöscht!";
-			teams.deleteTeam(id);
+			let dbresponse = await teams.deleteTeam(id)
+			if(dbresponse.affectedRows > 0) {
+				res.status(201);
+				response = "Team gelöscht!";
+			} else {
+				res.status(404);
+				response = "Team nicht vorhanden!";
+			}
 		} else {
 			res.status(422);
 			response = "Du musst eine ID angeben!";
@@ -50,7 +55,6 @@ teamsRouter.post('/teams/delete', async (req, res) => {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
 	}
-
 	res.json({
 		message: response
 	});
@@ -63,12 +67,24 @@ teamsRouter.post('/teams/add', async(req, res) => {
 
     let response;
     let permissions = await verifyToken(token);
-    if (permissions.Lehrer === 1) { 
-        teams.addTeammate(userid,teamid)
-        res.status(201);
-        response = "Mitglied hinzugefügt";
-    } else {
-        res.status(403);
+    if (permissions.Lehrer === 1) {
+		console.log((await teams.info(teamid)).length) 
+		if(!(await userWithIDExists(userid))) {
+			res.status(404);
+			response = "Nuter existiert nicht!";
+		} else if ((await teams.info(teamid)).length <= 0) {
+			res.status(404);
+			response = "Team existiert nicht!";
+		} else if (await teams.isUserMemberOfTeam(userid,teamid)) {
+			res.status(418);
+			response = "Nuter ist schon Mitglied!";
+		} else {
+			teams.addTeammate(userid,teamid)
+			res.status(201);
+			response = "Mitglied hinzugefügt!";
+		}
+	} else {
+    	res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
@@ -84,10 +100,21 @@ teamsRouter.post('/teams/remove', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions.Lehrer === 1) { 
-		teams.removeTeammate(userid, teamid)
-		res.status(200);
-		response = "Mitglied entfernt";
+	if (permissions.Lehrer === 1) {
+		if(!(await userWithIDExists(userid))) {
+			res.status(404);
+			response = "Nuter existiert nicht!";
+		} else if ((await teams.info(teamid)).length <= 0) {
+			res.status(404);
+			response = "Team existiert nicht!";
+		} else if (!(await teams.isUserMemberOfTeam(userid,teamid))) {
+			res.status(418);
+			response = "Nuter ist kein Mitglied!";
+		} else {
+			teams.removeTeammate(userid, teamid)
+			res.status(200);
+			response = "Mitglied entfernt";
+		} 
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
@@ -106,9 +133,20 @@ teamsRouter.post('/teams/promote', async(req, res) => {
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions.Lehrer === 1) { 
-		teams.promote(userid, teamid)
-		res.status(200);
-		response = "Befördert"
+		if(!(await userWithIDExists(userid))) {
+			res.status(404);
+			response = "Nuter existiert nicht!";
+		} else if ((await teams.info(teamid)).length <= 0) {
+			res.status(404);
+			response = "Team existiert nicht!";
+		} else if (await teams.isUserKlassensprecherOfTeam(userid,teamid)) {
+			res.status(418);
+			response = "Nuter ist schon Klassensprecher!";
+		} else {
+			teams.promote(userid, teamid)
+			res.status(200);
+			response = "Befördert"
+		}
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
@@ -127,9 +165,20 @@ teamsRouter.post('/teams/demote', async(req, res) => {
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions.Lehrer === 1) { 
-		teams.demote(userid, teamid)
-		res.status(200);
-		response = "Defördert"
+		if(!(await userWithIDExists(userid))) {
+			res.status(404);
+			response = "Nuter existiert nicht!";
+		} else if ((await teams.info(teamid)).length <= 0) {
+			res.status(404);
+			response = "Team existiert nicht!";
+		} else if (!(await teams.isUserKlassensprecherOfTeam(userid,teamid))) {
+			res.status(418);
+			response = "Nuter ist kein Klassensprecher!";
+		} else {
+			teams.demote(userid, teamid)
+			res.status(200);
+			response = "Defördert"
+		}
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
@@ -151,7 +200,7 @@ teamsRouter.post("/teams/info", async(req, res) => {
     {
         const dbRes = await teams.info(teamid)
         if (dbRes.length > 0) {
-            response = dbRes[0]["TeamName"]
+            response = dbRes[0]
         }
         else {
             response = "Team nicht vorhanden"
