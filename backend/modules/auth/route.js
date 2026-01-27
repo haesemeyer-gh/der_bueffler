@@ -8,22 +8,26 @@ authRouter.post('/auth/register', async (req, res) => {
 	const uname = req.body.uname;
 	const email = req.body.email;
 	const password = req.body.password;
+
+	var validEmail = new RegExp
+
 	if (uname.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0) {
 		res.status(422);
 		return res.json({
 			message: "Some fields are empty"
 		})
-	}
-
-	if (await auth.userWithEmailExists(email)) {
+	} else if (await auth.userWithEmailExists(email)) {
 		console.log("exists")
-		res.status(422);
+		res.status(409);
 		return res.json({
 			message: "User exists already"
 		});
-
-	}
-	else {
+	} else if (!/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(bbw-azubi\.de|sfz-net\.de|sfz-chemnitz\.de|sfz\.de)$/.test(email)) {
+		res.status(403);
+		return res.json({
+			message: "Your E-Mail is not valid."
+		});
+	} else {
 		console.log("created")
 		await auth.createNewUser(uname, email, password)
 		res.status(201);
