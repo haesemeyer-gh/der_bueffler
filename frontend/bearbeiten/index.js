@@ -62,21 +62,30 @@ async function fetchAPI() {
 
 async function updateDashboard() {
 
-	let appointments = await fetchAPI();
+	if (searchID) {
+		let appointments = await fetchAPI();
 
-	if (appointments.length <= 0) { // change to if appointment does not exist
-		console.log("appointment length 0")
+		if (appointments.length <= 0) { // change to if appointment does not exist
+			console.log("appointment length 0")
+		} else {
+			let appointmentdate = new Date(appointments.Datum);
+			appointmentdate.setMinutes(appointmentdate.getMinutes() - appointmentdate.getTimezoneOffset()); // datetime-local
+
+			createFormTerminID.value = searchID;
+			createFormDate.value = appointmentdate.toISOString().slice(0,16);
+			createFormTitle.value = appointments.Titel;
+			createFormCourse.value = appointments.Fach;
+			createFormTeacher.value = appointments.Lehrer;
+			createFormNotes.value = appointments.Notizen;
+
+		}
 	} else {
-		let appointmentdate = new Date(appointments.Datum);
-		appointmentdate.setMinutes(appointmentdate.getMinutes() - appointmentdate.getTimezoneOffset()); // datetime-local
-
-		createFormTerminID.value = searchID;
-		createFormDate.value = appointmentdate.toISOString().slice(0,16);
-		createFormTitle.value = appointments.Titel;
-		createFormCourse.value = appointments.Fach;
-		createFormTeacher.value = appointments.Lehrer;
-		createFormNotes.value = appointments.Notizen;
-
+		createFormTerminID.value = urlParams.get('termin');
+		createFormDate.value = urlParams.get('datum');
+		createFormTitle.value = urlParams.get('titel');
+		createFormCourse.value = urlParams.get('fach');
+		createFormTeacher.value = urlParams.get('lehrer');
+		createFormNotes.value = urlParams.get('notizen');
 	}
 
 }

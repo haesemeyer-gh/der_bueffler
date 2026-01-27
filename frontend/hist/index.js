@@ -32,6 +32,8 @@ async function updateDashboard() {
 			messageEl.innerText = appointments.Titel;
 			detailEl.appendChild(messageEl)
 
+			let appointmentdate_datetimelocal = new Date(appointments.Datum);
+			appointmentdate_datetimelocal.setMinutes(appointmentdate_datetimelocal.getMinutes() - appointmentdate_datetimelocal.getTimezoneOffset()); // datetime-local
 			let appointmentdate = new Date(appointments.Datum);
 			let day = Date.parse(new Date(appointmentdate.getFullYear(), appointmentdate.getMonth(), appointmentdate.getDate()));
 			let dateString = appointmentdate.toLocaleString('de-DE', {weekday: 'short', day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'});
@@ -59,7 +61,14 @@ async function updateDashboard() {
 			linkContainer.classList.add('appointment-detail-links');
 			let editLink = document.createElement('a');
 			editLink.innerText = "Termin bearbeiten"
-			editLink.href = `../bearbeiten?t=${searchID}`
+			editLink.href = `../bearbeiten
+				?termin=${appointments.TerminID}
+				&datum=${appointmentdate_datetimelocal.toISOString().slice(0,16)}
+				&titel=${appointments.Titel}
+				&fach=${appointments.Fach}
+				&lehrer=${appointments.Lehrer}
+				&notizen=${appointments.Notizen}
+			`;
 			let logLink = document.createElement('a');
 			logLink.innerText = "Änderungen"
 			logLink.href = `../log?t=${searchID}`
