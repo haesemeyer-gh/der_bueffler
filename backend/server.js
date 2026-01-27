@@ -10,11 +10,11 @@ import teamsRouter from './modules/teams/route.js';
 import usersRouter from './modules/users/route.js';
 import gradesRouter from './modules/grades/route.js';
 
-import startDigest from './modules/mails/mails.js';
+import startDigest from './modules/mails/digests.js';
 import setupWebpush from './modules/push/push.js';
 
 //tmp
-import { sendCollectiveMails } from './modules/mails/mails.js';
+import { sendCollectiveMails } from './modules/mails/digests.js';
 import { addTeammate } from './modules/teams/teams.js';
 import { listUserAppointments } from './modules/appointments/appointments.js';
 import { listMonthlyAppointments } from './modules/appointments/appointments.js';

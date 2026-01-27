@@ -1,8 +1,9 @@
 import { query } from '../db/db.js';
 
-export function appointmentToObject(title, teamid, lastchangedby, date, course, teacher, notes) {
+export function appointmentToObject(terminid, title, teamid, lastchangedby, date, course, teacher, notes) {
 	let dateString = new Date(date).toLocaleString('de-DE', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
 	let appointmentObject = {
+		id: terminid,
 		title: title,
 		lastchangedby: lastchangedby,
 		teamid: teamid,
