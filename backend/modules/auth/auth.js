@@ -70,6 +70,14 @@ export async function createSession(userid) {
 	return uuid
 }
 
+export async function createSessionNonDestructive(userid) {
+	const uuid = crypto.randomUUID();
+	//await closeSession(userid)
+	await query("INSERT INTO session (Token, NutzerID) VALUES (?, ?)", [uuid, userid])
+	//await markOnline(userid)
+	return uuid
+}
+
 export async function closeSession(userid) {
 	return await query("DELETE FROM session WHERE (NutzerID = ?)", [userid])
 }

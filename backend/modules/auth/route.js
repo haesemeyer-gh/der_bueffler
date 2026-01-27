@@ -1,6 +1,7 @@
 import express from 'express';
 
-import * as auth from './auth.js'
+import * as auth from './auth.js';
+import sendmail from '../mails/mails.js';
 
 const authRouter = express.Router();
 
@@ -95,6 +96,34 @@ authRouter.post("/auth/reset", async (req, res)  => {
 	else {
 		return res.status(403).json({message: "Wrong token"})
 	}
+})
+
+authRouter.post("/auth/requestreset", async (req, res) => {
+	const email = req.body.email;
+
+	if (await auth.userWithEmailExists(email)) {
+		const userID = await auth.getUserID(email);
+		const token = await auth.createSessionNonDestructive(userID);
+
+		// send user frontend link to reset password
+		let mailbody = `<h1>Der Büffler: Passwortzurücksetzung</h1>
+			<p>Klicke den folgenden Link um dein Büffler-Passwort zurückzusetzen:<br/><br/>
+			<a href="${process.env.BUEFFLER_MAIL_FRONTENDLINK}/reset?s=${token}">Hier klicken</a><br/><br/>
+			Viel Spaß beim Büffeln!</p>
+		`;
+		sendmail(email, "Büffler Passwortzurücksetzung", mailbody);
+
+		res.status(201);
+		return res.json({
+			message: "Please check your inbox."
+		});
+	} else {
+		res.status(404);
+		return res.json({
+			message: "This E-Mail Adress is not registered."
+		});
+	}
+
 })
 
 // Can be .delete() but the route right now is so.

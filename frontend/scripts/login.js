@@ -27,6 +27,7 @@ if (cookieToken) {
 
 const registerButton = document.getElementById('register-button');
 const loginButton = document.getElementById('login-button');
+const resetButton = document.getElementById('reset');
 const emailEl = document.getElementById('login-mail');
 const passEl = document.getElementById('login-pass');
 const unameEl = document.getElementById('register-uname');
@@ -67,6 +68,21 @@ loginButton.addEventListener('click', () => {
 		} else {
 			statusEl.innerText = json.message;
 		}
+	});
+});
+
+resetButton.addEventListener('click', () => {
+	fetch(APIURL+"/auth/requestreset", {
+		method: "POST",
+		body: JSON.stringify({
+			email: emailEl.value
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	}).then(async (response) => {
+		let json = await response.json();
+		statusEl.innerText = json.message;
 	});
 });
 
