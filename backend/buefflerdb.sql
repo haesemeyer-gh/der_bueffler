@@ -18,7 +18,7 @@ CREATE TABLE `changes` (
   `AenderungsID` int(11) NOT NULL AUTO_INCREMENT,
   `Timestamp` datetime NOT NULL,
   `TerminID` int(11) NOT NULL,
-  `Geloescht` tinyint(1) NOT NULL,
+  `Geloescht` tinyint(1) DEFAULT NULL,
   `TeamID` int(11) NOT NULL,
   `ZuletztGeaendert` int(11) NOT NULL,
   `Datum` datetime NOT NULL,
@@ -40,8 +40,8 @@ ALTER TABLE `session`
 CREATE TABLE `teams` (
   `TeamID` int(11) NOT NULL AUTO_INCREMENT,
   `TeamName` varchar(255) NOT NULL,
-  `Mitglieder` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT ([]) CHECK (json_valid(`Mitglieder`)),
-  `Klassensprecher` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT ([]) CHECK (json_valid(`Klassensprecher`)),
+  `Mitglieder` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT (JSON_ARRAY()) CHECK (json_valid(`Mitglieder`)),
+  `Klassensprecher` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT (JSON_ARRAY()) CHECK (json_valid(`Klassensprecher`)),
   PRIMARY KEY (`TeamID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
