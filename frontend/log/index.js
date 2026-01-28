@@ -44,7 +44,7 @@ async function updateDashboard() {
 				let timestampSpan = document.createElement('span');
 				let titleSpan = document.createElement('b');
 
-				lastchangedSpan.innerText = `[Zuletzt bearbeitet von: userid ${appointment.ZuletztGeaendert}]`;
+				lastchangedSpan.innerText = `[Zuletzt bearbeitet von: ${appointment.ZuletztGeaendertName}]`;
 				timestampSpan.innerText = `Stand bis ${dateString} Uhr:`;
 				titleSpan.innerText = `${appointment.Titel}`;
 

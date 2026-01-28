@@ -70,7 +70,7 @@ export async function listDeletedUserAppointments(userid) {
 	}
 	let appointments = []
 	for (let i = 0; i < teamIds.length; i++) {
-		let current = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer, ZuletztGeaendert FROM appointments WHERE TeamID = ? AND Geloescht = 1", [teamIds[i]])
+		let current = await query("SELECT appointments.TerminID, appointments.Datum, appointments.Titel, appointments.Fach, appointments.Lehrer, appointments.ZuletztGeaendert, user.Name AS ZuletztGeaendertName FROM appointments INNER JOIN user ON appointments.ZuletztGeaendert = user.ID WHERE TeamID = ? AND Geloescht = 1", [teamIds[i]])
 		appointments.push(...current)
 	}
 	return appointments

@@ -1,7 +1,7 @@
 import { query } from "../db/db.js";
 
 export async function listHistory(terminid) {
-    return query("SELECT AenderungsID, Timestamp, Geloescht, ZuletztGeaendert, Datum, Titel, Fach, Lehrer FROM changes WHERE TerminID = ?", [terminid])
+    return query("SELECT changes.AenderungsID, changes.Timestamp, changes.Geloescht, changes.ZuletztGeaendert, changes.Datum, changes.Titel, changes.Fach, changes.Lehrer, user.Name AS ZuletztGeaendertName FROM changes INNER JOIN user ON changes.ZuletztGeaendert = user.ID WHERE TerminID = ?", [terminid])
 }
 
 export async function viewHistory(aenderungsid) {
