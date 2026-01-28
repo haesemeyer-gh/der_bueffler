@@ -141,7 +141,7 @@ authRouter.post("/user/delete/:id", async (req, res)  => {
 	}
 
 	const permissions = await auth.verifyToken(token);
-	if (permissions && permissions.Admin === 1) {
+	if (permissions.Admin === 1) {
 		await auth.removeUser(toDeleteUserID);
 		await auth.removeSubscriptions(toDeleteUserID);
 		await auth.closeSession(toDeleteUserID);

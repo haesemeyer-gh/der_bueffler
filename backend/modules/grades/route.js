@@ -38,7 +38,7 @@ gradesRouter.post('/grades/list', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions.Lehrer === 1) {
+	if (permissions.Lehrer === 1 || permissions.ID === studentid) {
 		response = await grades.listGrades(teacherid, studentid, course)
 		res.status(200)
 	} else {

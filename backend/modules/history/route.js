@@ -2,6 +2,8 @@ import express from 'express';
 
 import { verifyToken } from '../auth/auth.js';
 import * as history from './history.js';
+import { viewAppointment } from '../appointments/appointments.js';
+import { isUserMemberOfTeam } from '../teams/teams.js';
 
 const historyRouter = express.Router();
 
@@ -11,7 +13,8 @@ historyRouter.post('/history/list', async(req,res) => {
 
     let response;
     let permissions = await verifyToken(token)
-    if (permissions) {
+	let teamid = (await viewAppointment(terminid))[0].TeamID;
+    if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
         let dbresponse = await history.listHistory(terminid)
         response = dbresponse
         res.status(201)
@@ -31,7 +34,8 @@ historyRouter.post('/history/view', async(req,res) => {
 
     let response;
     let permissions = await verifyToken(token)
-    if (permissions) {
+	let teamid = (await history.viewHistory(aenderungsid))[0].TeamID;
+    if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
         let dbresponse = await history.viewHistory(aenderungsid)
         response = dbresponse[0]
         res.status(201)

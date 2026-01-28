@@ -2,6 +2,7 @@ import express from 'express';
 
 import { verifyToken } from '../auth/auth.js';
 import * as appointments from './appointments.js';
+import { isUserMemberOfTeam } from '../teams/teams.js';
 
 const appointmentsRouter = express.Router();
 
@@ -11,7 +12,7 @@ appointmentsRouter.post('/appointment/list', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions) { // TODO: benötigte Berechtigungen definieren
+	if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
         let dbresponse = await appointments.listAppointments(teamid)
         response = dbresponse
         res.status(201)
@@ -71,7 +72,7 @@ appointmentsRouter.post('/appointment/list-deleted', async(req,res) => {
 
 	let response;
 	let permissions = await verifyToken(token)
-	if (permissions) {
+	if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
 		let dbresponse = await appointments.listDeletedAppointments(teamid)
 		response = dbresponse
 		res.status(201)
@@ -91,10 +92,15 @@ appointmentsRouter.post('/appointment/view', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions) { // TODO: benötigte Berechtigungen definieren
+	if (permissions) {
         let dbresponse = await appointments.viewAppointment(terminid)
-        response = dbresponse[0]
-        res.status(201)
+		if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, dbresponse[0].TeamID)) {
+			response = dbresponse[0]
+			res.status(201)
+		} else {
+			res.status(403);
+			response = "Du hast nicht die nötigen Berechtigungen.";
+		}
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
@@ -116,7 +122,7 @@ appointmentsRouter.post('/appointment/create', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions) { // TODO: benötigte Berechtigungen definieren
+	if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
 		let dbresponse = await appointments.createAppointment(teamid, permissions.ID, date, title, course, teacher, notes)
 		if (dbresponse.code === "ER_BAD_NULL_ERROR") {
 			res.status(422);
@@ -147,8 +153,9 @@ appointmentsRouter.post('/appointment/edit', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions) { // TODO: benötigte Berechtigungen definieren
-		 let dbresponse = await appointments.editAppointment(terminid, permissions.ID, date, title, course, teacher, notes) //Werte anpassen (s. ./appointments.js)
+	let teamid = (await appointments.viewAppointment(terminid))[0].TeamID;
+	if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
+		let dbresponse = await appointments.editAppointment(terminid, permissions.ID, date, title, course, teacher, notes)
 		if (dbresponse.code === "ER_BAD_NULL_ERROR") {
 			res.status(422);
 			response = "Nicht alle Pflichtfelder ausgefüllt";
@@ -172,7 +179,8 @@ appointmentsRouter.post('/appointment/delete', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions) { // TODO: benötigte Berechtigungen definieren
+	let teamid = (await appointments.viewAppointment(terminid))[0].TeamID;
+	if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
         await appointments.deleteAppointment(permissions.ID, terminid)
         res.status(201)
         response = "Termin gelöscht!"
