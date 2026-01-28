@@ -5,7 +5,6 @@ import * as grades from './grades.js';
 
 const gradesRouter = express.Router();
 
-
 gradesRouter.post('/grades/add', async(req, res) => {
 	const token = req.body.token;
 	const grade = req.body.grade;
@@ -51,7 +50,6 @@ gradesRouter.post('/grades/list', async(req, res) => {
 	});
 });
 
-
 gradesRouter.post('/grades/edit', async(req, res) => {
 	const token = req.body.token;
 	const gradeid = req.body.gradeid;
@@ -73,8 +71,6 @@ gradesRouter.post('/grades/edit', async(req, res) => {
 		message: response
 	});
 });
-
-
 
 gradesRouter.post('/grades/get_avg', async(req, res) => {
 	const token = req.body.token;

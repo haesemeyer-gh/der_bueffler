@@ -15,7 +15,7 @@ Das Projekt besteht aus zwei Teilen:
 - Backend: stellt API bereit und kümmert sich um Benachrichtigungen
 - Frontend: Web-App
 
-Für das Backend wird außerdem eine MySQL/MariaDB Datenbank benötigt.
+Für das Backend wird außerdem eine MariaDB Datenbank benötigt.
 ```sql
 CREATE DATABASE buefflerdb;
 ```
@@ -33,4 +33,61 @@ Er ist standardgemäß unter [localhost:3000](http://localhost:3000) verfügbar.
 
 Der Server kann mit Umgebungsvariablen konfiguriert werden.
 Eine Beispiel-Konfiguration ist unter `dist.env` verfügbar.
+
+## Entwickeln
+
+### Backend
+
+[`server.js`](backend/server.js) ist die primäre Datei des Backends.
+Es importiert alle  module, startet den ExpressJS-Web-Server und die Schedules für die Benachrichtigungen.
+
+Die Module sind unter [`modules`](backend/modules/) zu finden.
+Exportieren Module Endpoints, sind diese in einer `route.js` zu finden.
+In den Endpoints finden grundsätzlich auch Error Handling und Berechtigungsabfragen statt.
+
+Datenbankabfragen werden mit dem `query()` Wrapper aus [`db.js`](backend/modules/db/db.js) getätigt.
+
+Der Server stürzt ab, wenn er versucht E-Mails ohne einen validen SMTP Server zu versenden.
+
+In [`beispiel.js`](backend/beispiel.js) ist eine *(veraltete)* kommentierte Version eines Endpoints.
+
+### Frontend
+
+Das Frontend ist einfaches HTML/CSS/JS.
+
+Fast jede Seite hat eine `index.html` Datei mit einer identischen Anmeldemaske, einem identischen Header und einem Hauptpart.
+Jede Seite hat eine eigene `index.js` mit Seitenspezifischer Logik.
+Die Seite unter [`/`](frontend/index.html) ist die Dashboard-Ansicht, alle anderen Seiten sollten sich schon aus dem Namen ergeben.
+
+Außerdem gibt es in [`scripts`](frontend/scripts) mehrere JS Dateien, die von allen Seiten geladen werden.
+
+In [`assets`](frontend/assets) befinden sich grafische Dinge, die für die Funktion der Seite nicht relevant sind (z.B. CSS Dateien oder Icons)
+
+[`worker.js`](frontend/worker.js) ist der Worker für die Push-Benachrichtigungen.
+
+## Anwenden
+
+Nutzer können Accounts nur mit einer validen E-Mail Adresse erstellen.
+Valide Domains sind:
+- `@bbw-fi.de`
+- `@bbw-azubi.de`
+- `@sfz-net.de`
+- `@sfz-chemnitz.de`
+- `@sfz.de`
+
+Standardgemäß gibt es keine Administratoren. Der einzige Weg zum Admin zu werden ist es also, manuell die Datenbank zu bearbeiten und einen Nutzer zum Admin zu ernennen.
+Danach kann dieser Admin weitere Nutzer zu Admins und/oder Lehrern ernennen.
+
+Der Büffler ist **teambasiert**. Termine sind immer einem Team zugewiesen.
+Lehrer können Teams erstellen und Nutzer zu diesen hinzufügen.
+Teammitglieder können dann Termine erstellen.
+
+Die Felder "Fach" und "Lehrer" sind nur Textfelder, in die etwas beliebiges eingetragen werden kann.
+Hier muss kein Lehrer-Nutzer angegeben werden und aktuell gibt es keine Sortierung nach Fächern.
+
+Termine sind einsehbar im **Dashboard**, wo Termine in 3 Listen sortiert aufgelistet werden, sowie in der **Kalenderansicht**, wo man eine Monatsübersicht sieht.
+Klickt man einen Termin an, sieht man in einer **Detailansicht** alle Informationen über diesen Termin und kann ihn **bearbeiten** sowie **vorherige Versionen** einsehen.
+
+Jeder Nutzer erhält am Samstag um 6 Uhr morgens eine **E-Mail** mit allen Terminen der kommenden Woche.
+Außerdem erhält jeder Nutzer morgens um 6 Uhr **Push-Benachrichtigungen** für alle Termine, die an diesem Tag anstehen werden, sofern der Nutzer diese aktiviert hat.
 

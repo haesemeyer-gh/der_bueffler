@@ -21,7 +21,7 @@ authRouter.post('/auth/register', async (req, res) => {
 		return res.json({
 			message: "User exists already"
 		});
-	} else if (!/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(bbw-azubi\.de|sfz-net\.de|sfz-chemnitz\.de|sfz\.de)$/.test(email)) {
+	} else if (!/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(bbw-fi\.de|bbw-azubi\.de|sfz-net\.de|sfz-chemnitz\.de|sfz\.de)$/.test(email)) {
 		res.status(403);
 		return res.json({
 			message: "Your E-Mail is not valid."
