@@ -13,11 +13,22 @@ historyRouter.post('/history/list', async(req,res) => {
 
     let response;
     let permissions = await verifyToken(token)
-	let teamid = (await viewAppointmentIgnoreDeleted(terminid))[0].TeamID;
+	let appointment = await viewAppointmentIgnoreDeleted(terminid);
+	if (appointment.length <= 0) {
+		return res.status(404).json({
+			message: "Dieser Termin existiert nicht."
+		})
+	}
+	let teamid = appointment[0].TeamID;
     if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
         let dbresponse = await history.listHistory(terminid)
-        response = dbresponse
-        res.status(201)
+		if (dbresponse.length > 0) {
+			response = dbresponse
+			res.status(201)
+		} else {
+			response = "Es gibt keine vorherigen Versionen dieses Termins oder er existiert nicht."
+			res.status(404)
+		}
     } else {
         res.status(403)
         response = "Du hast nicht die nötigen Berechtigungen."
@@ -34,11 +45,16 @@ historyRouter.post('/history/view', async(req,res) => {
 
     let response;
     let permissions = await verifyToken(token)
-	let teamid = (await history.viewHistory(aenderungsid))[0].TeamID;
+	let appointment = await history.viewHistory(aenderungsid);
+	if (appointment.length <= 0) {
+		return res.status(404).json({
+			message: "Dieser Termin existiert nicht."
+		})
+	}
+	let teamid = appointment[0].TeamID;
     if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
-        let dbresponse = await history.viewHistory(aenderungsid)
-        response = dbresponse[0]
-        res.status(201)
+		response = appointment[0]
+		res.status(201)
     } else {
         res.status(403)
         response = "du hast nicht die nötigen Berechtigungen."

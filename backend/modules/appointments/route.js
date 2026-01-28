@@ -53,9 +53,14 @@ appointmentsRouter.post('/appointment/list-month', async(req,res) => {
 	let response;
 	let permissions = await verifyToken(token)
 	if (permissions) {
-		let dbresponse = await appointments.listMonthlyAppointments(permissions.ID, month, year)
-		response = dbresponse
-		res.status(201)
+		if ((month >= 1 && month <= 12) && (year > 0)) {
+			let dbresponse = await appointments.listMonthlyAppointments(permissions.ID, month, year)
+			response = dbresponse
+			res.status(201)
+		} else {
+			response = "Kein valides Datum."
+			res.status(422)
+		}
 	} else {
 		res.status(403)
 		response = "Du hast nicht die nötigen Berechtigungen."
@@ -93,12 +98,17 @@ appointmentsRouter.post('/appointment/view', async(req, res) => {
 	let permissions = await verifyToken(token);
 	if (permissions) {
         let dbresponse = await appointments.viewAppointment(terminid)
-		if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, dbresponse[0].TeamID)) {
-			response = dbresponse[0]
-			res.status(201)
+		if (dbresponse.length > 0) {
+			if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, dbresponse[0].TeamID)) {
+				response = dbresponse[0]
+				res.status(201)
+			} else {
+				res.status(403);
+				response = "Du hast nicht die nötigen Berechtigungen.";
+			}
 		} else {
-			res.status(403);
-			response = "Du hast nicht die nötigen Berechtigungen.";
+			res.status(404);
+			response = "Dieser Termin existiert nicht.";
 		}
 	} else {
 		res.status(403);
@@ -152,7 +162,13 @@ appointmentsRouter.post('/appointment/edit', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	let teamid = (await appointments.viewAppointment(terminid))[0].TeamID;
+	let appointment = await appointments.viewAppointment(terminid);
+	if (appointment.length <= 0) {
+		return res.status(404).json({
+			message: "Dieser Termin existiert nicht."
+		})
+	}
+	let teamid = appointment[0].TeamID;
 	if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
 		let dbresponse = await appointments.editAppointment(terminid, permissions.ID, date, title, course, teacher, notes)
 		if (dbresponse.code === "ER_BAD_NULL_ERROR") {
@@ -178,7 +194,13 @@ appointmentsRouter.post('/appointment/delete', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	let teamid = (await appointments.viewAppointment(terminid))[0].TeamID;
+	let appointment = await appointments.viewAppointment(terminid);
+	if (appointment.length <= 0) {
+		return res.status(404).json({
+			message: "Dieser Termin existiert nicht."
+		})
+	}
+	let teamid = appointment[0].TeamID;
 	if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
         await appointments.deleteAppointment(permissions.ID, terminid)
         res.status(201)
