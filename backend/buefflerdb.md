@@ -17,6 +17,7 @@ Ein Skript, um diese Datenbank einzurichten, befindet sich in [`./buefflerdb.sql
 Der `appointments`-Table enthält den aktuellen Stand aller Termine.
 
 - `TerminID` ist die einzigartige ID des Termins
+- `Geloescht` ist 1, wenn der Termin gelöscht ist
 - `TeamID` ist die ID des Teams, in dem dieser Termin sichtbar ist
 - `ZuletztGeaendert` ist die ID des Nutzers, der zuletzt diesen Termin bearbeitet hat
 - `Datum` ist der Zeitpunkt, an dem dieser Termin stattfindet

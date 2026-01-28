@@ -41,7 +41,7 @@ authRouter.post('/auth/login', async (req, res) => {
 	const password = req.body.password;
 
 	if (email.trim().length === 0 || password.trim().length === 0) {
-		res.status(403);
+		res.status(422);
 		return res.json({
 			message: "Some fields are empty"
 		})
