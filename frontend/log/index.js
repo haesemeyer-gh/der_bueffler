@@ -36,7 +36,7 @@ async function updateDashboard() {
 			console.log(appointments)
 			appointments.forEach(appointment => {
 
-				let dateString = new Date(appointment.Datum).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+				let dateString = new Date(appointment.Timestamp).toLocaleString('de-DE', {day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit'});
 
 				let listItem = document.createElement('li');
 				let linkItem = document.createElement('a');
@@ -44,7 +44,7 @@ async function updateDashboard() {
 				let timestampSpan = document.createElement('span');
 				let titleSpan = document.createElement('b');
 
-				lastchangedSpan.innerText = `[Zuletzt bearbeitet von: ${appointment.ZuletztGeaendert}]`;
+				lastchangedSpan.innerText = `[Zuletzt bearbeitet von: userid ${appointment.ZuletztGeaendert}]`;
 				timestampSpan.innerText = `Stand bis ${dateString} Uhr:`;
 				titleSpan.innerText = `${appointment.Titel}`;
 

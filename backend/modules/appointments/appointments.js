@@ -60,6 +60,22 @@ export async function listDeletedAppointments(teamid) {
 	return query("SELECT TerminID, ZuletztGeaendert, Datum, Titel, Fach, Lehrer, Notizen FROM appointments WHERE TeamID = ? AND Geloescht = 1", [teamid])
 }
 
+export async function listDeletedUserAppointments(userid) {
+	let teamIds = []
+	let allTeams = await query("SELECT TeamID, Mitglieder FROM teams")
+	for (let i = 0; i < allTeams.length; i++) {
+		if (allTeams[i].Mitglieder.includes(userid)) {
+			teamIds.push(allTeams[i].TeamID)
+		}
+	}
+	let appointments = []
+	for (let i = 0; i < teamIds.length; i++) {
+		let current = await query("SELECT TerminID, Datum, Titel, Fach, Lehrer, ZuletztGeaendert FROM appointments WHERE TeamID = ? AND Geloescht = 1", [teamIds[i]])
+		appointments.push(...current)
+	}
+	return appointments
+}
+
 export async function viewAppointment(terminid) {
 	return query(
 	   `SELECT appointments.TerminID,
@@ -76,6 +92,24 @@ export async function viewAppointment(terminid) {
 		INNER JOIN user ON appointments.ZuletztGeaendert = user.ID
 		INNER JOIN teams ON appointments.TeamID = teams.TeamID
 		WHERE TerminID = ? AND Geloescht = 0`, [terminid])
+}
+
+export async function viewAppointmentIgnoreDeleted(terminid) {
+	return query(
+	   `SELECT appointments.TerminID,
+		appointments.TeamID,
+		appointments.ZuletztGeaendert,
+		appointments.Datum,
+		appointments.Titel,
+		appointments.Fach,
+		appointments.Lehrer,
+		appointments.Notizen,
+		user.Name AS ZuletztGeaendertName,
+		teams.TeamName
+		FROM appointments
+		INNER JOIN user ON appointments.ZuletztGeaendert = user.ID
+		INNER JOIN teams ON appointments.TeamID = teams.TeamID
+		WHERE TerminID = ?`, [terminid])
 }
 
 export async function editAppointment(terminid, userid, date, title, course, teacher, notes) {

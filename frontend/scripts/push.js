@@ -19,7 +19,7 @@ async function registerServiceWorker() {
 		await fetch(APIURL+"/push/subscribe", {
 			method: "POST",
 			body: JSON.stringify({
-				"subscription": subscription
+				"subscription": subscription,
 				"token": cookieToken
 			}),
 			headers: {

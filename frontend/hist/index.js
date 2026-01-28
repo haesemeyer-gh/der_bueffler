@@ -71,7 +71,7 @@ async function updateDashboard() {
 			`;
 			let logLink = document.createElement('a');
 			logLink.innerText = "Änderungen"
-			logLink.href = `../log?t=${searchID}`
+			logLink.href = `../log?t=${appointments.TerminID}`
 			linkContainer.append(editLink, logLink)
 
 			let notesEl = document.createElement('p');

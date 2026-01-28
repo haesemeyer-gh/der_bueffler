@@ -1,13 +1,13 @@
 import { query } from "../db/db.js";
 
 export async function listHistory(terminid) {
-    return query("SELECT AenderungsID, Geloescht, ZuletztGeaendert, Datum, Titel, Fach, Lehrer FROM changes WHERE TerminID = ?", [terminid])
+    return query("SELECT AenderungsID, Timestamp, Geloescht, ZuletztGeaendert, Datum, Titel, Fach, Lehrer FROM changes WHERE TerminID = ?", [terminid])
 }
 
 export async function viewHistory(aenderungsid) {
     return query(
 	   `SELECT changes.TerminID,
-		changes.TeamID;
+		changes.TeamID,
 		changes.Geloescht,
 		changes.ZuletztGeaendert,
 		changes.Datum,
@@ -26,3 +26,4 @@ export async function viewHistory(aenderungsid) {
 export async function reverseChange(/*TBD*/) {
     //Wird bei vorhandener Zeit umgesetzt
 }
+

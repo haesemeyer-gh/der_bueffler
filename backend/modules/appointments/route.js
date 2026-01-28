@@ -68,17 +68,16 @@ appointmentsRouter.post('/appointment/list-month', async(req,res) => {
 
 appointmentsRouter.post('/appointment/list-deleted', async(req,res) => {
 	const token = req.body.token
-	const teamid = req.body.teamid
 
 	let response;
 	let permissions = await verifyToken(token)
-	if (permissions.Lehrer === 1 || await isUserMemberOfTeam(permissions.ID, teamid)) {
-		let dbresponse = await appointments.listDeletedAppointments(teamid)
+	if (permissions) {
+		let dbresponse = await appointments.listDeletedUserAppointments(permissions.ID)
 		response = dbresponse
 		res.status(201)
 	} else {
-		res.status(418)
-		response = "Ich bin ein Teekessel!"
+		res.status(403)
+		response = "Du hast nicht die nötigen Berechtigungen."
 	}
 
 	res.json({
