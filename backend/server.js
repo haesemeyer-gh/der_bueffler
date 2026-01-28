@@ -14,6 +14,7 @@ import startDigest from './modules/mails/digests.js';
 import setupWebpush from './modules/push/push.js';
 
 //tmp
+import { sendPush } from './modules/push/push.js';
 import { sendCollectiveMails } from './modules/mails/digests.js';
 import { addTeammate } from './modules/teams/teams.js';
 import { listUserAppointments } from './modules/appointments/appointments.js';
@@ -46,6 +47,7 @@ app.listen(process.env.BUEFFLER_PORT, async () => {
 	setupWebpush();
 
 	//tmp
+	//sendPush();
 	//sendCollectiveMails();
 	//console.log(await listMonthlyAppointments(1,2,2026))
 	//console.log(await listHistory(16))

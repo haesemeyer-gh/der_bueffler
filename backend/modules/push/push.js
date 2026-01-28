@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import webpush from 'web-push';
+import cron from 'node-cron';
 
 import { query } from '../db/db.js';
 import { listTeammates } from '../teams/teams.js';
@@ -24,7 +25,11 @@ function setupWebpush() {
 	const publicVapidKey = process.env.BUEFFLER_VAPID_PUBLIC;
 	const privateVapidKey = process.env.BUEFFLER_VAPID_PRIVATE;
 
-	webpush.setVapidDetails("mailto:fiadmin@localhosts", publicVapidKey, privateVapidKey);
+	webpush.setVapidDetails(process.env.BUEFFLER_MAIL_FRONTENDLINK, publicVapidKey, privateVapidKey);
+
+	cron.schedule(process.env.BUEFFLER_PUSH_CRON, () => {
+		sendPush();
+	});
 }
 
 export async function sendPush() {
@@ -75,8 +80,8 @@ export async function sendPush() {
 }
 
 function formatAppointment(appointment) {
-	const date = new Date(appointment.Datum);
-	return JSON.stringify({title: appointment.Titel, body: `Datum: ${date}; Fach: ${appointment.Fach}; Lehrer: ${appointment.Lehrer}`})
+	const date = new Date(appointment.Datum).toLocaleString('de-DE', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit'});
+	return JSON.stringify({title: `Ein Termin steht an!`, body: `Titel: ${appointment.Titel}; Datum: ${date}; Fach: ${appointment.Fach}; Lehrer: ${appointment.Lehrer}`})
 }
 
 export default setupWebpush;

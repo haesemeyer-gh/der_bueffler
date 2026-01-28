@@ -41,10 +41,12 @@ pushRouter.post("/push/unsubscribe", async (req, res) => {
 	}
 })
 
+/*
 pushRouter.get("/pingpush", (req, res) => {
 	push.sendPush()
 	return res.status(200).end();
 })
+*/
 
 export default pushRouter;
 

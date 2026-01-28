@@ -37,14 +37,14 @@ header {
 	display: flex;
 	justify-content: space-between;
 	flex-direction: row;
-	@media (width < 36rem) {
+	@media (width < 40rem) {
 		flex-direction: column;
 	}
 }
 header > h1 {
 	margin: 0;
 	font-weight: 900;
-	@media (width < 36rem) {
+	@media (width < 40rem) {
 		text-align: center;
 	}
 }
@@ -52,9 +52,17 @@ nav {
 	display: flex;
 	gap: 15px;
 }
+nav > button {
+	background-color: transparent;
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+nav > button > img,
 nav > a > img {
 	height: 48px;
 }
+nav > button > img:hover,
 nav > a > img:hover {
 	filter: saturate(100%) invert(20%) sepia(90%) saturate(1000%) hue-rotate(185deg) brightness(90%) contrast(90%);
 }

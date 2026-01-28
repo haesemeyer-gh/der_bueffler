@@ -8,14 +8,14 @@ import { getUserInfo } from '../users/users.js';
 import { listTeammates } from '../teams/teams.js';
 
 function startDigest() {
-	cron.schedule(process.env.BUEFFLER_CRON, () => { // should run each saturday @ 07:00
+	cron.schedule(process.env.BUEFFLER_MAIL_CRON, () => {
 		sendCollectiveMails();
 	});
 };
 
 // liest alle Appointments dieser Woche aus der Datenbank aus und gibt einen Array an appointmentObjects zurück
 async function getWeeklyAppointments() {
-	let appointmentResponse = await query("SELECT * FROM appointments WHERE Datum BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY);", []);
+	let appointmentResponse = await query("SELECT * FROM appointments WHERE Datum BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY) AND Geloescht = 0;", []);
 	let weeklyAppointments = [];
 	appointmentResponse.forEach((appointment, i) => {
 		let appointmentObject = appointmentToObject(appointment.TerminID, appointment.Titel, appointment.TeamID, appointment.ZuletztGeaendert, appointment.Datum, appointment.Fach, appointment.Lehrer, appointment.Notizen);
