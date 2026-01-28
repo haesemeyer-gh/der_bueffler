@@ -62,7 +62,8 @@ loginButton.addEventListener('click', () => {
 		if (response.status === 200) {
 			token = json.message;
 			document.cookie = `token=${token}`;
-			logIn();
+			location.reload(true);
+			//logIn();
 		} else {
 			statusEl.innerText = json.message;
 		}
