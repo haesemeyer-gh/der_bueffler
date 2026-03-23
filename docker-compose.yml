@@ -1,0 +1,41 @@
+services:
+  bueffler:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+      network: host
+    environment:
+      BUEFFLER_PORT: 3000
+      BUEFFLER_DB_HOST: db
+      BUEFFLER_DB_PASS: aA1234Aa
+      BUEFFLER_DB_USER: root
+      BUEFFLER_DB_NAME: bueffler
+      BUEFFLER_FRONTEND_PATH: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules
+    depends_on:
+      db:
+        condition: service_healthy
+  db:
+    image: mariadb:lts-ubi
+    environment:
+      MARIADB_ROOT_PASSWORD: aA1234Aa
+      MARIADB_PASSWORD: aA1234Aa
+      MARIADB_USER: bueffler
+      MARIADB_DATABASE: bueffler
+    ports:
+      - "3306:3306"
+    volumes:
+      - bueffler_mariadb_data:/var/lib/mysql
+      - ./backend/buefflerdb.sql:/docker-entrypoint-initdb.d/buefflerdb.sql:Z
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u $$MARIADB_USER --password=$$MARIADB_PASSWORD"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  bueffler_mariadb_data:
+
