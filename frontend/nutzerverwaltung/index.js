@@ -16,7 +16,7 @@ devTeamsCreateButton.addEventListener('click', () => {
 	});
 });
 
-const devTeamsDeleteID = document.getElementById('nv-dev-teams-delete-id');
+let devTeamsDeleteID = document.getElementById('nv-dev-teams-delete-id');
 const devTeamsDeleteButton = document.getElementById('nv-dev-teams-delete-button');
 const devTeamsDeleteStatus = document.getElementById('nv-dev-teams-delete-status');
 devTeamsDeleteButton.addEventListener('click', () => {
@@ -34,7 +34,7 @@ devTeamsDeleteButton.addEventListener('click', () => {
 	});
 });
 
-const devTeamsInfoID = document.getElementById('nv-dev-teams-info-id');
+let devTeamsInfoID = document.getElementById('nv-dev-teams-info-id');
 const devTeamsInfoButton = document.getElementById('nv-dev-teams-info-button');
 const devTeamsInfoStatus = document.getElementById('nv-dev-teams-info-status');
 devTeamsInfoButton.addEventListener('click', () => {
@@ -52,8 +52,8 @@ devTeamsInfoButton.addEventListener('click', () => {
 	});
 });
 
-const devTeamsAddTeamID = document.getElementById('nv-dev-teams-add-teamid');
-const devTeamsAddUserID = document.getElementById('nv-dev-teams-add-userid');
+let devTeamsAddTeamID = document.getElementById('nv-dev-teams-add-teamid');
+let devTeamsAddUserID = document.getElementById('nv-dev-teams-add-userid');
 const devTeamsAddButton = document.getElementById('nv-dev-teams-add-button');
 const devTeamsAddStatus = document.getElementById('nv-dev-teams-add-status');
 devTeamsAddButton.addEventListener('click', () => {
@@ -72,8 +72,8 @@ devTeamsAddButton.addEventListener('click', () => {
 	});
 });
 
-const devTeamsRemoveTeamID = document.getElementById('nv-dev-teams-remove-teamid');
-const devTeamsRemoveUserID = document.getElementById('nv-dev-teams-remove-userid');
+let devTeamsRemoveTeamID = document.getElementById('nv-dev-teams-remove-teamid');
+let devTeamsRemoveUserID = document.getElementById('nv-dev-teams-remove-userid');
 const devTeamsRemoveButton = document.getElementById('nv-dev-teams-remove-button');
 const devTeamsRemoveStatus = document.getElementById('nv-dev-teams-remove-status');
 devTeamsRemoveButton.addEventListener('click', () => {
@@ -92,8 +92,8 @@ devTeamsRemoveButton.addEventListener('click', () => {
 	});
 });
 
-const devTeamsPromoteTeamID = document.getElementById('nv-dev-teams-promote-teamid');
-const devTeamsPromoteUserID = document.getElementById('nv-dev-teams-promote-userid');
+let devTeamsPromoteTeamID = document.getElementById('nv-dev-teams-promote-teamid');
+let devTeamsPromoteUserID = document.getElementById('nv-dev-teams-promote-userid');
 const devTeamsPromoteButton = document.getElementById('nv-dev-teams-promote-button');
 const devTeamsPromoteStatus = document.getElementById('nv-dev-teams-promote-status');
 devTeamsPromoteButton.addEventListener('click', () => {
@@ -112,8 +112,8 @@ devTeamsPromoteButton.addEventListener('click', () => {
 	});
 });
 
-const devTeamsDemoteTeamID = document.getElementById('nv-dev-teams-demote-teamid');
-const devTeamsDemoteUserID = document.getElementById('nv-dev-teams-demote-userid');
+let devTeamsDemoteTeamID = document.getElementById('nv-dev-teams-demote-teamid');
+let devTeamsDemoteUserID = document.getElementById('nv-dev-teams-demote-userid');
 const devTeamsDemoteButton = document.getElementById('nv-dev-teams-demote-button');
 const devTeamsDemoteStatus = document.getElementById('nv-dev-teams-demote-status');
 devTeamsDemoteButton.addEventListener('click', () => {
@@ -132,7 +132,7 @@ devTeamsDemoteButton.addEventListener('click', () => {
 	});
 });
 
-const devUserMaketeacherID = document.getElementById('nv-dev-user-maketeacher-id');
+let devUserMaketeacherID = document.getElementById('nv-dev-user-maketeacher-id');
 const devUserMaketeacherButton = document.getElementById('nv-dev-user-maketeacher-button');
 const devUserMaketeacherStatus = document.getElementById('nv-dev-user-maketeacher-status');
 devUserMaketeacherButton.addEventListener('click', () => {
@@ -150,7 +150,7 @@ devUserMaketeacherButton.addEventListener('click', () => {
 	});
 });
 
-const devUserDeleteteacherID = document.getElementById('nv-dev-user-deleteteacher-id');
+let devUserDeleteteacherID = document.getElementById('nv-dev-user-deleteteacher-id');
 const devUserDeleteteacherButton = document.getElementById('nv-dev-user-deleteteacher-button');
 const devUserDeleteteacherStatus = document.getElementById('nv-dev-user-deleteteacher-status');
 devUserDeleteteacherButton.addEventListener('click', () => {
@@ -168,7 +168,7 @@ devUserDeleteteacherButton.addEventListener('click', () => {
 	});
 });
 
-const devUserMakeadminID = document.getElementById('nv-dev-user-makeadmin-id');
+let devUserMakeadminID = document.getElementById('nv-dev-user-makeadmin-id');
 const devUserMakeadminButton = document.getElementById('nv-dev-user-makeadmin-button');
 const devUserMakeadminStatus = document.getElementById('nv-dev-user-makeadmin-status');
 devUserMakeadminButton.addEventListener('click', () => {
@@ -186,7 +186,7 @@ devUserMakeadminButton.addEventListener('click', () => {
 	});
 });
 
-const devUserGetuserinfoID = document.getElementById('nv-dev-user-getuserinfo-id');
+let devUserGetuserinfoID = document.getElementById('nv-dev-user-getuserinfo-id');
 const devUserGetuserinfoButton = document.getElementById('nv-dev-user-getuserinfo-button');
 const devUserGetuserinfoStatus = document.getElementById('nv-dev-user-getuserinfo-status');
 devUserGetuserinfoButton.addEventListener('click', () => {
@@ -209,4 +209,97 @@ let resetPassword = document.createElement('a')
 resetPassword.href = `/reset?s=${cookieToken}`;
 resetPassword.innerHTML = "Passwort zurücksetzen";
 resetPasswordContainer.appendChild(resetPassword);
+
+fetch(APIURL+"/teams/list", {
+	method: "POST",
+	body: JSON.stringify({
+		token: cookieToken
+	}),
+	headers: {
+		"Content-type": "application/json; charset=UTF-8"
+	}
+}).then((response) => response.json()).then((response) => {
+
+	[
+		devTeamsDeleteID,
+		devTeamsInfoID,
+		devTeamsAddTeamID,
+		devTeamsRemoveTeamID,
+		devTeamsPromoteTeamID,
+		devTeamsDemoteTeamID
+	].forEach((inputel) => {
+
+		const devFormTeamDropdown = document.createElement("select");
+		devFormTeamDropdown.classList.add("nv-dev-dropdown");
+		devFormTeamDropdown.id = inputel.id;
+
+		response.message.forEach((team) => {
+			const option = document.createElement("option");
+			option.innerText = `[${team.TeamID}] ${team.TeamName}`;
+			option.value = team.TeamID;
+			devFormTeamDropdown.appendChild(option);
+		});
+
+		inputel.replaceWith(devFormTeamDropdown);
+		// the new thing = document.getElementById(inputel.id);
+
+	});
+
+	devTeamsDeleteID = document.getElementById('nv-dev-teams-delete-id');
+	devTeamsInfoID = document.getElementById('nv-dev-teams-info-id');
+	devTeamsAddTeamID = document.getElementById('nv-dev-teams-add-teamid');
+	devTeamsRemoveTeamID = document.getElementById('nv-dev-teams-remove-teamid');
+	devTeamsPromoteTeamID = document.getElementById('nv-dev-teams-promote-teamid');
+	devTeamsDemoteTeamID = document.getElementById('nv-dev-teams-demote-teamid');
+
+});
+
+
+fetch(APIURL+"/user/list", {
+	method: "POST",
+	body: JSON.stringify({
+		token: cookieToken
+	}),
+	headers: {
+		"Content-type": "application/json; charset=UTF-8"
+	}
+}).then((response) => response.json()).then((response) => {
+
+	[
+		devTeamsAddUserID,
+		devTeamsRemoveUserID,
+		devTeamsPromoteUserID,
+		devTeamsDemoteUserID,
+		devUserMaketeacherID,
+		devUserDeleteteacherID,
+		devUserMakeadminID,
+		devUserGetuserinfoID
+	].forEach((inputel) => {
+
+		const devFormUserDropdown = document.createElement("select");
+		devFormUserDropdown.classList.add("nv-dev-dropdown");
+		devFormUserDropdown.id = inputel.id;
+
+		response.message.forEach((user) => {
+			const option = document.createElement("option");
+			option.innerText = `[${user.ID}] "${user.Name}" <${user.Mail}>`;
+			option.value = user.ID;
+			devFormUserDropdown.appendChild(option);
+		});
+
+		inputel.replaceWith(devFormUserDropdown);
+		// the new thing = document.getElementById(inputel.id);
+
+	});
+
+	devTeamsAddUserID = document.getElementById('nv-dev-teams-add-userid');
+	devTeamsRemoveUserID = document.getElementById('nv-dev-teams-remove-userid');
+	devTeamsPromoteUserID = document.getElementById('nv-dev-teams-promote-userid');
+	devTeamsDemoteUserID = document.getElementById('nv-dev-teams-demote-userid');
+	devUserMaketeacherID = document.getElementById('nv-dev-user-maketeacher-id');
+	devUserDeleteteacherID = document.getElementById('nv-dev-user-deleteteacher-id');
+	devUserMakeadminID = document.getElementById('nv-dev-user-makeadmin-id');
+	devUserGetuserinfoID = document.getElementById('nv-dev-user-getuserinfo-id');
+
+});
 

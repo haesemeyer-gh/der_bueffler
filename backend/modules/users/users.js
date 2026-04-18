@@ -16,3 +16,7 @@ export function getUserInfo(userid) {
 	return query("SELECT Admin, Lehrer, Name, Mail FROM user WHERE ID LIKE ?;", [userid]);
 }
 
+export function list() {
+	return query("SELECT ID, Name, Mail FROM user");
+}
+

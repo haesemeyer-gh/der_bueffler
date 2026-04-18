@@ -193,6 +193,12 @@ main {
 
 .nv-dev-input {
 	width: 75%;
+}
+.nv-dev-dropdown {
+	width: 75.8%;
+}
+.nv-dev-dropdown,
+.nv-dev-input {
 	margin: 5px 0;
 	border: 2px solid black;
 	@media (prefers-color-scheme: dark) {
@@ -497,8 +503,15 @@ main {
 .create-form-double label {
 	width: 100%;
 }
+
 .create-form-double input {
 	width: 98%;
+}
+.create-form-double select {
+	width: 100%;
+}
+.create-form-double select,
+.create-form-double input {
 	border: 2px solid black;
 	@media (prefers-color-scheme: dark) {
 		border-color: white;

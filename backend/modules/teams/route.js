@@ -68,7 +68,7 @@ teamsRouter.post('/teams/add', async(req, res) => {
     let response;
     let permissions = await verifyToken(token);
     if (permissions.Lehrer === 1) {
-		console.log((await teams.info(teamid)).length) 
+		console.log((await teams.info(teamid)).length)
 		if(!(await userWithIDExists(userid))) {
 			res.status(404);
 			response = "Nuter existiert nicht!";
@@ -114,7 +114,7 @@ teamsRouter.post('/teams/remove', async(req, res) => {
 			teams.removeTeammate(userid, teamid)
 			res.status(200);
 			response = "Mitglied entfernt";
-		} 
+		}
 	} else {
 		res.status(403);
 		response = "Du hast nicht die nötigen Berechtigungen.";
@@ -132,7 +132,7 @@ teamsRouter.post('/teams/promote', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions.Lehrer === 1) { 
+	if (permissions.Lehrer === 1) {
 		if(!(await userWithIDExists(userid))) {
 			res.status(404);
 			response = "Nuter existiert nicht!";
@@ -164,7 +164,7 @@ teamsRouter.post('/teams/demote', async(req, res) => {
 
 	let response;
 	let permissions = await verifyToken(token);
-	if (permissions.Lehrer === 1) { 
+	if (permissions.Lehrer === 1) {
 		if(!(await userWithIDExists(userid))) {
 			res.status(404);
 			response = "Nuter existiert nicht!";
@@ -205,12 +205,29 @@ teamsRouter.post("/teams/info", async(req, res) => {
         else {
             response = "Team nicht vorhanden"
         }
-        
+
     }
     else {
         res.status(403);
         response = "Du hast nicht die nötigen Berechtigungen.";
-        
+
+    }
+
+    res.json({
+            message: response
+    });
+})
+
+teamsRouter.post("/teams/list", async(req, res) => {
+    const token = req.body.token;
+
+    let response;
+    let permissions = await verifyToken(token);
+    if (permissions) {
+        response = await teams.list()
+    } else {
+        res.status(403);
+        response = "Du hast nicht die nötigen Berechtigungen.";
     }
 
     res.json({
@@ -219,3 +236,4 @@ teamsRouter.post("/teams/info", async(req, res) => {
 })
 
 export default teamsRouter;
+

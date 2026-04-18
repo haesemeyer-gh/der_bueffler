@@ -1,4 +1,4 @@
-const createFormTeamID = document.getElementById('create-form-teamid');
+let createFormTeamID = document.getElementById('create-form-teamid');
 const createFormDate = document.getElementById('create-form-date');
 const createFormTitle = document.getElementById('create-form-title');
 const createFormCourse = document.getElementById('create-form-course');
@@ -24,5 +24,31 @@ createFormButton.addEventListener('click', () => {
 	}).then((response) => response.json()).then((response) => {
 		createFormStatus.innerText = response.message;
 	});
+});
+
+fetch(APIURL+"/teams/list", {
+	method: "POST",
+	body: JSON.stringify({
+		token: cookieToken
+	}),
+	headers: {
+		"Content-type": "application/json; charset=UTF-8"
+	}
+}).then((response) => response.json()).then((response) => {
+
+	const createFormTeamDropdown = document.createElement("select");
+	createFormTeamDropdown.classList.add("create-form-dropdown");
+	createFormTeamDropdown.id = "create-form-teamid";
+
+	response.message.forEach((team) => {
+		const option = document.createElement("option");
+		option.innerText = `[${team.TeamID}] ${team.TeamName}`;
+		option.value = team.TeamID;
+		createFormTeamDropdown.appendChild(option);
+	});
+
+	createFormTeamID.replaceWith(createFormTeamDropdown);
+	createFormTeamID = document.getElementById('create-form-teamid');
+
 });
 
