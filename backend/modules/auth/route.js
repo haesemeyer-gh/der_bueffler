@@ -68,6 +68,13 @@ authRouter.post('/auth/login', async (req, res) => {
 	}
 	console.log("exists")
 
+	if (!(await auth.usersMailIsVerified(email))) {
+		res.status(403);
+		return res.json({
+			message: "Unverified"
+		});
+	}
+
 	if (!(await auth.verifyPassword(password, email))) {
 		res.status(403);
 		return res.json({
@@ -136,6 +143,13 @@ authRouter.post("/auth/requestreset", async (req, res) => {
 	const email = req.body.email;
 
 	if (await auth.userWithEmailExists(email)) {
+		if (!(await auth.usersMailIsVerified(email))) {
+			res.status(403);
+			return res.json({
+				message: "Unverified"
+			});
+		}
+
 		const userID = await auth.getUserID(email);
 		const token = await auth.createSessionNonDestructive(userID);
 

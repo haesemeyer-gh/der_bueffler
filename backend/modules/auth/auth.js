@@ -37,6 +37,11 @@ export async function verifyMail(mailtoken) {
 	return await query("UPDATE user SET MailVerifiziert = 1 WHERE (MailToken = ?)", [mailtoken])
 }
 
+export async function usersMailIsVerified(email) {
+	const data = await query("SELECT * FROM user WHERE (Mail = ? AND MailVerifiziert = 1)", [email])
+	return data.length > 0
+}
+
 export async function createNewUser(uname, email, password, mailtoken) {
 	const hash = await encrypt(password)
 	return await query("INSERT INTO user (Mail, Passwort, Name, MailToken, Lehrer, Admin) VALUES (?, ?, ?, ?, 0, 0)", [email, hash, uname, mailtoken])
