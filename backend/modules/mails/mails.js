@@ -25,5 +25,15 @@ async function sendmail(to, subject, html) {
 	//console.log(smtpstatus);
 };
 
+export async function verifyMailConnection() {
+	try {
+		await transporter.verify();
+		console.log("SMTP Server ready");
+	} catch (err) {
+		console.error("Verification failed:", err);
+		throw new Error("SMTP Server unreachable.");
+	}
+}
+
 export default sendmail;
 

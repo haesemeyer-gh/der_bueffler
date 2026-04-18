@@ -47,7 +47,8 @@ In den Endpoints finden grundsätzlich auch Error Handling und Berechtigungsabfr
 
 Datenbankabfragen werden mit dem `query()` Wrapper aus [`db.js`](backend/modules/db/db.js) getätigt.
 
-Der Server stürzt ab, wenn er versucht E-Mails ohne einen validen SMTP Server zu versenden.
+Der Server stürzt ab, wenn er versucht E-Mails ohne einen validen SMTP Server zu versenden und startet nicht, wenn es keinen SMTP Server gibt.
+[smtp4dev](https://github.com/rnwood/smtp4dev)
 
 In [`beispiel.js`](backend/beispiel.js) ist eine *(veraltete)* kommentierte Version eines Endpoints.
 
