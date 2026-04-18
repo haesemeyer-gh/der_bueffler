@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import argon2 from 'argon2';
 
 import { query } from '../db/db.js';
@@ -44,7 +45,10 @@ export async function usersMailIsVerified(email) {
 
 export async function createNewUser(uname, email, password, mailtoken) {
 	const hash = await encrypt(password)
-	return await query("INSERT INTO user (Mail, Passwort, Name, MailToken, Lehrer, Admin) VALUES (?, ?, ?, ?, 0, 0)", [email, hash, uname, mailtoken])
+	const verified = (process.env.BUEFFLER_MAIL_VERIFICATION_REQUIRED === "true" ? 0 : 1);
+	const teacher = (process.env.BUEFFLER_MAKE_ALL_TEACHER === "true" ? true : false);
+	const admin = (process.env.BUEFFLER_MAKE_ALL_ADMIN === "true" ? true : false);
+	return await query("INSERT INTO user (Mail, Passwort, Name, MailToken, MailVerifiziert, Lehrer, Admin) VALUES (?, ?, ?, ?, ?, ?, ?)", [email, hash, uname, mailtoken, verified, teacher, admin])
 }
 
 export async function resetPassword(userid, password) {

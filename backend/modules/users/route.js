@@ -54,7 +54,7 @@ usersRouter.post('/user/makeadmin', async(req, res) => {
 	let permissions = await verifyToken(token);
 	if (permissions.Admin === 1) {
 		res.status(201);
-		userid.makeAdmin(id)
+		users.makeAdmin(id)
 		response = "Nutzer wurde erfolgreich zum Admin gemacht";
 	} else {
 		res.status(403);
