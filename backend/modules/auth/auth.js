@@ -28,9 +28,18 @@ export async function userWithTokenExists(token) {
 	return data.length > 0
 }
 
-export async function createNewUser(uname, email, password) {
+export async function userWithMailTokenExists(mailtoken) {
+	const data = await query("SELECT * FROM user WHERE (MailToken = ?)", [mailtoken])
+	return data.length > 0
+}
+
+export async function verifyMail(mailtoken) {
+	return await query("UPDATE user SET MailVerifiziert = 1 WHERE (MailToken = ?)", [mailtoken])
+}
+
+export async function createNewUser(uname, email, password, mailtoken) {
 	const hash = await encrypt(password)
-	return await query("INSERT INTO user (Mail, Passwort, Name, Lehrer, Admin) VALUES (?, ?, ?, 0, 0)", [email, hash, uname])
+	return await query("INSERT INTO user (Mail, Passwort, Name, MailToken, Lehrer, Admin) VALUES (?, ?, ?, ?, 0, 0)", [email, hash, uname, mailtoken])
 }
 
 export async function resetPassword(userid, password) {

@@ -61,6 +61,8 @@ Der `user`-Table enthält alle Nutzerprofile, Berechtigungen und Anmeldedaten.
 - `Name` ist der frei wählbare Anzeigename des Nutzers
 - `Lehrer` ist 1, wenn der Nutzer ein Lehrer ist
 - `Admin` ist 1, wenn der Nutzer ein Administrator ist
+- `MailToken` ist der geheime "Mail-Token" des Nutzers, der verwendet wird, um die E-Mail des Nutzers zu verifizieren
+- `MailVerifiziert` ist 1, wenn der Nutzer seine E-Mail Adresse verifiziert hat
 - `online` ist der Timestamp, an dem der Nutzer sich zuletzt einen neuen Session Token generieren ließ
 
 ## push_subscriptions

@@ -52,6 +52,8 @@ CREATE TABLE `user` (
   `Name` varchar(255) NOT NULL,
   `Lehrer` tinyint(1) NOT NULL,
   `Admin` tinyint(1) NOT NULL,
+  `MailToken` varchar(255) NOT NULL,
+  `MailVerifiziert` tinyint(1) DEFAULT NULL,
   `online` datetime DEFAULT NULL,
   PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;

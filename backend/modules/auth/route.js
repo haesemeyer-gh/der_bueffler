@@ -10,7 +10,7 @@ authRouter.post('/auth/register', async (req, res) => {
 	const email = req.body.email;
 	const password = req.body.password;
 
-	if (uname.trim().length === 0 || email.trim().length === 0 || password.trim().length === 0) {
+	if (uname === null || uname.trim().length === 0 || email === null || email.trim().length === 0 || password === null || password.trim().length === 0) {
 		res.status(422);
 		return res.json({
 			message: "Some fields are empty"
@@ -28,7 +28,18 @@ authRouter.post('/auth/register', async (req, res) => {
 		});
 	} else {
 		console.log("created")
-		await auth.createNewUser(uname, email, password)
+
+		const mailtoken = crypto.randomUUID();
+		await auth.createNewUser(uname, email, password, mailtoken)
+
+		// send user frontend link to reset password
+		let mailbody = `<h1>Der Büffler: E-Mail Verifikation</h1>
+			<p>Klicke den folgenden Link um deine E-Mail Adresse zu verifizieren:<br/><br/>
+			<a href="${process.env.BUEFFLER_MAIL_FRONTENDLINK}/verify?s=${mailtoken}">Hier klicken</a><br/><br/>
+			Viel Spaß beim Büffeln!</p>
+		`;
+		sendmail(email, "Büffler Verifikation", mailbody);
+
 		res.status(201);
 		return res.json({
 			message: "User created successfully"
@@ -40,7 +51,7 @@ authRouter.post('/auth/login', async (req, res) => {
 	const email = req.body.email;
 	const password = req.body.password;
 
-	if (email.trim().length === 0 || password.trim().length === 0) {
+	if (email === null || email.trim().length === 0 || password === null || password.trim().length === 0) {
 		res.status(422);
 		return res.json({
 			message: "Some fields are empty"
@@ -75,13 +86,33 @@ authRouter.post('/auth/login', async (req, res) => {
 
 });
 
+authRouter.post("/auth/verify", async (req, res)  => {
+	const mailtoken = req.body.mailtoken;
+
+	if (mailtoken === null || mailtoken.trim().length === 0) {
+		return res.json({
+			message: "Some fields are empty"
+		})
+	}
+
+	if (await auth.userWithMailTokenExists(mailtoken)) {
+		auth.verifyMail(mailtoken);
+		return res.status(201).json({
+			message: "Mail verified!"
+		});
+
+	}
+	else {
+		return res.status(403).json({message: "Wrong token"})
+	}
+})
 
 authRouter.post("/auth/reset", async (req, res)  => {
 	// Internal, so it will work if you are already logged in.
 	const token = req.body.token;
 	const newPassword = req.body.password;
 
-	if (newPassword.trim().length === 0) {
+	if (newPassword === null || newPassword.trim().length === 0) {
 		return res.json({
 			message: "Some fields are empty"
 		})
@@ -134,7 +165,7 @@ authRouter.post("/user/delete/:id", async (req, res)  => {
 	const toDeleteUserID = req.params.id;
 	const token = req.body.token;
 
-	if (toDeleteUserID.trim().length === 0 || !(await auth.userWithIDExists(toDeleteUserID))) {
+	if (toDeleteUserID === null || toDeleteUserID.trim().length === 0 || !(await auth.userWithIDExists(toDeleteUserID))) {
 		return res.status(400).json({
 			message: "Invalid ID"
 		})
