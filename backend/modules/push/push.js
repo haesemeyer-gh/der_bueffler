@@ -24,8 +24,13 @@ export async function removeSubscriptions(userid) {
 function setupWebpush() {
 	const publicVapidKey = process.env.BUEFFLER_VAPID_PUBLIC;
 	const privateVapidKey = process.env.BUEFFLER_VAPID_PRIVATE;
+	let vapidURL = process.env.BUEFFLER_MAIL_FRONTENDLINK;
+	if (!vapidURL.startsWith("https://")) {
+		vapidURL = "https" + vapidURL.substr(4);
+		console.log(`INVALID VapidURL! web-push wants an https:// (or mailto://) URL for setVapidDetails. A new VapidURL was automatically generated for testing purposes: ${vapidURL}`);
+	}
 
-	webpush.setVapidDetails(process.env.BUEFFLER_MAIL_FRONTENDLINK, publicVapidKey, privateVapidKey);
+	webpush.setVapidDetails(vapidURL, publicVapidKey, privateVapidKey);
 
 	cron.schedule(process.env.BUEFFLER_PUSH_CRON, () => {
 		sendPush();

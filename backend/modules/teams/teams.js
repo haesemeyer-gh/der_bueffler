@@ -44,7 +44,7 @@ export async function isUserMemberOfTeam(userid,teamID) {
 
 // prüft ob Nutzer Klassensprecher in einem Team ist
 export async function isUserKlassensprecherOfTeam(userid,teamID) {
-    let memberarray = await query("SELECT Klassensprechen FROM teams WHERE TeamID LIKE ?", [teamID]);
+    let memberarray = await query("SELECT Klassensprecher FROM teams WHERE TeamID LIKE ?", [teamID]);
     let mitglieder = memberarray[0].Klassensprecher
     return mitglieder.includes(userid)
 }

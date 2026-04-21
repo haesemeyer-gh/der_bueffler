@@ -11,6 +11,9 @@ und verschickt Benachrichtigungen für anstehende Termine.
 
 ## Projekt lokal starten
 
+**Anmerkung:**
+Es sind nun auch eine `Dockerfile` und eine `docker-compose.yml` verfügbar.
+
 Das Projekt besteht aus zwei Teilen:
 - Backend: stellt API bereit und kümmert sich um Benachrichtigungen
 - Frontend: Web-App
@@ -33,6 +36,11 @@ Er ist standardgemäß unter [localhost:3000](http://localhost:3000) verfügbar.
 
 Der Server kann mit Umgebungsvariablen konfiguriert werden.
 Eine Beispiel-Konfiguration ist unter `dist.env` verfügbar.
+
+**Anmerkung:**
+`web-push` erzwingt eine "`https://`" (oder "`mailto://`") URL in `setVapidDetails()`.
+Für Testzwecke generiert `setupWebpush()` automatisch eine `https://`-URL, wenn keine als Frontend Link angegeben wurde.
+Es ist trotzdem empfehlenswert, den Büffler hinter einem HTTPS Proxy verfügbar zu machen und den Frontend Link entsprechend in der `.env` anzupassen.
 
 ## Entwickeln
 
