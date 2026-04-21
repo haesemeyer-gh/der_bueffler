@@ -42,6 +42,16 @@ Eine Beispiel-Konfiguration ist unter `dist.env` verfügbar.
 Für Testzwecke generiert `setupWebpush()` automatisch eine `https://`-URL, wenn keine als Frontend Link angegeben wurde.
 Es ist trotzdem empfehlenswert, den Büffler hinter einem HTTPS Proxy verfügbar zu machen und den Frontend Link entsprechend in der `.env` anzupassen.
 
+**WINDOWS:**
+Auf Windows funktioniert der Code unter Node.js aktuell ggf. nicht richtig.
+Das liegt daran, dass wir `crypto.randomUUID()` nutzen. `crypto` kann `undefined` sein.
+Wir haben dieses Problem in einem anderen Projekt mit der folgenden Zeile behoben:
+```js
+globalThis.crypto ??= require("node:crypto").webcryptos
+```
+Da wir allerdings ES6' `import` statt CommonJS' `require()` verwenden, funktioniert das hier nicht.
+Es wird empfohlen auf Windows WSL zu installieren und/oder Docker zu verwenden.
+
 ## Entwickeln
 
 ### Backend
