@@ -73,7 +73,7 @@ usersRouter.post('/user/getuserinfo', async(req, res) => {
 	let response;
 	let permissions = await verifyToken(token);
 	if (permissions) {
-		res.status(201);
+		res.status(200);
 		response = await users.getUserInfo(id)
 	} else {
 		res.status(403);

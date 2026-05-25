@@ -1,6 +1,7 @@
 import express from 'express';
 
 import * as auth from './auth.js';
+import { removeSubscriptions } from '../teams/push.js'
 import { purgeUserFromTeams } from '../teams/teams.js'
 import sendmail from '../mails/mails.js';
 
@@ -207,9 +208,9 @@ authRouter.post("/auth/delete", async (req, res)  => {
 	const permissions = await auth.verifyToken(token);
 	if (permissions.Admin === 1 || permissions.ID.toString() === toDeleteUserID) {
 		await auth.removeUser(toDeleteUserID);
-		await auth.removeSubscriptions(toDeleteUserID);
+		await removeSubscriptions(toDeleteUserID); // push
 		await auth.closeSession(toDeleteUserID);
-		await teams.purgeUserFromTeams(toDeleteUserID);
+		await purgeUserFromTeams(toDeleteUserID);
 		return res.status(200).json({
 			message: "User deleted."
 		});
