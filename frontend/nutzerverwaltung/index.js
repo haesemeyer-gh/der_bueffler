@@ -1,3 +1,21 @@
+const devRenameName = document.getElementById('nv-dev-rename-name');
+const devRenameButton = document.getElementById('nv-dev-rename-button');
+const devRenameStatus = document.getElementById('nv-dev-rename-status');
+devTeamsCreateButton.addEventListener('click', () => {
+	fetch(APIURL+"/auth/rename", {
+		method: "POST",
+		body: JSON.stringify({
+			token: cookieToken,
+			name: devRenameName.value,
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	}).then((response) => response.json()).then((response) => {
+		devRenameStatus.innerText = response.message;
+	});
+});
+
 const devTeamsCreateName = document.getElementById('nv-dev-teams-create-name');
 const devTeamsCreateButton = document.getElementById('nv-dev-teams-create-button');
 const devTeamsCreateStatus = document.getElementById('nv-dev-teams-create-status');

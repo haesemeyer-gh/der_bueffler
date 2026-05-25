@@ -62,7 +62,6 @@ authRouter.post('/auth/login', async (req, res) => {
 	}
 
 	if (!(await auth.userWithEmailExists(email))) {
-
 		console.log("doesn't exist")
 		res.status(403);
 		return res.json({
@@ -110,9 +109,28 @@ authRouter.post("/auth/verify", async (req, res)  => {
 		return res.status(201).json({
 			message: "Mail verified!"
 		});
-
+	} else {
+		return res.status(403).json({message: "Wrong token"})
 	}
-	else {
+})
+
+authRouter.post("/auth/rename", async (req, res)  => {
+	const token = req.body.token;
+	const newName = req.body.name;
+
+	if (newName === null || newName.trim().length === 0) {
+		return res.json({
+			message: "Some fields are empty"
+		})
+	}
+
+	if (await auth.userWithTokenExists(token)) {
+		const userID = await auth.getIDByToken(token);
+		auth.changeName(userID, newName);
+		return res.status(201).json({
+			message: "Name changed!"
+		});
+	} else {
 		return res.status(403).json({message: "Wrong token"})
 	}
 })
@@ -135,9 +153,7 @@ authRouter.post("/auth/reset", async (req, res)  => {
 		return res.status(201).json({
 			message: "Reset password! You may now log in!"
 		});
-
-	}
-	else {
+	} else {
 		return res.status(403).json({message: "Wrong token"})
 	}
 })
@@ -195,8 +211,7 @@ authRouter.post("/user/delete/:id", async (req, res)  => {
 		await auth.closeSession(toDeleteUserID);
 		// TODO: clean from teams
 		return res.status(200).end();
-	}
-	else {
+	} else {
 		console.log("Not an Admin")
 		return res.status(403).json({message: "Du hast nicht die nötigen Berechtigungen."});
 	}

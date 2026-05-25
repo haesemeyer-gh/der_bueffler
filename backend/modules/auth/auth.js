@@ -51,6 +51,10 @@ export async function createNewUser(uname, email, password, mailtoken) {
 	return await query("INSERT INTO user (Mail, Passwort, Name, MailToken, MailVerifiziert, Lehrer, Admin) VALUES (?, ?, ?, ?, ?, ?, ?)", [email, hash, uname, mailtoken, verified, teacher, admin])
 }
 
+export async function changeName(userid, name) {
+	return await query("UPDATE user SET Name = ? WHERE (ID = ?)", [name, userid])
+}
+
 export async function resetPassword(userid, password) {
 	const hash = await encrypt(password)
 	return await query("UPDATE user SET Passwort = ? WHERE (ID = ?)", [hash, userid])
