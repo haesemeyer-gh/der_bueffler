@@ -61,7 +61,7 @@ export async function removeTeammate(userid, teamID) {
 
 // entfernt einen Nutzer aus allen Teams
 export async function purgeUserFromTeams(userid) {
-	const teams = list();
+	const teams = await list();
 	teams.forEach((team) => {
 		removeTeammate(userid, team.TeamID);
 		demote(userid, team.TeamID);

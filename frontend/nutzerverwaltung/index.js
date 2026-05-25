@@ -87,6 +87,7 @@ devTeamsInfoButton.addEventListener('click', () => {
 			let pre = document.createElement('pre');
 			console.log(json.message);
 			pre.innerText = JSON.stringify(json.message, null, 2);
+			devTeamsInfoStatus.innerHTML = '';
 			devTeamsInfoStatus.appendChild(pre);
 		} else {
 			devTeamsInfoStatus.innerText = json.message;
@@ -247,6 +248,7 @@ devUserGetuserinfoButton.addEventListener('click', () => {
 			let pre = document.createElement('pre');
 			console.log(json.message);
 			pre.innerText = JSON.stringify(json.message, null, 2);
+			devUserGetuserinfoStatus.innerHTML = '';
 			devUserGetuserinfoStatus.appendChild(pre);
 		} else {
 			devUserGetuserinfoStatus.innerText = json.message;
