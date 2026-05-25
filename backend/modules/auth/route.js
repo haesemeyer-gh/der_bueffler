@@ -1,7 +1,7 @@
 import express from 'express';
 
 import * as auth from './auth.js';
-import { removeSubscriptions } from '../teams/push.js'
+import { removeSubscriptions } from '../push/push.js'
 import { purgeUserFromTeams } from '../teams/teams.js'
 import sendmail from '../mails/mails.js';
 
