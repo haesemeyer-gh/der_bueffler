@@ -246,3 +246,5 @@ authRouter.post("/auth/requestdeletion", async (req, res) => {
 	}
 })
 
+export default authRouter;
+
