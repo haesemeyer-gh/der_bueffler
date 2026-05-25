@@ -284,11 +284,19 @@ main {
 	border-radius: 10px;
 	padding: 2px 5px;
 }
+.appointment-detail-notes {
+	max-width: 100%;
+	overflow-wrap: break-word;
+}
 .appointment-history-list > li > a,
 .appointment-detail-links {
 	display: flex;
 	flex-direction: row;
-	gap: 15px;
+	gap: 8px;
+	@media (width <= 64rem) {
+		flex-direction: column;
+		gap: 5px;
+	}
 }
 #user-settings-container > a,
 #user-settings-container > a:visited,

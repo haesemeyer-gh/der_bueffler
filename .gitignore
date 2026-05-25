@@ -1,3 +1,5 @@
 backend/node_modules
 backend/.env
+frontend/scripts/api.js
 frontend/assets/aptos
+

@@ -37,6 +37,9 @@ Er ist standardgemäß unter [localhost:3000](http://localhost:3000) verfügbar.
 Der Server kann mit Umgebungsvariablen konfiguriert werden.
 Eine Beispiel-Konfiguration ist unter `dist.env` verfügbar.
 
+Die API URL für das Frontend muss ebenfalls angepasst werden.
+`scripts/dist.api.js` Wird dann zu `scripts/api.js` umbenannt.
+
 **Anmerkung:**
 `web-push` erzwingt eine "`https://`" (oder "`mailto://`") URL in `setVapidDetails()`.
 Für Testzwecke generiert `setupWebpush()` automatisch eine `https://`-URL, wenn keine als Frontend Link angegeben wurde.

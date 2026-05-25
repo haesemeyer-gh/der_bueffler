@@ -47,8 +47,16 @@ devTeamsInfoButton.addEventListener('click', () => {
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
 		}
-	}).then((response) => response.json()).then((response) => {
-		devTeamsInfoStatus.innerText = response.message;
+	}).then(async (response) => {
+		let json = await response.json();
+		if (response.status === 201) {
+			let pre = document.createElement('pre');
+			console.log(json.message);
+			pre.innerText = JSON.stringify(json.message, null, 2);
+			devTeamsInfoStatus.appendChild(pre);
+		} else {
+		devTeamsInfoStatus.innerText = json.message;
+		}
 	});
 });
 
@@ -199,8 +207,16 @@ devUserGetuserinfoButton.addEventListener('click', () => {
 		headers: {
 			"Content-type": "application/json; charset=UTF-8"
 		}
-	}).then((response) => response.json()).then((response) => {
-		devUserGetuserinfoStatus.innerText = response.message;
+	}).then(async (response) => {
+		let json = await response.json();
+		if (response.status === 201) {
+			let pre = document.createElement('pre');
+			console.log(json.message);
+			pre.innerText = JSON.stringify(json.message, null, 2);
+			devUserGetuserinfoStatus.appendChild(pre);
+		} else {
+			devUserGetuserinfoStatus.innerText = json.message;
+		}
 	});
 });
 

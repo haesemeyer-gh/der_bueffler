@@ -75,6 +75,7 @@ async function updateDashboard() {
 			linkContainer.append(editLink, logLink)
 
 			let notesEl = document.createElement('p');
+			notesEl.classList.add('appointment-detail-notes');
 			notesEl.innerText = appointments.Notizen;
 
 			detailEl.append(appointmentEl, linkContainer, notesEl);
