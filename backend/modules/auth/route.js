@@ -5,6 +5,9 @@ import sendmail from '../mails/mails.js';
 
 const authRouter = express.Router();
 
+const emailRegexString = `^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(${process.env.BUEFFLER_MAIL_DOMAIN_WHITELIST})$`;
+const emailRegex = new RegExp(emailRegexString);
+
 authRouter.post('/auth/register', async (req, res) => {
 	const uname = req.body.uname;
 	const email = req.body.email;
@@ -21,7 +24,7 @@ authRouter.post('/auth/register', async (req, res) => {
 		return res.json({
 			message: "User exists already"
 		});
-	} else if (!/^[a-zA-Z0-9_.+-]+@(?:(?:[a-zA-Z0-9-]+\.)?[a-zA-Z]+\.)?(bbw-fi\.de|bbw-azubi\.de|sfz-net\.de|sfz-chemnitz\.de|sfz\.de)$/.test(email)) {
+	} else if (!emailRegex.test(email)) {
 		res.status(403);
 		return res.json({
 			message: "Your E-Mail is not valid."

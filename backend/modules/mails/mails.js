@@ -31,7 +31,9 @@ export async function verifyMailConnection() {
 		console.log("SMTP Server ready");
 	} catch (err) {
 		console.error("Verification failed:", err);
-		throw new Error("SMTP Server unreachable.");
+		if (process.env.BUEFFLER_SMTP_REQUIRED != "false") {
+			throw new Error("SMTP Server unreachable.");
+		}
 	}
 }
 
