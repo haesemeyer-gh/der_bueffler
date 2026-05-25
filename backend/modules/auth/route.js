@@ -197,15 +197,15 @@ authRouter.post("/auth/delete", async (req, res)  => {
 	const token = req.body.token;
 	const toDeleteUserID = req.body.id;
 
-	if (!auth.userWithTokenExists(req.body.token)) {
+	if (!await auth.userWithTokenExists(req.body.token)) {
 		return res.status(403).json({message: "Wrong token"})
 	}
-	if (!auth.userWithIDExists(toDeleteUserID)) {
-		return res.status(403).json({message: "This User does not exist."})
+	if (!await auth.userWithIDExists(toDeleteUserID)) {
+		return res.status(404).json({message: "This User does not exist."})
 	}
 
 	const permissions = await auth.verifyToken(token);
-	if (permissions.Admin === 1 || permissions.ID === toDeleteUserID) {
+	if (permissions.Admin === 1 || permissions.ID.toString() === toDeleteUserID) {
 		await auth.removeUser(toDeleteUserID);
 		await auth.removeSubscriptions(toDeleteUserID);
 		await auth.closeSession(toDeleteUserID);
@@ -223,7 +223,7 @@ authRouter.post("/auth/requestdeletion", async (req, res) => {
 
 	if (await auth.userWithTokenExists(token)) {
 		const userID = await auth.getIDByToken(token);
-		const mail = await auth.getUserMail(userID);
+		const email = await auth.getUserMail(userID);
 		const deletionToken = await auth.createSessionNonDestructive(userID);
 
 		// send user frontend link to delete account

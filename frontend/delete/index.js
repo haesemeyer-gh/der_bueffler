@@ -2,7 +2,7 @@ const urlParams = new URLSearchParams(window.location.search);
 const tokenSearch = urlParams.get('t');
 const deletionID = urlParams.get('d');
 
-if (tokenID && deletionID) {
+if (tokenSearch && deletionID) {
 	document.getElementById('reset-div').classList.remove('hidden');
 }
 
