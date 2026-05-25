@@ -1,7 +1,7 @@
 const devRenameName = document.getElementById('nv-dev-rename-name');
 const devRenameButton = document.getElementById('nv-dev-rename-button');
 const devRenameStatus = document.getElementById('nv-dev-rename-status');
-devTeamsCreateButton.addEventListener('click', () => {
+devRenameButton.addEventListener('click', () => {
 	fetch(APIURL+"/auth/rename", {
 		method: "POST",
 		body: JSON.stringify({
