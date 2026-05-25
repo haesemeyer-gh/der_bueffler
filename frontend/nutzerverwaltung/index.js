@@ -16,6 +16,22 @@ devRenameButton.addEventListener('click', () => {
 	});
 });
 
+const devDeleteSelfButton = document.getElementById('nv-dev-delete-self-button');
+const devDeleteSelfStatus = document.getElementById('nv-dev-delete-self-status');
+devDeleteSelfButton.addEventListener('click', () => {
+	fetch(APIURL+"/auth/requestdeletion", {
+		method: "POST",
+		body: JSON.stringify({
+			token: cookieToken
+		}),
+		headers: {
+			"Content-type": "application/json; charset=UTF-8"
+		}
+	}).then((response) => response.json()).then((response) => {
+		devDeleteSelfStatus.innerText = response.message;
+	});
+});
+
 const devTeamsCreateName = document.getElementById('nv-dev-teams-create-name');
 const devTeamsCreateButton = document.getElementById('nv-dev-teams-create-button');
 const devTeamsCreateStatus = document.getElementById('nv-dev-teams-create-status');
@@ -238,11 +254,11 @@ devUserGetuserinfoButton.addEventListener('click', () => {
 	});
 });
 
-const resetPasswordContainer = document.getElementById('user-settings-container');
+const userSettingsContainer = document.getElementById('user-settings-container');
 let resetPassword = document.createElement('a')
 resetPassword.href = `/reset?s=${cookieToken}`;
 resetPassword.innerHTML = "Passwort zurücksetzen";
-resetPasswordContainer.appendChild(resetPassword);
+userSettingsContainer.appendChild(resetPassword);
 
 fetch(APIURL+"/teams/list", {
 	method: "POST",

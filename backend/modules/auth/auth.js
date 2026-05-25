@@ -70,6 +70,11 @@ export async function getUserID(email) {
 	return data[0].ID
 }
 
+export async function getUserMail(userid) {
+	const data = await query("SELECT Mail FROM user WHERE (ID = ?)", [userid])
+	return data[0].Mail
+}
+
 export async function removeUser(userid) {
 	return await query("DELETE FROM user WHERE (ID = ?)", [userid])
 }

@@ -1,6 +1,7 @@
 import express from 'express';
 
 import * as auth from './auth.js';
+import { purgeUserFromTeams } from '../teams/teams.js'
 import sendmail from '../mails/mails.js';
 
 const authRouter = express.Router();
@@ -170,12 +171,12 @@ authRouter.post("/auth/requestreset", async (req, res) => {
 		}
 
 		const userID = await auth.getUserID(email);
-		const token = await auth.createSessionNonDestructive(userID);
+		const resetToken = await auth.createSessionNonDestructive(userID);
 
 		// send user frontend link to reset password
 		let mailbody = `<h1>Der Büffler: Passwortzurücksetzung</h1>
 			<p>Klicke den folgenden Link um dein Büffler-Passwort zurückzusetzen:<br/><br/>
-			<a href="${process.env.BUEFFLER_MAIL_FRONTENDLINK}/reset?s=${token}">Hier klicken</a><br/><br/>
+			<a href="${process.env.BUEFFLER_MAIL_FRONTENDLINK}/reset?s=${resetToken}">Hier klicken</a><br/><br/>
 			Viel Spaß beim Büffeln!</p>
 		`;
 		sendmail(email, "Büffler Passwortzurücksetzung", mailbody);
@@ -190,32 +191,58 @@ authRouter.post("/auth/requestreset", async (req, res) => {
 			message: "This E-Mail Adress is not registered."
 		});
 	}
-
 })
 
-// Can be .delete() but the route right now is so.
-authRouter.post("/user/delete/:id", async (req, res)  => {
-	const toDeleteUserID = req.params.id;
+authRouter.post("/auth/delete", async (req, res)  => {
 	const token = req.body.token;
+	const toDeleteUserID = req.body.id;
 
-	if (toDeleteUserID === null || toDeleteUserID.trim().length === 0 || !(await auth.userWithIDExists(toDeleteUserID))) {
-		return res.status(400).json({
-			message: "Invalid ID"
-		})
+	if (!auth.userWithTokenExists(req.body.token)) {
+		return res.status(403).json({message: "Wrong token"})
+	}
+	if (!auth.userWithIDExists(toDeleteUserID)) {
+		return res.status(403).json({message: "This User does not exist."})
 	}
 
 	const permissions = await auth.verifyToken(token);
-	if (permissions.Admin === 1) {
+	if (permissions.Admin === 1 || permissions.ID === toDeleteUserID) {
 		await auth.removeUser(toDeleteUserID);
 		await auth.removeSubscriptions(toDeleteUserID);
 		await auth.closeSession(toDeleteUserID);
-		// TODO: clean from teams
-		return res.status(200).end();
+		await teams.purgeUserFromTeams(toDeleteUserID);
+		return res.status(200).json({
+			message: "User deleted."
+		});
 	} else {
-		console.log("Not an Admin")
-		return res.status(403).json({message: "Du hast nicht die nötigen Berechtigungen."});
+		return res.status(403).json({message: "You do not have permissions to delete this user."})
 	}
 })
 
-export default authRouter;
+authRouter.post("/auth/requestdeletion", async (req, res) => {
+	const token = req.body.token;
+
+	if (await auth.userWithTokenExists(token)) {
+		const userID = await auth.getIDByToken(token);
+		const mail = await auth.getUserMail(userID);
+		const deletionToken = await auth.createSessionNonDestructive(userID);
+
+		// send user frontend link to delete account
+		let mailbody = `<h1>Der Büffler: Account Löschen</h1>
+			<p>Klicke den folgenden Link um deinen Büffler-Account zu löschen:<br/><br/>
+			<a href="${process.env.BUEFFLER_MAIL_FRONTENDLINK}/delete?t=${deletionToken}&d=${userID}">Hier klicken</a><br/><br/>
+			Viel Spaß beim Büffeln!</p>
+		`;
+		sendmail(email, "Büffler Account Löschen", mailbody);
+
+		res.status(201);
+		return res.json({
+			message: "Please check your inbox."
+		});
+	} else {
+		res.status(404);
+		return res.json({
+			message: "This Account does not exist."
+		});
+	}
+})
 

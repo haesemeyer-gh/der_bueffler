@@ -59,6 +59,15 @@ export async function removeTeammate(userid, teamID) {
     return query("UPDATE teams SET Mitglieder = ? WHERE TeamID = ?", [JSON.stringify(mitglieder), teamID]);
 }
 
+// entfernt einen Nutzer aus allen Teams
+export async function purgeUserFromTeams(userid) {
+	const teams = list();
+	teams.forEach((team) => {
+		removeTeammate(userid, team.TeamID);
+		demote(userid, team.TeamID);
+	});
+}
+
 // befördert ein Teammitglied zum Klassensprecher
 export async function promote(userid, teamid) {
     let memberarray = await query("SELECT Klassensprecher FROM teams WHERE TeamID LIKE ?", [teamid]);
