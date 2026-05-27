@@ -59,11 +59,11 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `push_subscriptions` (
-  `ID` int(11) NOT NULL AUTO_INCREMENT,
-  `Subscription` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`Subscription`)),
   `NutzerID` int(11) NOT NULL,
-  PRIMARY KEY(`ID`),
-  UNIQUE(`Subscription`)
+  `Endpoint` varchar(511) NOT NULL,
+  `Auth` varchar(255) NOT NULL,
+  `P256DH` varchar(255) NOT NULL,
+  PRIMARY KEY (`Endpoint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE `grades` (
@@ -73,7 +73,7 @@ CREATE TABLE `grades` (
   `Fach` varchar(255) NOT NULL,
   `Timestamp` datetime NOT NULL,
   `Note` int(11) DEFAULT NULL,
-  PRIMARY KEY(`ID`)
+  PRIMARY KEY (`ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 

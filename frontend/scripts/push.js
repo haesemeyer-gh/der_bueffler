@@ -16,11 +16,15 @@ async function registerServiceWorker() {
 			applicationServerKey: publicVapidKey,
 		});
 
+		const subscriptionObject = JSON.parse(JSON.stringify(subscription));
+
 		await fetch(APIURL+"/push/subscribe", {
 			method: "POST",
 			body: JSON.stringify({
-				"subscription": subscription,
-				"token": cookieToken
+				"token": cookieToken,
+				"subendpoint": subscriptionObject.endpoint,
+				"subauth": subscriptionObject.keys.auth,
+				"subp256dh": subscriptionObject.keys.p256dh
 			}),
 			headers: {
 				"Content-Type": "application/json",

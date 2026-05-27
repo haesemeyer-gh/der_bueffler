@@ -6,12 +6,14 @@ import * as push from './push.js';
 const pushRouter = express.Router();
 
 pushRouter.post("/push/subscribe", async (req, res) => {
-	const subscription = req.body.subscription;
 	const token = req.body.token;
+	const subendpoint = req.body.subendpoint;
+	const subauth = req.body.subauth;
+	const subp256dh = req.body.subp256dh;
 
 	if (await auth.userWithTokenExists(token)) {
 		const userID = await auth.getIDByToken(token);
-		await push.addSubscriptions(userID, subscription);
+		await push.addSubscriptions(userID, subendpoint, subauth, subp256dh);
 		return res.json({
 			message: "Subscribed successfully"
 		})
@@ -41,6 +43,9 @@ pushRouter.post("/push/unsubscribe", async (req, res) => {
 	}
 })
 
+// TODO endpoint zum abrufen des public keys
+
+//TODO
 /*
 pushRouter.get("/pingpush", (req, res) => {
 	push.sendPush()

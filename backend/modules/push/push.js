@@ -10,11 +10,11 @@ async function getAllAppointmentsWithinTimeframe(start, end) {
 }
 
 async function getSubscriptions(userid) {
-	return await query("SELECT Subscription FROM push_subscriptions WHERE (NutzerID = ?)", [userid])
+	return await query("SELECT Endpoint, Auth, P256DH FROM push_subscriptions WHERE (NutzerID = ?)", [userid])
 }
 
-export async function addSubscriptions(userid, subscription) {
-	return await query("INSERT IGNORE INTO push_subscriptions (Subscription, NutzerID) VALUES (?, ?)", [subscription, userid]);
+export async function addSubscriptions(userid, endpoint, auth, p256dh) {
+	return await query("INSERT IGNORE INTO push_subscriptions (NutzerID, Endpoint, Auth, P256DH) VALUES (?, ?, ?, ?)", [userid, endpoint, auth, p256dh]);
 }
 
 export async function removeSubscriptions(userid) {
@@ -63,22 +63,29 @@ export async function sendPush() {
 	}
 
 	const subscriptions = {}
-
 	for (const userid of Object.keys(toSend)) {
 		let pushSubscriptions = await getSubscriptions(userid)
 		if (pushSubscriptions.length > 0) {
 			subscriptions[userid] = pushSubscriptions;
 		}
-
 	}
 
+	// TODO Error Handling: nutzer hat unsubscribed
+	// TODO Error Handling: keys falsch
+	// TODO Error Handling: endpoint falsch falsch
 	for (const [userid, pushsubscriptions] of Object.entries(subscriptions)) {
 		let appointments = toSend[userid];
-		for (const address of pushsubscriptions) {
+		for (const pushsubscription of pushsubscriptions) {
+			const subscriptionObject = {
+				endpoint: pushsubscription.Endpoint,
+				keys: {
+					auth: pushsubscription.Auth,
+					p256dh: pushsubscription.P256DH
+				}
+			};
 			for (const appointment of appointments) {
-				console.log(address.Subscription)
-				console.log(formatAppointment(appointment))
-				webpush.sendNotification(address.Subscription, formatAppointment(appointment))
+				console.log("sent notification to: " + JSON.stringify(subscriptionObject))
+				webpush.sendNotification(subscriptionObject, formatAppointment(appointment))
 			}
 		}
 	}

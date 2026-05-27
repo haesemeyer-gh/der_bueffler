@@ -69,9 +69,10 @@ Der `user`-Table enthält alle Nutzerprofile, Berechtigungen und Anmeldedaten.
 
 Der `push_subscriptions`-Table enthält Push-Subscription Credentials für Nutzer
 
-- `ID` ist die einzigartige ID der Push-Subscription
-- `Subscription` ist die Credentials dieser Push-Subscription
 - `NutzerID` ist die ID des Nutzers, der die diese Push-Subscription bestellt hat
+- `Endpoint` ist die Adresse, an die die Benachrichtigungen gesendet werden sollen
+- `Auth` ist das Auth Secret des Nutzers für diese Subscription
+- `P265DH` ist der öffentliche Schlüssel des Nutzers für diese Subscription
 
 ## grades
 
