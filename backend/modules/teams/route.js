@@ -68,7 +68,6 @@ teamsRouter.post('/teams/add', async(req, res) => {
     let response;
     let permissions = await verifyToken(token);
     if (permissions.Lehrer === 1) {
-		console.log((await teams.info(teamid)).length)
 		if(!(await userWithIDExists(userid))) {
 			res.status(404);
 			response = "Nuter existiert nicht!";

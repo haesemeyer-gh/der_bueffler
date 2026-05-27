@@ -21,7 +21,6 @@ authRouter.post('/auth/register', async (req, res) => {
 			message: "Some fields are empty"
 		})
 	} else if (await auth.userWithEmailExists(email)) {
-		console.log("exists")
 		res.status(409);
 		return res.json({
 			message: "User exists already"
@@ -32,7 +31,6 @@ authRouter.post('/auth/register', async (req, res) => {
 			message: "Your E-Mail is not valid."
 		});
 	} else {
-		console.log("created")
 
 		const mailtoken = crypto.randomUUID();
 		await auth.createNewUser(uname, email, password, mailtoken)
@@ -64,13 +62,11 @@ authRouter.post('/auth/login', async (req, res) => {
 	}
 
 	if (!(await auth.userWithEmailExists(email))) {
-		console.log("doesn't exist")
 		res.status(403);
 		return res.json({
 			message: "No such user"
 		});
 	}
-	console.log("exists")
 
 	if (!(await auth.usersMailIsVerified(email))) {
 		res.status(403);
@@ -89,7 +85,6 @@ authRouter.post('/auth/login', async (req, res) => {
 	const userID = await auth.getUserID(email);
 	const token = await auth.createSession(userID);
 
-	console.log(token)
 	res.status(200);
 	return res.json({
 		message: token

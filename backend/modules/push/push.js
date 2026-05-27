@@ -70,9 +70,6 @@ export async function sendPush() {
 		}
 	}
 
-	// TODO Error Handling: nutzer hat unsubscribed
-	// TODO Error Handling: keys falsch
-	// TODO Error Handling: endpoint falsch falsch
 	for (const [userid, pushsubscriptions] of Object.entries(subscriptions)) {
 		let appointments = toSend[userid];
 		for (const pushsubscription of pushsubscriptions) {
@@ -84,8 +81,14 @@ export async function sendPush() {
 				}
 			};
 			for (const appointment of appointments) {
-				console.log("sent notification to: " + JSON.stringify(subscriptionObject))
-				webpush.sendNotification(subscriptionObject, formatAppointment(appointment))
+				try {
+					let pushPromise = await webpush.sendNotification(subscriptionObject, formatAppointment(appointment))
+				} catch (err) {
+					console.log("webpush error:");
+					console.log("could not send push notification to: " + JSON.stringify(subscriptionObject));
+					console.log("error:");
+					console.log(err);
+				};
 			}
 		}
 	}
