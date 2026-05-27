@@ -43,11 +43,15 @@ pushRouter.post("/push/unsubscribe", async (req, res) => {
 	}
 })
 
-// TODO endpoint zum abrufen des public keys
+pushRouter.get("/push/getpublickey", (req, res) => {
+	res.status(200);
+	return res.json({
+		message: process.env.BUEFFLER_VAPID_PUBLIC
+	});
+})
 
-//TODO
 /*
-pushRouter.get("/pingpush", (req, res) => {
+pushRouter.get("/push/pingpush", (req, res) => {
 	push.sendPush()
 	return res.status(200).end();
 })

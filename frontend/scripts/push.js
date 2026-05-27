@@ -5,7 +5,10 @@ subscribeBtn.addEventListener("click", () => {
 })
 
 async function registerServiceWorker() {
-	const publicVapidKey = "BHm1GIUIGMm3R47i5qRCPCo6oU4Z7dlc_g2JkXptkvcZOFLlobRAgJWpAmzKOrbiKBtBR69J4iB9-ISA_X8suNc";
+	const resKey = await fetch(APIURL+"/push/getpublickey", { method: "GET" });
+	const resKeyJSON = await resKey.json();
+	const publicVapidKey = await resKeyJSON.message;
+	console.log(publicVapidKey);
 
 	if (cookieToken) {
 		const register = await navigator.serviceWorker.register('/worker.js');
